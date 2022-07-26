@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+    <h2 class="border-bottom py-2">
+        <b>Industry Landscape</b>
+    </h2>
+
+    Lv {{ level }}:
+    [{{ code }}]
+    {{ name }}
+    <p></p>
+    <div>
+        <form action = "{% url 'pybo:industry_landscape_3' %}">
+            <button type = "submit" class="btn btn-primary"> 그래프 생성 </button>
+        </form>
+    </div>
+    <p></p>
+    <div>
+        {{ df | safe }}
+    </div>
+
+
+</div>
+{% endblock %}

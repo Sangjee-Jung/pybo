@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3" xmlns="http://www.w3.org/1999/html">
+    <h2 class="border-bottom py-2">
+        <b>엑셀파일/시트 합치기</b>
+    </h2>
+
+    <form action="" method="POST" enctype="multipart/form-data">
+        <div class="row g-3">
+            <div class="col-auto">
+                <label for="excel_기준" class="col-form-label"> 기준 파일을 업로드하세요: </label>
+            </div>
+            <div class="col-auto">
+                <input type="file" class="form-control" name="excel_기준" id="excel_기준">
+                {% csrf_token %}
+            </div>
+            <div class="col-auto">
+                <input type="submit" class="btn btn-secondary" value="Upload">
+            </div>
+        </div>
+    </form>
+    <br>
+
+    {% if df_excel_기준 %}
+    <form action = "{% url 'pybo:excel_settings_2' %}" method = "GET">
+        <label> <strong>설정1</strong>: Header에 해당하는 행 Index를 입력하세요</label>
+        <input type="integer" name="header_index">
+        <input type="submit" value="입력">
+        {% csrf_token %}
+    </form>
+    <p></p>
+    {{ df_excel_기준 | safe }}
+    {% endif %}
+
+</div>
+{% endblock %}

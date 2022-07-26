@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container my-3">
+    <!--
+
+    <table class="table">
+        <thead>
+        <tr class="table-dark">
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성일시</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if question_list %}
+        {% for question in question_list %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>
+                <a href="{% url 'pybo:detail' question.id %}">{{question.subject}}</a>
+            </td>
+            <td>{{question.create_date}}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan = "3">질문이 없습니다.</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+    <p>
+        <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">질문 등록하기</a>
+    </p>
+    -->
+    <!--Project SJ Start-->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 3단길이의 첫번째 열 -->
+            <div class="col-md-3">
+                <!-- 사이드 바 메뉴-->
+                <!-- 패널 타이틀1 -->
+                <div class="panel mb-3">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Industry</h4>
+                    </div>
+                <!-- 사이드바 메뉴목록1 -->
+                    <ul class="list-group">
+                        <li class="list-group-item"><a href="{% url 'pybo:industry_landscape' %}" style="text-decoration:none" >Industry Landscape</a></li>
+                    </ul>
+                </div>
+                <!-- 패널 타이틀2 -->
+                <div class="panel panel-default mb-3">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Company</h4>
+                    </div>
+                <!-- 사이드바 메뉴목록2 -->
+                    <ul class="list-group">
+                        <li class="list-group-item"><a href="{% url 'pybo:ledger' %}" style="text-decoration:none">Ledger Summary</a></li>
+                        <li class="list-group-item"><a href="{% url 'pybo:account' %}" style="text-decoration:none">Account Summary</a></li>
+                    </ul>
+                </div>
+                <!-- 패널 타이틀3 -->
+                <div class="panel panel-default mb-3">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Data</h4>
+                    </div>
+                <!-- 사이드바 메뉴목록3 -->
+                    <ul class="list-group">
+                        <li class="list-group-item"><a href="{% url 'pybo:excel_settings' %}" style="text-decoration:none">엑셀파일/시트 합치기</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+
+
+            <!-- 9단길이의 첫번째 열 -->
+             <div class="col-md-9">
+                 <div class = "jumbotron">
+                     <div class="container m-3">
+                        <h2><strong>상디의 실험실</strong> </h2>
+                         <div>이용 가이드</div>
+                         <div>XXX</div>
+                     </div>
+                 </div>
+             </div>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

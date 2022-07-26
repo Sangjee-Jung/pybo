@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+    <h2 class="border-bottom py-2">
+        <b>계정 요약</b>
+    </h2>
+
+        <form action="" method="POST" enctype="multipart/form-data">
+            <div class="row g-3">
+                <div class="col-auto">
+                    <label for="excel_file_ledger" class="col-form-label"> 원장 업로드: </label>
+                </div>
+                <div class="col-auto">
+                    <input type="file" class="form-control" name="excel_file_ledger" id="excel_file_ledger">
+                    {% csrf_token %}
+                </div>
+                <div class="col-auto">
+                    <input type="submit" class="btn btn-secondary" value="Upload">
+                </div>
+            </div>
+        </form>
+
+        <p></p>
+
+    {% if accounts %}
+    <form action="{% url 'pybo:account_target' %}" method = "GET">
+        <div class="col-6 mb-1">
+            <select name = "target_account" class="form-select">
+                <option> --계정선택-- </option>
+                {% for account in accounts %}
+                <option> {{ account }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-check form-check-inline mb-1">
+            <input class="form-check-input" type = "radio" name = "account_type" id = "자산" value = "자산">
+            <label class="form-check-label" for="자산">자산</label>
+        </div>
+        <div class="form-check form-check-inline mb-1">
+            <input class="form-check-input" type = "radio" name = "account_type" id = "부채" value = "부채">
+            <label class="form-check-label" for="부채">부채</label>
+        </div>
+        <div class="form-check form-check-inline mb-1">
+            <input class="form-check-input" type = "radio" name = "account_type" id = "수익" value = "수익">
+            <label class="form-check-label" for="수익">수익</label>
+        </div>
+        <div class="form-check form-check-inline mb-1">
+            <input class="form-check-input" type = "radio" name = "account_type" id = "비용" value = "비용">
+            <label class="form-check-label" for="비용">비용</label>
+        </div>
+
+        <div>
+            <input type="submit" class="btn btn-primary" value="선택">
+            {% csrf_token %}
+        </div>
+    </form>
+    {% endif %}
+
+
+
+
+</div>
+{% endblock %}

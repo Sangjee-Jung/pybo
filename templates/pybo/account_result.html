@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+    <h2 class="border-bottom py-2">
+        <b>계정 요약</b>
+    </h2>
+    <div>
+        <p><strong>{{ target_account}} _거래처별 증가금액(년)</strong></p>
+        {{ df1|safe }}
+    </div>
+    <br></br>
+    <div>
+        <p><strong>{{ target_account}} _거래처별 증가금액(월)</strong></p>
+        {{ df2|safe }}
+    </div>
+
+
+</div>
+{% endblock %}

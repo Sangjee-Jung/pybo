@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3" xmlns="http://www.w3.org/1999/html">
+    <h2 class="border-bottom py-2">
+        <b>엑셀파일/시트 합치기</b>
+    </h2>
+
+    <form action = "{% url 'pybo:excel' %}" method = "GET">
+        <div>
+            <strong>설정2</strong> : 추가할 칼럼을 모두 선택하세요
+            <input type="checkbox" class="form-check-input mb-3" name="selected" value="시트명" checked> 시트명
+            <input type="checkbox" class="form-check-input mb-3" name="selected" value="파일명" checked> 파일명
+        </div>
+            <input type="submit" class="btn btn-primary mb-3" value="설정 완료">
+            {% csrf_token %}
+    </form>
+
+
+
+    {{ df_excel_기준 | safe}}
+
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3" xmlns="http://www.w3.org/1999/html">
+    <h2 class="border-bottom py-2">
+        <b>엑셀파일/시트 합치기</b>
+    </h2>
+
+    <div>
+        <form action="" method="POST" enctype="multipart/form-data">
+            <label>파일을 전부 선택하세요</label>
+            {{ form }}
+            {% csrf_token %}
+            <button name ="choice" value="{{ form.value}}">파일 올리기</button>
+        </form>
+    </div>
+
+    <p></p>
+
+    {% if concated_df %}
+
+    <div>
+        <form action = "{% url 'pybo:excel_download' %}">
+            <button type="submit" class="btn btn-primary">엑셀 다운로드</button>
+        </form>
+    </div>
+    <p></p>
+
+    {{ concated_df | safe}}
+
+    {% endif %}
+
+
+
+
+
+
+
+    <!-- 모델에서 테이블 만들기
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Upload Date & Time</th>
+        </tr>
+        {% for file in files %}
+            <tr>
+                <td>{{ file.id }}</td>
+                <td>{{ file.title }}</td>
+                <td> {{file.dateTimeOfUpload }}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+    -->
+
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+    <h2 class="border-bottom py-2">
+        <b>원장 가공</b>
+    </h2>
+
+    <div class="'form-group mb-4">
+        <form class="row g-2">
+            <div class="col-auto">
+                <label for="start_year" class="col-form-label">시작년도</label>
+            </div>
+            <div class = "col-auto">
+                <select name = "start_year" class="form-select" id="start_year">
+                    <option selected> --선택--</option>
+                    <option value = 2017> 2017 </option>
+                    <option value = 2018> 2018 </option>
+                    <option value = 2019> 2019 </option>
+                    <option value = 2020> 2020 </option>
+                    <option value = 2021> 2021 </option>
+                </select>
+            </div>
+            <div class = "col-auto">
+                <label for="end_year" class="col-form-label">종료년도</label>
+            </div>
+            <div class = "col-auto">
+                <select name = "end_year" class="form-select" id="end_year">
+                    <option selected> --선택--</option>
+                    <option value = 2017> 2017 </option>
+                    <option value = 2018> 2018 </option>
+                    <option value = 2019> 2019 </option>
+                    <option value = 2020> 2020 </option>
+                    <option value = 2021> 2021 </option>
+                </select>
+            </div>
+            <div class = "col-auto">
+                <input type="submit" class="btn btn-secondary" value="입력">
+            </div>
+        </form>
+    </div>
+
+    <p></p>
+
+    {% if years %}
+    <form action="{% url 'pybo:upload' %}" method="POST" enctype="multipart/form-data">
+
+        {% if years and 2017 in years %}
+        <div class="row g-2 mb-1">
+            <div class="col-auto">
+                <label for="excel_file_2017" class="col-form-label"> 2017년 파일 업로드 : </label>
+            </div>
+            <div class="col-auto">
+                <input type="file" class="form-control" name="excel_file_2017" id="excel_file_2017">
+                {% csrf_token %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if years and 2018 in years %}
+        <div class="row g-2 mb-1">
+            <div class="col-auto">
+                <label for="excel_file_2018" class="col-form-label"> 2018년 파일 업로드 : </label>
+            </div>
+            <div class="col-auto">
+                <input type="file" class="form-control" name="excel_file_2018" id="excel_file_2018">
+                {% csrf_token %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if years and 2019 in years %}
+        <div class="row g-2 mb-1">
+            <div class="col-auto">
+                <label for="excel_file_2019" class="col-form-label"> 2019년 파일 업로드 : </label>
+            </div>
+            <div class="col-auto">
+                <input type="file" class="form-control" name="excel_file_2019" id="excel_file_2019">
+                {% csrf_token %}
+            </div>
+        </div>
+       {% endif %}
+
+        {% if years and 2020 in years %}
+        <div class="row g-2 mb-1">
+            <div class="col-auto">
+                <label for="excel_file_2020" class="col-form-label"> 2020년 파일 업로드 : </label>
+            </div>
+            <div class="col-auto">
+                <input type="file" class="form-control" name="excel_file_2020" id="excel_file_2020">
+                {% csrf_token %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if years and 2021 in years %}
+        <div class="row g-2 mb-1">
+            <div class="col-auto">
+                <label for="excel_file_2021" class="col-form-label"> 2021년 파일 업로드 : </label>
+            </div>
+            <div class="col-auto">
+                <input type="file" class="form-control" name="excel_file_2021" id="excel_file_2021">
+                {% csrf_token %}
+            </div>
+        </div>
+        {% endif %}
+
+
+        <div>
+            <input type="submit" class="btn btn-primary" value="Upload">
+        </div>
+    </form>
+    {% endif %}
+
+</div>
+{% endblock %}
