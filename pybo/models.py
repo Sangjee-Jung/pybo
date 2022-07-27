@@ -37,4 +37,4 @@ class Dart_is_2(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'dart_is_2'
+        #db_table = 'dart_is_2'
