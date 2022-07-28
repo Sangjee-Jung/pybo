@@ -95,11 +95,11 @@ def industry_landscape_2(request):
     code_4 = request.session["code_4"]
     search_code = str(code_4)[0:level+1]
 
-    dart_is = Dart_is_2.objects.all().values()
-    df_dart_is = pd.DataFrame(dart_is)
+    #dart_is = Dart_is_2.objects.all().values()
+    #df_dart_is = pd.DataFrame(dart_is)
 
 
-    search_name, companies, df = define_companies(search_code, level, df_dart_is)
+    search_name, companies, df = define_companies(search_code, level)
 
     #Session 만들기
     df_columns = df.columns.tolist()

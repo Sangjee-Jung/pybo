@@ -35,7 +35,7 @@ def define_industry(target, df_산업코드_산업, df_산업코드_기업):
 
     return industry_code_lv2, industry_name_lv2, df_industry_code_lv2, industry_code_lv4, industry_name_lv4, industry_code_lv3, industry_name_lv3
 
-def define_companies(search_code, level, df_dart_is):
+def define_companies(search_code, level):
 
     df_산업코드_기업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='기업코드')
     df_산업코드_산업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='산업코드(전체)')
@@ -54,9 +54,9 @@ def define_companies(search_code, level, df_dart_is):
             pass
 
     #데이터프레임 생성
-    #df_is별도 = pd.read_excel("static/DART공시정보활용마당_상장법인재무정보_2021.xlsx", sheet_name = 'IS_별도')
-    #df_포괄is별도 = pd.read_excel("static/DART공시정보활용마당_상장법인재무정보_2021.xlsx", sheet_name='포괄IS_별도')
-    df = df_dart_is
+    dart_is_3 = pd.read_excel("static/dart_is_3.xlsx", header=0)
+
+    df = dart_is_3
 
     영업이익_2021 = []
     영업이익_2020 = []
@@ -66,34 +66,34 @@ def define_companies(search_code, level, df_dart_is):
     매출액_2019 = []
 
     for company in companies:
-        ebit_row = df[(df['회사명'] == company) & (df['항목코드'] == "dart_OperatingIncomeLoss")]
+        ebit_row = df[(df['company'] == company) & (df['account'] == "dart_OperatingIncomeLoss")]
         try:
-            영업이익_2021.append(int(ebit_row['당기']))
+            영업이익_2021.append(int(ebit_row['FY21']))
         except:
             영업이익_2021.append(np.nan)
         try:
-            영업이익_2020.append(int(ebit_row['전기']))
+            영업이익_2020.append(int(ebit_row['FY20']))
         except:
             영업이익_2020.append(np.nan)
         try:
-            영업이익_2019.append(int(ebit_row['전전기']))
+            영업이익_2019.append(int(ebit_row['FY19']))
         except:
             영업이익_2019.append(np.nan)
 
-        revenue_row = df[(df['회사명'] == company) & (df['항목코드'] == "ifrs-full_Revenue")]
+        revenue_row = df[(df['company'] == company) & (df['account'] == "ifrs-full_Revenue")]
         if len(revenue_row) == 0:
-            revenue_row = df[(df['회사명'] == company) & (df['항목코드'] == "ifrs-full_GrossProfit")]
+            revenue_row = df[(df['company'] == company) & (df['account'] == "ifrs-full_GrossProfit")]
 
         try:
-            매출액_2021.append(int((revenue_row['당기'])))
+            매출액_2021.append(int((revenue_row['FY21'])))
         except:
             매출액_2021.append(np.nan)
         try:
-            매출액_2020.append(int(revenue_row['전기']))
+            매출액_2020.append(int(revenue_row['FY20']))
         except:
             매출액_2020.append(np.nan)
         try:
-            매출액_2019.append(int(revenue_row['전전기']))
+            매출액_2019.append(int(revenue_row['FY19']))
         except:
             매출액_2019.append(np.nan)
 
