@@ -10,7 +10,14 @@ def load_industry():
     df_산업코드_기업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='기업코드')
     df_산업코드_산업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='산업코드(전체)')
 
-    return df_산업코드_산업, df_산업코드_기업
+    company_name_all = df_산업코드_기업['회사명'].tolist()
+    company_code_all_가공전 = df_산업코드_기업['종목코드'].tolist()
+    company_code_all = []
+    for code in company_code_all_가공전:
+        company_code_all.append(code[1:7])
+
+
+    return df_산업코드_산업, df_산업코드_기업, company_name_all, company_code_all
 
 def define_industry(target, df_산업코드_산업, df_산업코드_기업):
 
@@ -117,7 +124,7 @@ def define_companies(search_code, level):
 
     return search_name, companies, df
 
-def make_scatter(df, search_name):
+def make_scatter(df):
 
     #색상설정
     kpmg_blue = '#00338D'
@@ -132,7 +139,7 @@ def make_scatter(df, search_name):
 
     #######################그래프그리기##########################
     # 그래프 설정
-    f = plt.figure(figsize=(18, 10))
+    f = plt.figure(figsize=(17, 10))
     plt.rc('font', family='Malgun Gothic')
     plt.rcParams['axes.unicode_minus'] = False
     plt.rc('font', size=13)

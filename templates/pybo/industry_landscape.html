@@ -7,7 +7,12 @@
     <div class="'input-group mb-3">
         <form class="row g-3">
             <div class="col-auto">
-                <input type="text" class="form-control" name="target" placeholder="회사명을 입력하세요" aria-describedby="basic-addon1">
+                <input class="form-control" list="datalistOptions" name="target" placeholder="회사명을 입력하세요">
+                <datalist id="datalistOptions">
+                    {% for name in company_name_all %}
+                    <option> {{name}} </option>
+                    {% endfor %}
+                </datalist>
             </div>
             <div class="col-auto">
                 <input type="submit" class="btn btn-secondary mb-3" value="입력">

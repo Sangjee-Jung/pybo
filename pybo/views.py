@@ -63,7 +63,7 @@ def question_create(request):
     return render(request, 'pybo/question_form.html', context)
 
 def industry_landscape(request):
-    df_산업코드_산업, df_산업코드_기업 = load_industry()
+    df_산업코드_산업, df_산업코드_기업, company_name_all, company_code_all = load_industry()
     target = request.GET.get('target')
     code_2 = None
     name_2 = None
@@ -84,7 +84,7 @@ def industry_landscape(request):
 
     #graph = mpld3.fig_to_html(f, figid='THIS_IS_FIGID')
 
-    context = {"target": target, "code_2": code_2, "name_2": name_2, "code_4": code_4, "name_4": name_4, "code_3": code_3, "name_3": name_3, "df_industry": df_industry.to_html(justify='center',
+    context = {"company_name_all": company_name_all, "target": target, "code_2": code_2, "name_2": name_2, "code_4": code_4, "name_4": name_4, "code_3": code_3, "name_3": name_3, "df_industry": df_industry.to_html(justify='center',
                                                                                                 index=False, classes="table table-sm table-hover")}
 
     return render(request, 'pybo/industry_landscape.html', context)
@@ -122,6 +122,7 @@ def industry_landscape_2(request):
     return render(request, 'pybo/industry_landscape_2.html', context)
 
 def industry_landscape_3(request):
+    #Session 가져오기
     df_columns = request.session['df_columns']
     df_rows = request.session['df_rows']
     df_index = request.session['df_index']
@@ -130,18 +131,50 @@ def industry_landscape_3(request):
     search_code = request.session['search_code']
     search_name = request.session['search_name']
 
-
+    #df 생성
     df = pd.DataFrame()
     for i in range(len(df_columns)):
         df[df_columns[i]] = df_rows[i]
     df['index'] = df_index
     df.set_index('index')
 
-    graph = make_scatter(df, search_name)
+    graph = make_scatter(df)
 
     context = {"graph": graph, "level": level, "code": search_code, "name": search_name}
 
     return render(request, 'pybo/industry_landscape_3.html', context)
+
+def industry_landscape_4(request):
+
+    number = int(request.GET.get('number'))
+
+    # Session 가져오기
+    df_columns = request.session['df_columns']
+    df_rows = request.session['df_rows']
+    df_index = request.session['df_index']
+
+    # df 생성
+    df = pd.DataFrame()
+    df.index = df_index
+    for i in range(len(df_columns)):
+        df[df_columns[i]] = df_rows[i]
+    df['index'] = df_index
+    df.set_index('index')
+
+    df_상위 = None
+    df_하위 = None
+
+    df_상위 = df.iloc[0:number,:]
+    df_하위 = df.iloc[number:,:]
+
+    graph_상위 = make_scatter(df_상위)
+    graph_하위 = make_scatter(df_하위)
+
+
+    context = {"number": number, "graph_상위": graph_상위, "graph_하위":graph_하위}
+
+    return render(request, 'pybo/industry_landscape_4.html', context)
+
 
 def ledger(request):
     start_year = request.GET.get('start_year')

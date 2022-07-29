@@ -7,10 +7,26 @@
     Lv {{ level }}:
     [{{ code }}]
     {{ name }}
+
     <div>
         {{ graph | safe }}
     </div>
-
+    <br>
+    <strong><u>More Details</u></strong>
+    <div class="'input-group mb-3">
+        <form action = "{% url 'pybo:industry_landscape_4' %}" class="row g-3">
+            <div class="col-auto">
+                <label class="col-form-label"> Option 1: 매출규모 기준으로 그래프 분리 </label>
+            </div>
+            <div class = "col-auto">
+                <input type ="text" class="form-control" name ="number" placeholder="상위 N번째 기업(순위)">
+            </div>
+            <div class = "col-auto">
+                <input type="submit" class="btn btn-secondary" value="입력">
+                {% csrf_token %}
+            </div>
+        </form>
+    </div>
 
 </div>
 {% endblock %}
