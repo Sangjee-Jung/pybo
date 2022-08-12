@@ -82,12 +82,24 @@ def industry_landscape(request):
         #session 지정
         request.session["code_4"] = code_4
 
-    #graph = mpld3.fig_to_html(f, figid='THIS_IS_FIGID')
+    try:
+        df_industry_2 = {}
+        df_industry_2['Lv'] = df_industry['Lv'].tolist()
+        df_industry_2['CODE'] = df_industry['CODE'].tolist()
 
-    context = {"company_name_all": company_name_all, "target": target, "code_2": code_2, "name_2": name_2, "code_4": code_4, "name_4": name_4, "code_3": code_3, "name_3": name_3, "df_industry": df_industry.to_html(justify='center',
+        context = {"company_name_all": company_name_all, "target": target, "code_2": code_2, "name_2": name_2,
+               "code_4": code_4, "name_4": name_4, "code_3": code_3, "name_3": name_3,
+               "df_industry": df_industry.to_html(justify='center',
+                                                  index=False, classes="table table-sm table-hover"),
+               "df_industry_2": df_industry_2}
+
+        return render(request, 'pybo/industry_landscape.html', context)
+
+    except:
+        context = {"company_name_all": company_name_all, "target": target, "code_2": code_2, "name_2": name_2, "code_4": code_4, "name_4": name_4, "code_3": code_3, "name_3": name_3, "df_industry": df_industry.to_html(justify='center',
                                                                                                 index=False, classes="table table-sm table-hover")}
 
-    return render(request, 'pybo/industry_landscape.html', context)
+        return render(request, 'pybo/industry_landscape.html', context)
 
 def industry_landscape_2(request):
     level = int(request.GET.get('level'))
@@ -439,4 +451,17 @@ def excel_download(request):
     response['Content-Disposition'] = 'attachment; filename="합치기 완료.xlsx"'
 
     return response
+
+def account_download(request):
+    file_path = os.path.abspath("media/result/")
+    file_name = os.path.basename("media/result/account.xlsx")
+    fs = FileSystemStorage(file_path)
+    response = FileResponse(fs.open(file_name, 'rb'),
+                            content_type = 'application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="계정분석.xlsx"'
+
+    return response
+
+
+
 

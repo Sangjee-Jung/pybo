@@ -48,9 +48,40 @@
         </div>
     </div>
     <p></p>
+
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <td><b>Lv</b></td>
+                <td><b>CODE</b></td>
+                <td><b>표준산업분류</b></td>
+                <td><b>회사 수</b></td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for industry in df_industry_2 %}
+            {% for lv in industry%}
+
+            <tr>
+                <td>{{ lv }}</td>
+
+            </tr>
+            {% endfor %}
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    {{ df_industry_2.Lv }}
+    {{ df_industry_2.CODE }}
+
     <div>
         {{ df_industry | safe}}
     </div>
+
+
     <p></p>
     <div class="'input-group mb-3">
         <form action = "{% url 'pybo:industry_landscape_2' %}" class="row g-3">

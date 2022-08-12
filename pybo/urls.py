@@ -19,6 +19,7 @@ urlpatterns = [
     path('excel/settings', views.excel_settings, name='excel_settings'),
     path('excel/settings/2', views.excel_settings_2, name='excel_settings_2'),
     path('excel/download', views.excel_download, name='excel_download'),
+    path('account/download', views.account_download, name='account_download'),
     path('download/', views.downloadFile, name='downloadFile'),
     path('upload/', views.upload, name='upload'),
     path('account/', views.account, name='account'),
