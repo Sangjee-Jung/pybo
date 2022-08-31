@@ -89,9 +89,11 @@
     <p></p>
     <div class="'input-group mb-3">
         <form action = "{% url 'pybo:industry_landscape_2' %}" class="row g-3">
+
             <div class="col-auto">
                 <label class="col-form-label"> 분석대상 산업레벨 </label>
             </div>
+
             <div class = "col-auto">
                 <select name = "level" class="form-select">
                     <option selected> --선택--</option>
@@ -100,6 +102,21 @@
                     <option value = 4> Lv 4 </option>
                 </select>
             </div>
+
+            <div class = "col-auto">
+                <div class="form-check form-check-inline">
+                <input class="form-check-input" type = "radio" name = "fs_type" id = "별도" value = "별도">
+                <label class="form-check-label" for="별도">별도FS</label>
+                </div>
+            </div>
+
+            <div class = "col-auto">
+                <div class="form-check form-check-inline">
+                <input class="form-check-input" type = "radio" name = "fs_type" id = "연결" value = "연결">
+                <label class="form-check-label" for="별도">연결FS</label>
+                </div>
+            </div>
+
             <div class = "col-auto">
                 <input type="submit" class="btn btn-primary" value="입력">
                 {% csrf_token %}

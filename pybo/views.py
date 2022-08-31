@@ -103,6 +103,7 @@ def industry_landscape(request):
 
 def industry_landscape_2(request):
     level = int(request.GET.get('level'))
+    fs_type = request.GET.get('fs_type')
 
     code_4 = request.session["code_4"]
     search_code = str(code_4)[0:level+1]
@@ -111,7 +112,7 @@ def industry_landscape_2(request):
     #df_dart_is = pd.DataFrame(dart_is)
 
 
-    search_name, companies, df = define_companies(search_code, level)
+    search_name, companies, df = define_companies(search_code, level, fs_type)
 
     #Session 만들기
     df_columns = df.columns.tolist()
@@ -129,7 +130,7 @@ def industry_landscape_2(request):
     request.session['search_name'] = search_name
 
 
-    context = {"level": level, "code": search_code, "name": search_name, "companies": companies, "df": df.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format ),}
+    context = {"level": level, "code": search_code, "name": search_name, "companies": companies, "df": df.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format ),"fs_type": fs_type}
 
     return render(request, 'pybo/industry_landscape_2.html', context)
 

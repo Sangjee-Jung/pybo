@@ -42,7 +42,7 @@ def define_industry(target, df_산업코드_산업, df_산업코드_기업):
 
     return industry_code_lv2, industry_name_lv2, df_industry_code_lv2, industry_code_lv4, industry_name_lv4, industry_code_lv3, industry_name_lv3
 
-def define_companies(search_code, level):
+def define_companies(search_code, level, fs_type):
 
     df_산업코드_기업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='기업코드')
     df_산업코드_산업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='산업코드(전체)')
@@ -61,7 +61,11 @@ def define_companies(search_code, level):
             pass
 
     #데이터프레임 생성
-    dart_is_3 = pd.read_excel("static/dart_is_3.xlsx", header=0)
+
+    if fs_type == "별도":
+        dart_is_3 = pd.read_excel("static/dart_is_3.xlsx", sheet_name='별도', header=0)
+    else:
+        dart_is_3 = pd.read_excel("static/dart_is_3.xlsx", sheet_name='연결', header=0)
 
     df = dart_is_3
 
