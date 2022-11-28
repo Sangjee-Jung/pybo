@@ -63,11 +63,11 @@ def define_companies(search_code, level, fs_type):
     #데이터프레임 생성
 
     if fs_type == "별도":
-        dart_is_3 = pd.read_excel("static/dart_is_3.xlsx", sheet_name='별도', header=0)
+        dart_is_4 = pd.read_excel("static/dart_is_4.xlsx", sheet_name='별도', header=0)
     else:
-        dart_is_3 = pd.read_excel("static/dart_is_3.xlsx", sheet_name='연결', header=0)
+        dart_is_4 = pd.read_excel("static/dart_is_4.xlsx", sheet_name='연결', header=0)
 
-    df = dart_is_3
+    df = dart_is_4
 
     영업이익_2021 = []
     영업이익_2020 = []
