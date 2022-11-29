@@ -81,7 +81,7 @@ def define_companies(search_code, level, fs_type):
     for company in companies:
         ebit_row = df[(df['company'] == company) & (df['account'] == "dart_OperatingIncomeLoss")]
         try:
-            영업이익_2022_LTM.append(int(ebit_row['FY22_6M_LTM']))
+            영업이익_2022_LTM.append(int(ebit_row['FY22_9M_LTM']))
         except:
             영업이익_2022_LTM.append(np.nan)
         try:
@@ -102,7 +102,7 @@ def define_companies(search_code, level, fs_type):
             revenue_row = df[(df['company'] == company) & (df['account'] == "ifrs-full_GrossProfit")]
 
         try:
-            매출액_2022_LTM.append(int((revenue_row['FY22_6M_LTM'])))
+            매출액_2022_LTM.append(int((revenue_row['FY22_9M_LTM'])))
         except:
             매출액_2022_LTM.append(np.nan)
         try:
@@ -212,7 +212,7 @@ def make_scatter(df):
     # 축, 범례 표시
     plt.xlabel('매출액', fontsize=17, labelpad=30)
     plt.ylabel('영업이익', fontsize=17, labelpad=45)
-    plt.legend(['2022 LTM(반기)','2021', '2020', '2019'], fontsize=15, loc='upper left')
+    plt.legend(['2022 LTM(9월기준)','2021', '2020', '2019'], fontsize=15, loc='upper left')
 
     # 수평선(영업이익=0) 표시
     plt.plot([0,xmax],[0,0], color='indianred', linestyle='--', linewidth=1.2, alpha=0.5)
