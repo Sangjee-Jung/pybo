@@ -69,15 +69,21 @@ def define_companies(search_code, level, fs_type):
 
     df = dart_is_4
 
+    영업이익_2022_LTM = []
     영업이익_2021 = []
     영업이익_2020 = []
     영업이익_2019 = []
+    매출액_2022_LTM = []
     매출액_2021 = []
     매출액_2020 = []
     매출액_2019 = []
 
     for company in companies:
         ebit_row = df[(df['company'] == company) & (df['account'] == "dart_OperatingIncomeLoss")]
+        try:
+            영업이익_2022_LTM.append(int(ebit_row['FY22_6M_LTM']))
+        except:
+            영업이익_2022_LTM.append(np.nan)
         try:
             영업이익_2021.append(int(ebit_row['FY21']))
         except:
@@ -96,6 +102,10 @@ def define_companies(search_code, level, fs_type):
             revenue_row = df[(df['company'] == company) & (df['account'] == "ifrs-full_GrossProfit")]
 
         try:
+            매출액_2022_LTM.append(int((revenue_row['FY22_6M_LTM'])))
+        except:
+            매출액_2022_LTM.append(np.nan)
+        try:
             매출액_2021.append(int((revenue_row['FY21'])))
         except:
             매출액_2021.append(np.nan)
@@ -108,7 +118,8 @@ def define_companies(search_code, level, fs_type):
         except:
             매출액_2019.append(np.nan)
 
-    dict_data = {'매출액_2021': 매출액_2021, '영업이익_2021': 영업이익_2021,
+    dict_data = {'매출액_2022_LTM': 매출액_2022_LTM, '영업이익_2022_LTM': 영업이익_2022_LTM,
+                 '매출액_2021': 매출액_2021, '영업이익_2021': 영업이익_2021,
                  '매출액_2020': 매출액_2020, '영업이익_2020': 영업이익_2020,
                  '매출액_2019': 매출액_2019, '영업이익_2019': 영업이익_2019}
 
@@ -139,7 +150,7 @@ def make_scatter(df):
     light_purple = '#6D2077'
     green = '#00A3A1'
 
-    color_kpmg = [light_blue, medium_blue, light_purple]
+    color_kpmg = [light_blue, medium_blue, light_purple, green]
 
     #######################그래프그리기##########################
     # 그래프 설정
@@ -159,8 +170,11 @@ def make_scatter(df):
     df_2019 = df[['매출액_2019', '영업이익_2019']]
     df_2019.dropna(how="any")
 
+    df_2022_LTM = df[['매출액_2022_LTM', '영업이익_2022_LTM']]
+    df_2022_LTM.dropna(how="any")
 
     # 산점도 그래프 그리기
+    plt.scatter(df_2022_LTM['매출액_2022_LTM'], df_2022_LTM['영업이익_2022_LTM'], color=color_kpmg[3])
     plt.scatter(df_2021['매출액_2021'], df_2021['영업이익_2021'], color=color_kpmg[0])
     plt.scatter(df_2020['매출액_2020'], df_2020['영업이익_2020'], color=color_kpmg[1])
     plt.scatter(df_2019['매출액_2019'], df_2019['영업이익_2019'], color=color_kpmg[2])
@@ -178,6 +192,14 @@ def make_scatter(df):
     for i in range(len(df_arrow2)):
         plt.plot([df_arrow2['매출액_2020'][i], df_arrow2['매출액_2019'][i]], [df_arrow2['영업이익_2020'][i], df_arrow2['영업이익_2019'][i]], color='black', alpha=0.2)
 
+    df_arrow3 = df[['매출액_2022_LTM', '영업이익_2022_LTM', '매출액_2021', '영업이익_2021']]
+    df_arrow3.dropna(how="any")
+
+    for i in range(len(df_arrow3)):
+        plt.plot([df_arrow3['매출액_2022_LTM'][i], df_arrow3['매출액_2021'][i]],
+                 [df_arrow3['영업이익_2022_LTM'][i], df_arrow3['영업이익_2021'][i]], color='black', linestyle='--', alpha=0.2)
+
+
     # x축 설정
     xmax = plt.axis()[1]
     plt.xlim(0, xmax)
@@ -190,7 +212,7 @@ def make_scatter(df):
     # 축, 범례 표시
     plt.xlabel('매출액', fontsize=17, labelpad=30)
     plt.ylabel('영업이익', fontsize=17, labelpad=45)
-    plt.legend(['2021', '2020', '2019'], fontsize=15, loc='upper left')
+    plt.legend(['2022 LTM(반기)','2021', '2020', '2019'], fontsize=15, loc='upper left')
 
     # 수평선(영업이익=0) 표시
     plt.plot([0,xmax],[0,0], color='indianred', linestyle='--', linewidth=1.2, alpha=0.5)
