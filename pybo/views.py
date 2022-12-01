@@ -243,6 +243,15 @@ def upload(request):
     except:
         pass
 
+    try:
+        excel_file_2022 = request.FILES["excel_file_2022"]
+        excel_files.append(excel_file_2022)
+        years.append(2022)
+    except:
+        pass
+
+
+
     table = ledger_table(excel_files, years)
 
     context = {"table": table.to_html(justify='center',
