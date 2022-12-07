@@ -1,0 +1,65 @@
+<style>
+
+.GenericTable
+
+{
+
+font-size:12px;
+
+color:white;
+
+border-width: 1px;
+
+border-color: rgb(255, 51, 153);/* This is dark*/
+
+border-collapse: collapse;
+
+}
+
+.GenericTable th
+
+{
+
+font-size:18px;
+
+color:white;
+
+background-color:rgb(255, 51, 153);/* This is dark*/
+
+border-width: 1px;
+
+padding: 4px;
+
+border-style: solid;
+
+border-color: rgb(255, 204, 230);/* This is light*/
+
+text-align:left;
+
+}
+
+.GenericTable tr
+
+{
+
+color:black;
+
+background-color:rgb(255, 204, 230);/* This is light*/
+
+}
+
+.GenericTable td
+
+{
+
+font-size:14px;
+
+border-width: 1px;
+
+border-style: solid;
+
+border-color: rgb(255, 51, 153);/* This is dark*/
+
+}
+
+</style>

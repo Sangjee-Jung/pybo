@@ -79,19 +79,23 @@ def industry_landscape(request):
     else:
         code_2, name_2, df_industry, code_4, name_4, code_3, name_3 = define_industry(target, df_산업코드_산업, df_산업코드_기업)
 
+
         #session 지정
         request.session["code_4"] = code_4
 
     try:
-        df_industry_2 = {}
-        df_industry_2['Lv'] = df_industry['Lv'].tolist()
-        df_industry_2['CODE'] = df_industry['CODE'].tolist()
+
+        industry_lists = []
+        for i in range(len(df_industry)):
+            industry_lists.append(df_industry.iloc[i,].tolist())
+
+
 
         context = {"company_name_all": company_name_all, "target": target, "code_2": code_2, "name_2": name_2,
                "code_4": code_4, "name_4": name_4, "code_3": code_3, "name_3": name_3,
                "df_industry": df_industry.to_html(justify='center',
                                                   index=False, classes="table table-sm table-hover"),
-               "df_industry_2": df_industry_2}
+               "industry_lists": industry_lists}
 
         return render(request, 'pybo/industry_landscape.html', context)
 

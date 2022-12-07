@@ -49,10 +49,10 @@
     </div>
     <p></p>
 
-    <!--
+
 
     <div>
-        <table class="table">
+        <table class="table" style = "border: 1px solid DarkGray;">
             <thead>
             <tr>
                 <td><b>Lv</b></td>
@@ -61,30 +61,49 @@
                 <td><b>회사 수</b></td>
             </tr>
             </thead>
+
             <tbody>
-            {% for industry in df_industry_2 %}
-            {% for lv in industry%}
+            {% for list in industry_lists %}
+                {% if list.0 == 2 %}
+                <<tr style="background-color: Silver;">
+                    {% for i in list %}
+                    <td>{{ i }}</td>
+                    {% endfor %}
+                </tr>
+            {% elif list.0 == 3 %}
+                <<tr style="background-color: Gainsboro;">
+                    {% for i in list %}
+                    <td>{{ i }}</td>
+                    {% endfor %}
+                </tr>
+            {% elif code_4 in list %}
+                <<tr style="background-color: LemonChiffon; font-weight: bold;">
+                    {% for i in list %}
+                    <td>{{ i }}</td>
+                    {% endfor %}
+                </tr>
+            {% else %}
+                <tr>
+                    {% for i in list %}
+                    <td>{{ i }}</td>
+                    {% endfor %}
+                </tr>
 
-            <tr>
-                <td>{{ lv }}</td>
-
-            </tr>
-            {% endfor %}
+            {% endif %}
             {% endfor %}
 
             </tbody>
         </table>
     </div>
 
-    {{ df_industry_2.Lv }}
-    {{ df_industry_2.CODE }}
 
-    -->
 
+
+    <!--
     <div>
-        {{ df_industry | safe}}
+        {{ df_industry | safe }}
     </div>
-
+    -->
 
     <p></p>
     <div class="'input-group mb-3">
@@ -130,3 +149,4 @@
 
 </div>
 {% endblock %}
+
