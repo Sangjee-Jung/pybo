@@ -82,6 +82,7 @@ def industry_landscape(request):
 
         #session 지정
         request.session["code_4"] = code_4
+        request.session["target"] = target
 
     try:
 
@@ -112,11 +113,14 @@ def industry_landscape_2(request):
     code_4 = request.session["code_4"]
     search_code = str(code_4)[0:level+1]
 
+    target = request.session["target"]
+
     #dart_is = Dart_is_2.objects.all().values()
     #df_dart_is = pd.DataFrame(dart_is)
 
 
     search_name, companies, df = define_companies(search_code, level, fs_type)
+
 
     #Session 만들기
     df_columns = df.columns.tolist()
@@ -133,8 +137,17 @@ def industry_landscape_2(request):
     request.session['search_code'] = search_code
     request.session['search_name'] = search_name
 
+    #리스트 만들기
+    df_lists = []
+    df2 = df.reset_index(drop =False)
 
-    context = {"level": level, "code": search_code, "name": search_name, "companies": companies, "df": df.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format ),"fs_type": fs_type}
+
+    for i in range(len(df2)):
+        df_lists.append(df2.iloc[i,].tolist())
+
+    context = {"level": level, "code": search_code, "name": search_name, "companies": companies,
+               "df": df.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format ),
+               "df_lists": df_lists ,"fs_type": fs_type, "target": target}
 
     return render(request, 'pybo/industry_landscape_2.html', context)
 

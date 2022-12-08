@@ -65,19 +65,19 @@
             <tbody>
             {% for list in industry_lists %}
                 {% if list.0 == 2 %}
-                <<tr style="background-color: Silver;">
+                <tr style="background-color: Silver;">
                     {% for i in list %}
                     <td>{{ i }}</td>
                     {% endfor %}
                 </tr>
             {% elif list.0 == 3 %}
-                <<tr style="background-color: Gainsboro;">
+                <tr style="background-color: Gainsboro;">
                     {% for i in list %}
                     <td>{{ i }}</td>
                     {% endfor %}
                 </tr>
             {% elif code_4 in list %}
-                <<tr style="background-color: LemonChiffon; font-weight: bold;">
+                <tr style="background-color: LemonChiffon; font-weight: bold;">
                     {% for i in list %}
                     <td>{{ i }}</td>
                     {% endfor %}

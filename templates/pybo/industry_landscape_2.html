@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load humanize %}
 {% block content %}
 <div class="container my-3">
     <h2 class="border-bottom py-2">
@@ -17,10 +18,52 @@
     <p></p>
 
     <{{fs_type}}재무제표 기준>
+
+
     <div>
         {{ df | safe }}
     </div>
 
+    <!--
+
+    <div>
+        <table class="table" style = "border: 1px solid DarkGray; ">
+            <thead>
+            <tr>
+                <td><b>회사명</b></td>
+                <td><b>매출액_'22_LTM</b></td>
+                <td><b>영업이익_'22_LTM</b></td>
+                <td><b>매출액_'21</b></td>
+                <td><b>영업이익_'21</b></td>
+                <td><b>매출액_'20</b></td>
+                <td><b>영업이익_'20</b></td>
+                <td><b>매출액_'19</b></td>
+                <td><b>영업이익_'19</b></td>
+                <td><b>영업이익률_'21</b></td>
+                <td><b>순위_'21기준</b></td>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for list in df_lists %}
+                {% if list.0 == target %}
+                <tr style="background-color: LemonChiffon; font-weight: bold;">
+                    {% for i in list %}
+                    <td>{{ i }}</td>
+                    {% endfor %}
+                </tr>
+                {% else %}
+                <tr>
+                    {% for i in list %}
+                    <td>{{ i }}</td>
+                    {% endfor %}
+                </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    -->
 
 </div>
 {% endblock %}
