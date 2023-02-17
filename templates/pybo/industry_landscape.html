@@ -22,127 +22,125 @@
     </div>
 
     {% if target %}
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="card">
-                <h5 class="card-header"><em>Target Industry</em></h5>
-                <div class="card-body">
-                    <h5 class="card-title"><strong>{{ target }}</strong></h5>
-                    <div>
-                        Lv 2:
-                        {{ code_2 }}
-                        {{ name_2 }}
-                    </div>
-                    <div>
-                        Lv 3:
-                        {{ code_3 }}
-                        {{ name_3 }}
-                    </div>
-                    <div>
-                        Lv 4:
-                        {{ code_4 }}
-                        {{ name_4 }}
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <h5 class="card-header"><em>Target Industry</em></h5>
+                    <div class="card-body">
+                        <h5 class="card-title"><strong>{{ target }}</strong></h5>
+                        <div>
+                            Lv 2:
+                            {{ code_2 }}
+                            {{ name_2 }}
+                        </div>
+                        <div>
+                            Lv 3:
+                            {{ code_3 }}
+                            {{ name_3 }}
+                        </div>
+                        <div>
+                            Lv 4:
+                            {{ code_4 }}
+                            {{ name_4 }}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <p></p>
+        <p></p>
 
 
 
-    <div>
-        <table class="table" style = "border: 1px solid DarkGray;">
-            <thead>
-            <tr>
-                <td><b>Lv</b></td>
-                <td><b>CODE</b></td>
-                <td><b>표준산업분류</b></td>
-                <td><b>회사 수</b></td>
-            </tr>
-            </thead>
-
-            <tbody>
-            {% for list in industry_lists %}
-                {% if list.0 == 2 %}
-                <tr style="background-color: Silver;">
-                    {% for i in list %}
-                    <td>{{ i }}</td>
-                    {% endfor %}
-                </tr>
-            {% elif list.0 == 3 %}
-                <tr style="background-color: Gainsboro;">
-                    {% for i in list %}
-                    <td>{{ i }}</td>
-                    {% endfor %}
-                </tr>
-            {% elif code_4 in list %}
-                <tr style="background-color: LemonChiffon; font-weight: bold;">
-                    {% for i in list %}
-                    <td>{{ i }}</td>
-                    {% endfor %}
-                </tr>
-            {% else %}
+        <div>
+            <table class="table" style = "border: 1px solid DarkGray;">
+                <thead>
                 <tr>
-                    {% for i in list %}
-                    <td>{{ i }}</td>
-                    {% endfor %}
+                    <td><b>Lv</b></td>
+                    <td><b>CODE</b></td>
+                    <td><b>표준산업분류</b></td>
+                    <td><b>회사 수</b></td>
                 </tr>
+                </thead>
 
-            {% endif %}
-            {% endfor %}
+                <tbody>
+                {% for list in industry_lists %}
+                    {% if list.0 == 2 %}
+                    <tr style="background-color: Silver;">
+                        {% for i in list %}
+                        <td>{{ i }}</td>
+                        {% endfor %}
+                    </tr>
+                {% elif list.0 == 3 %}
+                    <tr style="background-color: Gainsboro;">
+                        {% for i in list %}
+                        <td>{{ i }}</td>
+                        {% endfor %}
+                    </tr>
+                {% elif code_4 in list %}
+                    <tr style="background-color: LemonChiffon; font-weight: bold;">
+                        {% for i in list %}
+                        <td>{{ i }}</td>
+                        {% endfor %}
+                    </tr>
+                {% else %}
+                    <tr>
+                        {% for i in list %}
+                        <td>{{ i }}</td>
+                        {% endfor %}
+                    </tr>
 
-            </tbody>
-        </table>
-    </div>
+                {% endif %}
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
 
 
 
 
-    <!--
-    <div>
-        {{ df_industry | safe }}
-    </div>
-    -->
+        <!--
+        <div>
+            {{ df_industry | safe }}
+        </div>
+        -->
 
-    <p></p>
-    <div class="'input-group mb-3">
-        <form action = "{% url 'pybo:industry_landscape_2' %}" class="row g-3">
+        <p></p>
+        <div class="'input-group mb-3">
+            <form action = "{% url 'pybo:industry_landscape_2' %}" class="row g-3">
 
-            <div class="col-auto">
-                <label class="col-form-label"> 분석대상 산업레벨 </label>
-            </div>
-
-            <div class = "col-auto">
-                <select name = "level" class="form-select">
-                    <option selected> --선택--</option>
-                    <option value = 2> Lv 2 </option>
-                    <option value = 3> Lv 3 </option>
-                    <option value = 4> Lv 4 </option>
-                </select>
-            </div>
-
-            <div class = "col-auto">
-                <div class="form-check form-check-inline">
-                <input class="form-check-input" type = "radio" name = "fs_type" id = "별도" value = "별도" checked="checked">
-                <label class="form-check-label" for="별도">별도FS</label>
+                <div class="col-auto">
+                    <label class="col-form-label"> 분석대상 산업레벨 </label>
                 </div>
-            </div>
 
-            <div class = "col-auto">
-                <div class="form-check form-check-inline">
-                <input class="form-check-input" type = "radio" name = "fs_type" id = "연결" value = "연결">
-                <label class="form-check-label" for="별도">연결FS</label>
+                <div class = "col-auto">
+                    <select name = "level" class="form-select">
+                        <option value = 2> Lv 2 </option>
+                        <option value = 3> Lv 3 </option>
+                        <option selected value = 4> Lv 4 </option>
+                    </select>
                 </div>
-            </div>
 
-            <div class = "col-auto">
-                <input type="submit" class="btn btn-primary" value="입력">
-                {% csrf_token %}
-            </div>
-        </form>
-    </div>
+                <div class = "col-auto">
+                    <div class="form-check form-check-inline">
+                    <input class="form-check-input" type = "radio" name = "fs_type" id = "별도" value = "별도" checked="checked">
+                    <label class="form-check-label" for="별도">별도FS</label>
+                    </div>
+                </div>
 
+                <div class = "col-auto">
+                    <div class="form-check form-check-inline">
+                    <input class="form-check-input" type = "radio" name = "fs_type" id = "연결" value = "연결">
+                    <label class="form-check-label" for="별도">연결FS</label>
+                    </div>
+                </div>
+
+                <div class = "col-auto">
+                    <input type="submit" class="btn btn-primary" value="입력">
+                    {% csrf_token %}
+                </div>
+            </form>
+        </div>
     {% endif %}
 
 
