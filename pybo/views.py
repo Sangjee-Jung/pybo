@@ -147,7 +147,7 @@ def industry_landscape_2(request):
 
     context = {"level": level, "code": search_code, "name": search_name, "companies": companies,
                "df": df.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format ),
-               "df_lists": df_lists ,"fs_type": fs_type, "target": target}
+               "df_lists": df_lists,"fs_type": fs_type, "target": target, "df_index": df_index}
 
     return render(request, 'pybo/industry_landscape_2.html', context)
 

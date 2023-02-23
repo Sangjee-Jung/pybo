@@ -12,7 +12,21 @@
     <p></p>
     <div>
         <form action = "{% url 'pybo:industry_landscape_3' %}">
-            <button type = "submit" class="btn btn-primary"> 그래프 생성 </button>
+            <div class="row g-3">
+                <div class="col-auto">
+                    <label for="graph_대상" class="col-form-label"> 분석대상 회사를 선택하세요 (Ctrl키 사용하여 중복 선택) : </label>
+                </div>
+                <div class="col-auto">
+                    <select name="graph_대상" id="graph_대상" multiple size="7">
+                        {% for index in df_index %}
+                        <option> {{index}} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type = "submit" class="btn btn-primary"> 그래프 생성 </button>
+                </div>
+            </div>
         </form>
     </div>
     <p></p>
