@@ -11,7 +11,7 @@
                     <label for="excel_file_ledger" class="col-form-label"> 원장 업로드: </label>
                 </div>
                 <div class="col-auto">
-                    <input type="file" class="form-control" name="excel_file_ledger" id="excel_file_ledger">
+                    <input type="file" class="form-control" name="excel_file_ledger" id="excel_file_ledger" required>
                     {% csrf_token %}
                 </div>
                 <div class="col-auto">

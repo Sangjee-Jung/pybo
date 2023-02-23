@@ -7,8 +7,8 @@
     <div class="'input-group mb-3">
         <form class="row g-3">
             <div class="col-auto">
-                <input class="form-control" list="datalistOptions" name="target" placeholder="회사명을 입력하세요">
-                <datalist id="datalistOptions">
+                <input class="form-control" list="datalistOptions" name="target" placeholder="회사명을 입력하세요" required>
+                <datalist id="datalistOptions" >
                     {% for name in company_name_all %}
                     <option> {{name}} </option>
                     {% endfor %}

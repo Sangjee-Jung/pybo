@@ -11,10 +11,9 @@
                 <label for="start_year" class="col-form-label">시작년도</label>
             </div>
             <div class = "col-auto">
-                <select name = "start_year" class="form-select" id="start_year">
-                    <option selected> --선택--</option>
+                <select name = "start_year" required class="form-select" id="start_year">
                     <option value = 2017> 2017 </option>
-                    <option value = 2018> 2018 </option>
+                    <option value = 2018 selected> 2018 </option>
                     <option value = 2019> 2019 </option>
                     <option value = 2020> 2020 </option>
                     <option value = 2021> 2021 </option>
@@ -25,14 +24,13 @@
                 <label for="end_year" class="col-form-label">종료년도</label>
             </div>
             <div class = "col-auto">
-                <select name = "end_year" class="form-select" id="end_year">
-                    <option selected> --선택--</option>
+                <select name = "end_year" required class="form-select" id="end_year" >
                     <option value = 2017> 2017 </option>
                     <option value = 2018> 2018 </option>
                     <option value = 2019> 2019 </option>
                     <option value = 2020> 2020 </option>
                     <option value = 2021> 2021 </option>
-                    <option value = 2022> 2022 </option>
+                    <option value = 2022 selected> 2022 </option>
                 </select>
             </div>
             <div class = "col-auto">
@@ -52,7 +50,7 @@
                 <label for="excel_file_2017" class="col-form-label"> 2017년 파일 업로드 : </label>
             </div>
             <div class="col-auto">
-                <input type="file" class="form-control" name="excel_file_2017" id="excel_file_2017">
+                <input type="file" class="form-control" name="excel_file_2017" id="excel_file_2017" required>
                 {% csrf_token %}
             </div>
         </div>
@@ -64,7 +62,7 @@
                 <label for="excel_file_2018" class="col-form-label"> 2018년 파일 업로드 : </label>
             </div>
             <div class="col-auto">
-                <input type="file" class="form-control" name="excel_file_2018" id="excel_file_2018">
+                <input type="file" class="form-control" name="excel_file_2018" id="excel_file_2018" required>
                 {% csrf_token %}
             </div>
         </div>
@@ -76,7 +74,7 @@
                 <label for="excel_file_2019" class="col-form-label"> 2019년 파일 업로드 : </label>
             </div>
             <div class="col-auto">
-                <input type="file" class="form-control" name="excel_file_2019" id="excel_file_2019">
+                <input type="file" class="form-control" name="excel_file_2019" id="excel_file_2019" required>
                 {% csrf_token %}
             </div>
         </div>
@@ -88,7 +86,7 @@
                 <label for="excel_file_2020" class="col-form-label"> 2020년 파일 업로드 : </label>
             </div>
             <div class="col-auto">
-                <input type="file" class="form-control" name="excel_file_2020" id="excel_file_2020">
+                <input type="file" class="form-control" name="excel_file_2020" id="excel_file_2020" required>
                 {% csrf_token %}
             </div>
         </div>
@@ -100,7 +98,7 @@
                 <label for="excel_file_2021" class="col-form-label"> 2021년 파일 업로드 : </label>
             </div>
             <div class="col-auto">
-                <input type="file" class="form-control" name="excel_file_2021" id="excel_file_2021">
+                <input type="file" class="form-control" name="excel_file_2021" id="excel_file_2021" required>
                 {% csrf_token %}
             </div>
         </div>
@@ -112,7 +110,7 @@
                 <label for="excel_file_2022" class="col-form-label"> 2022년 파일 업로드 : </label>
             </div>
             <div class="col-auto">
-                <input type="file" class="form-control" name="excel_file_2022" id="excel_file_2022">
+                <input type="file" class="form-control" name="excel_file_2022" id="excel_file_2022" required>
                 {% csrf_token %}
             </div>
         </div>
