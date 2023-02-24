@@ -14,17 +14,18 @@
         <form action = "{% url 'pybo:industry_landscape_3' %}">
             <div class="row g-3">
                 <div class="col-auto">
-                    <label for="graph_대상" class="col-form-label"> 분석대상 회사를 선택하세요 (Ctrl키 사용하여 중복 선택) : </label>
+                    <label for="graph_대상" class="col-form-label"> 비교대상 회사를 선택하세요 (Ctrl, Shift 키 사용하여 중복 선택) : </label>
                 </div>
                 <div class="col-auto">
-                    <select name="graph_대상" id="graph_대상" multiple size="7">
+                    <select name="graph_대상" id="graph_대상" multiple size="7" required>
                         {% for index in df_index %}
                         <option> {{index}} </option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-auto">
-                    <button type = "submit" class="btn btn-primary"> 그래프 생성 </button>
+                    <input type = "submit" class="btn btn-primary" value="그래프생성">
+                    {% csrf_token %}
                 </div>
             </div>
         </form>

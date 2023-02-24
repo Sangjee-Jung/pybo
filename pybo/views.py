@@ -166,11 +166,16 @@ def industry_landscape_3(request):
     for i in range(len(df_columns)):
         df[df_columns[i]] = df_rows[i]
     df['index'] = df_index
-    df.set_index('index')
 
-    graph = make_scatter(df)
+    #비교대상 필터링
+    graph_대상 = request.GET.getlist('graph_대상')
 
-    context = {"graph": graph, "level": level, "code": search_code, "name": search_name}
+    df_대상 = df[df['index'].isin(graph_대상)].reset_index(drop=True)
+    df_대상.set_index('index')
+
+    graph = make_scatter(df_대상)
+
+    context = {"graph": graph, "level": level, "code": search_code, "name": search_name, 'graph_대상':graph_대상}
 
     return render(request, 'pybo/industry_landscape_3.html', context)
 
