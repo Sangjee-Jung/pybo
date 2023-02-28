@@ -13,7 +13,7 @@ from .models import Document, Dart_is_2
 import os
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
-from .landscape import load_industry, define_industry, define_companies, make_scatter
+from .landscape import load_industry, define_industry, define_companies, make_scatter, make_df_customized, make_scatter_customized
 from .excel_programs import excel_concat
 import mpld3
 
@@ -137,6 +137,8 @@ def industry_landscape_2(request):
     request.session['search_code'] = search_code
     request.session['search_name'] = search_name
 
+    request.session['fs_type'] = fs_type
+
     #리스트 만들기
     df_lists = []
     df2 = df.reset_index(drop =False)
@@ -173,6 +175,10 @@ def industry_landscape_3(request):
     df_대상 = df[df['index'].isin(graph_대상)].reset_index(drop=True)
     df_대상.set_index('index')
 
+    #Session 만들기
+    request.session['graph_대상'] = graph_대상
+
+    #그래프 그려
     graph = make_scatter(df_대상)
 
     context = {"graph": graph, "level": level, "code": search_code, "name": search_name, 'graph_대상':graph_대상}
@@ -181,32 +187,24 @@ def industry_landscape_3(request):
 
 def industry_landscape_4(request):
 
-    number = int(request.GET.get('number'))
+    x축 = request.GET.get('x축')
+    y축 = request.GET.get('y축')
 
-    # Session 가져오기
-    df_columns = request.session['df_columns']
-    df_rows = request.session['df_rows']
-    df_index = request.session['df_index']
+    #Session 가져오기
+    graph_대상 = request.session['graph_대상']
+    fs_type = request.session['fs_type']
 
-    # df 생성
-    df = pd.DataFrame()
-    df.index = df_index
-    for i in range(len(df_columns)):
-        df[df_columns[i]] = df_rows[i]
-    df['index'] = df_index
-    df.set_index('index')
+    #df 생성
+    df_customized = make_df_customized(x축,y축,graph_대상, fs_type)
 
-    df_상위 = None
-    df_하위 = None
-
-    df_상위 = df.iloc[0:number,:]
-    df_하위 = df.iloc[number:,:]
-
-    graph_상위 = make_scatter(df_상위)
-    graph_하위 = make_scatter(df_하위)
+    #그래프 그려
+    graph_customized = make_scatter_customized(df_customized, x축, y축)
 
 
-    context = {"number": number, "graph_상위": graph_상위, "graph_하위":graph_하위}
+    context = {"x축": x축, "y축": y축, "graph_대상": graph_대상, "fs_type": fs_type,
+               "df_customized": df_customized.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format), "graph_customized": graph_customized}
+
+
 
     return render(request, 'pybo/industry_landscape_4.html', context)
 

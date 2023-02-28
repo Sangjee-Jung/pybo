@@ -5,23 +5,10 @@
         <b>Industry Landscape</b>
     </h2>
 
-    <div>
-        <strong>상위 {{number}}개</strong> 회사에 대한 분석
-    </div>
-    <div>
-        {{graph_상위 | safe}}
-    </div>
     <br>
-
-    <div>
-        상위 {{number}}개 회사를 <strong>제외한</strong> 분석
-    </div>
-    <div>
-        {{graph_하위 | safe}}
-    </div>
-
-    <i>#처음부터 다시 시작하지 않는 경우 그래프 순서 반대로 나올 수 있음</i>
-
+    <h5><strong><u>Further Analysis</u></strong></h5>
+    {{graph_customized | safe}}
+    {{df_customized | safe}}
 
 </div>
 {% endblock %}

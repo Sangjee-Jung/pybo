@@ -139,6 +139,72 @@ def define_companies(search_code, level, fs_type):
 
     return search_name, companies, df
 
+def make_df_customized(x축,y축,graph_대상, fs_type):
+
+    if fs_type == "별도":
+        df = pd.read_excel("static/dart_fs.xlsx", sheet_name='별도', header=0)
+    else:
+        df = pd.read_excel("static/dart_fs.xlsx", sheet_name='연결', header=0)
+
+
+    x축_2022_LTM = []
+    x축_2021 = []
+    x축_2020 = []
+    x축_2019 = []
+    y축_2022_LTM = []
+    y축_2021 = []
+    y축_2020 = []
+    y축_2019 = []
+
+    for 대상 in graph_대상:
+        x축_row = df[(df['company'] == 대상) & (df['account'] == x축)]
+        try:
+            x축_2022_LTM.append(int(x축_row['FY22_9M_LTM']))
+        except:
+            x축_2022_LTM.append(np.nan)
+        try:
+            x축_2021.append(int(x축_row['FY21']))
+        except:
+            x축_2021.append(np.nan)
+        try:
+            x축_2020.append(int(x축_row['FY20']))
+        except:
+            x축_2020.append(np.nan)
+        try:
+            x축_2019.append(int(x축_row['FY19']))
+        except:
+            x축_2019.append(np.nan)
+
+        y축_row = df[(df['company'] == 대상) & (df['account'] == y축)]
+        try:
+            y축_2022_LTM.append(int(y축_row['FY22_9M_LTM']))
+        except:
+            y축_2022_LTM.append(np.nan)
+        try:
+            y축_2021.append(int(y축_row['FY21']))
+        except:
+            y축_2021.append(np.nan)
+        try:
+            y축_2020.append(int(y축_row['FY20']))
+        except:
+            y축_2020.append(np.nan)
+        try:
+            y축_2019.append(int(y축_row['FY19']))
+        except:
+            y축_2019.append(np.nan)
+
+
+    dict_data = {'x축_2022_LTM': x축_2022_LTM, 'y축_2022_LTM': y축_2022_LTM,
+                 'x축_2021': x축_2021, 'y축_2021': y축_2021,
+                 'x축_2020': x축_2020, 'y축_2020': y축_2020,
+                 'x축_2019': x축_2019, 'y축_2019': y축_2019}
+
+    df_customized = pd.DataFrame(dict_data, index= graph_대상)
+    df_customized = df_customized.astype('float')
+
+
+    return df_customized
+
 def make_scatter(df):
 
     #색상설정
@@ -183,6 +249,7 @@ def make_scatter(df):
     # 연결선 그리기
     df_arrow1 = df[['매출액_2021', '영업이익_2021', '매출액_2020', '영업이익_2020']]
     df_arrow1.dropna(how="any")
+
     for i in range(len(df_arrow1)):
         plt.plot([df_arrow1['매출액_2021'][i], df_arrow1['매출액_2020'][i]], [df_arrow1['영업이익_2021'][i],df_arrow1['영업이익_2020'][i]], color='black', alpha=0.2)
 
@@ -221,3 +288,89 @@ def make_scatter(df):
     graph = mpld3.fig_to_html(f, figid='THIS_IS_FIGID')
 
     return graph
+
+
+def make_scatter_customized(df, x축, y축):
+
+    # 색상설정
+    kpmg_blue = '#00338D'
+    medium_blue = '#005EB8'
+    light_blue = '#0091DA'
+    violet = '#483698'
+    purple = '#470A68'
+    light_purple = '#6D2077'
+    green = '#00A3A1'
+
+    color_kpmg = [light_blue, medium_blue, light_purple, green]
+
+
+    #######################그래프그리기##########################
+    # 그래프 설정
+    f = plt.figure(figsize=(17, 10))
+    plt.rc('font', family='Malgun Gothic')
+    plt.rcParams['axes.unicode_minus'] = False
+    plt.rc('font', size=13)
+
+
+    # 결측치 제거된 DataFrame 생성
+    df_2021 = df[['x축_2021', 'y축_2021']]
+    df_2021.dropna(how="any")
+
+    df_2020 = df[['x축_2020', 'y축_2020']]
+    df_2020.dropna(how="any")
+
+    df_2019 = df[['x축_2019', 'y축_2019']]
+    df_2019.dropna(how="any")
+
+    df_2022_LTM = df[['x축_2022_LTM', 'y축_2022_LTM']]
+    df_2022_LTM.dropna(how="any")
+
+
+    # 산점도 그래프 그리기
+    plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3])
+    plt.scatter(df_2021['x축_2021'], df_2021['y축_2021'], color=color_kpmg[0])
+    plt.scatter(df_2020['x축_2020'], df_2020['y축_2020'], color=color_kpmg[1])
+    plt.scatter(df_2019['x축_2019'], df_2019['y축_2019'], color=color_kpmg[2])
+
+
+    # 연결선 그리기
+    df_arrow1 = df[['x축_2021', 'y축_2021', 'x축_2020', 'y축_2020']]
+    df_arrow1.dropna(how="any")
+
+    for i in range(len(df_arrow1)):
+        plt.plot([df_arrow1['x축_2021'][i], df_arrow1['x축_2020'][i]],
+                 [df_arrow1['y축_2021'][i], df_arrow1['y축_2020'][i]], color='black', alpha=0.2)
+
+    df_arrow2 = df[['x축_2020', 'y축_2020', 'x축_2019', 'y축_2019']]
+    df_arrow2.dropna(how="any")
+
+    for i in range(len(df_arrow2)):
+        plt.plot([df_arrow2['x축_2020'][i], df_arrow2['x축_2019'][i]],
+                 [df_arrow2['y축_2020'][i], df_arrow2['y축_2019'][i]], color='black', alpha=0.2)
+
+    df_arrow3 = df[['x축_2022_LTM', 'y축_2022_LTM', 'x축_2021', 'y축_2021']]
+    df_arrow3.dropna(how="any")
+
+    for i in range(len(df_arrow3)):
+        plt.plot([df_arrow3['x축_2022_LTM'][i], df_arrow3['x축_2021'][i]],
+                 [df_arrow3['y축_2022_LTM'][i], df_arrow3['y축_2021'][i]], color='black', linestyle='--', alpha=0.2)
+
+
+
+    # x축 설정
+    xmax = plt.axis()[1]
+    plt.xlim(0, xmax)
+
+
+    # 축, 범례 표시
+    plt.xlabel(x축, fontsize=17, labelpad=30)
+    plt.ylabel(y축, fontsize=17, labelpad=45)
+    plt.legend(['2022 LTM(9월기준)', '2021', '2020', '2019'], fontsize=15, loc='upper left')
+
+    # 수평선(영업이익=0) 표시
+    plt.plot([0, xmax], [0, 0], color='indianred', linestyle='--', linewidth=1.2, alpha=0.5)
+
+    # HTML로 내보내기
+    graph_customized = mpld3.fig_to_html(f, figid='THIS_IS_FIGID')
+
+    return graph_customized
