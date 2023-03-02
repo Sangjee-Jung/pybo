@@ -118,10 +118,8 @@ def define_companies(search_code, level, fs_type):
         except:
             매출액_2019.append(np.nan)
 
-    dict_data = {'매출액_2022_LTM': 매출액_2022_LTM, '영업이익_2022_LTM': 영업이익_2022_LTM,
-                 '매출액_2021': 매출액_2021, '영업이익_2021': 영업이익_2021,
-                 '매출액_2020': 매출액_2020, '영업이익_2020': 영업이익_2020,
-                 '매출액_2019': 매출액_2019, '영업이익_2019': 영업이익_2019}
+    dict_data = {'매출액_2019': 매출액_2019, '매출액_2020': 매출액_2020, '매출액_2021': 매출액_2021, '매출액_2022_LTM': 매출액_2022_LTM,
+                 '영업이익_2019': 영업이익_2019, '영업이익_2020': 영업이익_2020, '영업이익_2021': 영업이익_2021, '영업이익_2022_LTM': 영업이익_2022_LTM}
 
     df = pd.DataFrame(dict_data, index=companies)
     df = df.astype('float')
@@ -194,10 +192,8 @@ def make_df_customized(x축,y축,graph_대상, fs_type):
             y축_2019.append(np.nan)
 
 
-    dict_data = {'x축_2022_LTM': x축_2022_LTM, 'y축_2022_LTM': y축_2022_LTM,
-                 'x축_2021': x축_2021, 'y축_2021': y축_2021,
-                 'x축_2020': x축_2020, 'y축_2020': y축_2020,
-                 'x축_2019': x축_2019, 'y축_2019': y축_2019}
+    dict_data = {'x축_2019': x축_2019, 'x축_2020': x축_2020, 'x축_2021': x축_2021, 'x축_2022_LTM': x축_2022_LTM,
+                 'y축_2019': y축_2019, 'y축_2020': y축_2020, 'y축_2021': y축_2021, 'y축_2022_LTM': y축_2022_LTM}
 
     df_customized = pd.DataFrame(dict_data, index= graph_대상)
     df_customized = df_customized.astype('float')
@@ -325,6 +321,7 @@ def make_scatter_customized(df, x축, y축):
     df_2022_LTM = df[['x축_2022_LTM', 'y축_2022_LTM']]
     df_2022_LTM.dropna(how="any")
 
+    index = df.index.to_list()
 
     # 산점도 그래프 그리기
     plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3])
@@ -356,15 +353,27 @@ def make_scatter_customized(df, x축, y축):
                  [df_arrow3['y축_2022_LTM'][i], df_arrow3['y축_2021'][i]], color='black', linestyle='--', alpha=0.2)
 
 
-
     # x축 설정
     xmax = plt.axis()[1]
     plt.xlim(0, xmax)
 
+    # 회사명 표시
+    for i in range(len(df_2021)):
+        plt.text(df_2021['x축_2021'][i] + xmax*0.005, df_2021['y축_2021'][i],
+                 index[i])
+
+    # Dictionary 설정
+
+    names = {'ifrs-full_Revenue': '매출액', 'ifrs-full_CostOfSales': '매출원가', 'ifrs-full_GrossProfit': '매출총이익',
+             'dart_TotalSellingGeneralAdministrativeExpenses': '판매비와관리비', 'dart_OperatingIncomeLoss': '영업이익',
+             'ifrs-full_ProfitLoss': '당기순이익'}
+
+    name_x축 = names[x축]
+    name_y축 = names[y축]
 
     # 축, 범례 표시
-    plt.xlabel(x축, fontsize=17, labelpad=30)
-    plt.ylabel(y축, fontsize=17, labelpad=45)
+    plt.xlabel(name_x축, fontsize=17, labelpad=30)
+    plt.ylabel(name_y축, fontsize=17, labelpad=45)
     plt.legend(['2022 LTM(9월기준)', '2021', '2020', '2019'], fontsize=15, loc='upper left')
 
     # 수평선(영업이익=0) 표시
@@ -373,4 +382,4 @@ def make_scatter_customized(df, x축, y축):
     # HTML로 내보내기
     graph_customized = mpld3.fig_to_html(f, figid='THIS_IS_FIGID')
 
-    return graph_customized
+    return graph_customized, name_x축, name_y축

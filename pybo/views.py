@@ -143,9 +143,12 @@ def industry_landscape_2(request):
     df_lists = []
     df2 = df.reset_index(drop =False)
 
-
     for i in range(len(df2)):
         df_lists.append(df2.iloc[i,].tolist())
+
+    #Column명 변경
+    df.columns = ["매출액_FY19", "매출액_FY20", "매출액_FY21", "매출액_FY22LTM",
+                  "영업이익_FY19", "영업이익_FY20", "영업이익_FY21", "영업이익_FY22LTM", "영업이익률_FY21", "순위"]
 
     context = {"level": level, "code": search_code, "name": search_name, "companies": companies,
                "df": df.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format ),
@@ -198,12 +201,13 @@ def industry_landscape_4(request):
     df_customized = make_df_customized(x축,y축,graph_대상, fs_type)
 
     #그래프 그려
-    graph_customized = make_scatter_customized(df_customized, x축, y축)
+    graph_customized, name_x축,name_y축 = make_scatter_customized(df_customized, x축, y축)
 
+    df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22LTM",
+                             name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22LTM"]
 
-    context = {"x축": x축, "y축": y축, "graph_대상": graph_대상, "fs_type": fs_type,
-               "df_customized": df_customized.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format), "graph_customized": graph_customized}
-
+    context = {"df_customized": df_customized.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format),
+               "graph_customized": graph_customized}
 
 
     return render(request, 'pybo/industry_landscape_4.html', context)
