@@ -366,7 +366,7 @@ def make_scatter_customized(df, x축, y축):
 
     names = {'ifrs-full_Revenue': '매출액', 'ifrs-full_CostOfSales': '매출원가', 'ifrs-full_GrossProfit': '매출총이익',
              'dart_TotalSellingGeneralAdministrativeExpenses': '판매비와관리비', 'dart_OperatingIncomeLoss': '영업이익',
-             'ifrs-full_ProfitLoss': '당기순이익'}
+             'ifrs-full_ProfitLoss': '당기순이익', 'ifrs-full_Assets': '총자산', 'ifrs-full_Liabilities': '총부채', 'ifrs-full_Equity': '총자본' }
 
     name_x축 = names[x축]
     name_y축 = names[y축]

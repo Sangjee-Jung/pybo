@@ -8,8 +8,10 @@
     [{{ code }}]
     {{ name }}
 
-    <br>
-    <br>
+
+    <div>
+        {{ graph | safe }}
+    </div>
 
 
     <div class="'input-group mb-3">
@@ -29,7 +31,9 @@
                         <option value = dart_TotalSellingGeneralAdministrativeExpenses> 판매비와관리비 </option>
                     </optgroup>
                     <optgroup label="BS">
-
+                        <option value = ifrs-full_Assets> 총자산 </option>
+                        <option value = ifrs-full_Liabilities> 총부채 </option>
+                        <option value = ifrs-full_Equity> 총자본 </option>
                     </optgroup>
                     <optgroup label="CF">
 
@@ -56,7 +60,9 @@
                         <option value = dart_TotalSellingGeneralAdministrativeExpenses> 판매비와관리비 </option>
                     </optgroup>
                     <optgroup label="BS">
-
+                        <option value = ifrs-full_Assets> 총자산 </option>
+                        <option value = ifrs-full_Liabilities> 총부채 </option>
+                        <option value = ifrs-full_Equity> 총자본 </option>
                     </optgroup>
                     <optgroup label="CF">
 
@@ -70,15 +76,12 @@
                 </select>
             </div>
             <div class = "col-auto">
-                <input type="submit" class="btn btn-primary" value="입력">
+                <input type="submit" class="btn btn-primary" value="선택">
                 {% csrf_token %}
             </div>
         </form>
     </div>
 
-    <div>
-        {{ graph | safe }}
-    </div>
 
 
 </div>
