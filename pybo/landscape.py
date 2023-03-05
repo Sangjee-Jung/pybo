@@ -154,42 +154,59 @@ def make_df_customized(x축,y축,graph_대상, fs_type):
     y축_2020 = []
     y축_2019 = []
 
-    for 대상 in graph_대상:
-        x축_row = df[(df['company'] == 대상) & (df['account'] == x축)]
-        try:
-            x축_2022_LTM.append(int(x축_row['FY22_9M_LTM']))
-        except:
-            x축_2022_LTM.append(np.nan)
-        try:
-            x축_2021.append(int(x축_row['FY21']))
-        except:
-            x축_2021.append(np.nan)
-        try:
-            x축_2020.append(int(x축_row['FY20']))
-        except:
-            x축_2020.append(np.nan)
-        try:
-            x축_2019.append(int(x축_row['FY19']))
-        except:
-            x축_2019.append(np.nan)
+    이익률 = ['GP%', 'EBIT%', 'NI%']
+    성장률 = ['Revenue_growth%', 'EBIT_growth%', 'NI_growth%']
 
-        y축_row = df[(df['company'] == 대상) & (df['account'] == y축)]
-        try:
-            y축_2022_LTM.append(int(y축_row['FY22_9M_LTM']))
-        except:
-            y축_2022_LTM.append(np.nan)
-        try:
-            y축_2021.append(int(y축_row['FY21']))
-        except:
-            y축_2021.append(np.nan)
-        try:
-            y축_2020.append(int(y축_row['FY20']))
-        except:
-            y축_2020.append(np.nan)
-        try:
-            y축_2019.append(int(y축_row['FY19']))
-        except:
-            y축_2019.append(np.nan)
+
+    for 대상 in graph_대상:
+
+        if x축 in 이익률:
+            pass
+        elif x축 in 성장률:
+            pass
+        else:
+            x축_row = df[(df['company'] == 대상) & (df['account'] == x축)]
+            try:
+                x축_2022_LTM.append(int(x축_row['FY22_9M_LTM']))
+            except:
+                x축_2022_LTM.append(np.nan)
+            try:
+                x축_2021.append(int(x축_row['FY21']))
+            except:
+                x축_2021.append(np.nan)
+            try:
+                x축_2020.append(int(x축_row['FY20']))
+            except:
+                x축_2020.append(np.nan)
+            try:
+                x축_2019.append(int(x축_row['FY19']))
+            except:
+                x축_2019.append(np.nan)
+
+
+
+        if y축 in 이익률:
+            pass
+        elif y축 in 성장률:
+            pass
+        else:
+            y축_row = df[(df['company'] == 대상) & (df['account'] == y축)]
+            try:
+                y축_2022_LTM.append(int(y축_row['FY22_9M_LTM']))
+            except:
+                y축_2022_LTM.append(np.nan)
+            try:
+                y축_2021.append(int(y축_row['FY21']))
+            except:
+                y축_2021.append(np.nan)
+            try:
+                y축_2020.append(int(y축_row['FY20']))
+            except:
+                y축_2020.append(np.nan)
+            try:
+                y축_2019.append(int(y축_row['FY19']))
+            except:
+                y축_2019.append(np.nan)
 
 
     dict_data = {'x축_2019': x축_2019, 'x축_2020': x축_2020, 'x축_2021': x축_2021, 'x축_2022_LTM': x축_2022_LTM,
