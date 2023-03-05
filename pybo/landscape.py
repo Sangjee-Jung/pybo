@@ -154,16 +154,57 @@ def make_df_customized(x축,y축,graph_대상, fs_type):
     y축_2020 = []
     y축_2019 = []
 
+
     이익률 = ['GP%', 'EBIT%', 'NI%']
     성장률 = ['Revenue_growth%', 'EBIT_growth%', 'NI_growth%']
 
+    names_further = {'GP%': 'ifrs-full_GrossProfit', 'EBIT%': 'dart_OperatingIncomeLoss', 'NI%': 'ifrs-full_ProfitLoss',
+                     'Revenue_growth%': 'ifrs-full_Revenue', 'EBIT_growth%': 'dart_OperatingIncomeLoss', 'NI_growth%': 'ifrs-full_ProfitLoss', }
 
     for 대상 in graph_대상:
 
+        #x축
         if x축 in 이익률:
-            pass
+            x축_분모_row = df[(df['company'] == 대상) & (df['account'] == 'ifrs-full_Revenue')]
+            x축_분자_row = df[(df['company'] == 대상) & (df['account'] == names_further[x축])]
+
+            try:
+                x축_2022_LTM.append(int(x축_분자_row['FY22_9M_LTM'])/int(x축_분모_row['FY22_9M_LTM']) * 100)
+            except:
+                x축_2022_LTM.append(np.nan)
+            try:
+                x축_2021.append(int(x축_분자_row['FY21'])/int(x축_분모_row['FY21']) * 100)
+            except:
+                x축_2021.append(np.nan)
+            try:
+                x축_2020.append(int(x축_분자_row['FY20'])/int(x축_분모_row['FY20']) * 100)
+            except:
+                x축_2020.append(np.nan)
+            try:
+                x축_2019.append(int(x축_분자_row['FY19'])/int(x축_분모_row['FY19']) * 100)
+            except:
+                x축_2019.append(np.nan)
+
         elif x축 in 성장률:
-            pass
+            x축_row = df[(df['company'] == 대상) & (df['account'] == names_further[x축])]
+
+            try:
+                x축_2022_LTM.append(((int(x축_row['FY22_9M_LTM'])/int(x축_row['FY21']))-1) * 100)
+            except:
+                x축_2022_LTM.append(np.nan)
+            try:
+                x축_2021.append(((int(x축_row['FY21'])/int(x축_row['FY20']))-1) * 100)
+            except:
+                x축_2021.append(np.nan)
+            try:
+                x축_2020.append(((int(x축_row['FY20'])/int(x축_row['FY19']))-1) * 100)
+            except:
+                x축_2020.append(np.nan)
+            try:
+                x축_2019.append(((int(x축_row['FY19'])/int(x축_row['FY18']))-1) * 100)
+            except:
+                x축_2019.append(np.nan)
+
         else:
             x축_row = df[(df['company'] == 대상) & (df['account'] == x축)]
             try:
@@ -183,12 +224,50 @@ def make_df_customized(x축,y축,graph_대상, fs_type):
             except:
                 x축_2019.append(np.nan)
 
-
-
+        #y축
         if y축 in 이익률:
-            pass
+            y축_분모_row = df[(df['company'] == 대상) & (df['account'] == 'ifrs-full_Revenue')]
+            y축_분자_row = df[(df['company'] == 대상) & (df['account'] == names_further[y축])]
+
+            try:
+                y축_2022_LTM.append(int(y축_분자_row['FY22_9M_LTM']) / int(y축_분모_row['FY22_9M_LTM']) * 100)
+            except:
+                y축_2022_LTM.append(np.nan)
+            try:
+                y축_2021.append(int(y축_분자_row['FY21']) / int(y축_분모_row['FY21']) * 100)
+            except:
+                y축_2021.append(np.nan)
+            try:
+                y축_2020.append(int(y축_분자_row['FY20']) / int(y축_분모_row['FY20']) * 100)
+            except:
+                y축_2020.append(np.nan)
+            try:
+                y축_2019.append(int(y축_분자_row['FY19']) / int(y축_분모_row['FY19']) * 100)
+            except:
+                y축_2019.append(np.nan)
+
+
         elif y축 in 성장률:
-            pass
+            y축_row = df[(df['company'] == 대상) & (df['account'] == names_further[y축])]
+
+            try:
+                y축_2022_LTM.append(((int(y축_row['FY22_9M_LTM']) / int(y축_row['FY21'])) - 1) * 100)
+            except:
+                y축_2022_LTM.append(np.nan)
+            try:
+                y축_2021.append(((int(y축_row['FY21']) / int(y축_row['FY20'])) - 1) * 100)
+            except:
+                y축_2021.append(np.nan)
+            try:
+                y축_2020.append(((int(y축_row['FY20']) / int(y축_row['FY19'])) - 1) * 100)
+            except:
+                y축_2020.append(np.nan)
+            try:
+                y축_2019.append(((int(y축_row['FY19']) / int(y축_row['FY18'])) - 1) * 100)
+            except:
+                y축_2019.append(np.nan)
+                
+
         else:
             y축_row = df[(df['company'] == 대상) & (df['account'] == y축)]
             try:
@@ -385,7 +464,9 @@ def make_scatter_customized(df, x축, y축):
              'dart_TotalSellingGeneralAdministrativeExpenses': '판매비와관리비', 'dart_OperatingIncomeLoss': '영업이익',
              'ifrs-full_ProfitLoss': '당기순이익', 'ifrs-full_Assets': '총자산', 'ifrs-full_Liabilities': '총부채', 'ifrs-full_Equity': '총자본',
              'ifrs-full_CashFlowsFromUsedInOperatingActivities': '영업활동CF', 'ifrs-full_CashFlowsFromUsedInInvestingActivities': '투자활동CF',
-             'ifrs-full_CashFlowsFromUsedInFinancingActivities': '재무활동CF', }
+             'ifrs-full_CashFlowsFromUsedInFinancingActivities': '재무활동CF',
+             'GP%': '매출총이익률', 'EBIT%': '영업이익률', 'NI%': '당기순이익률',
+             'Revenue_growth%': '매출증가율', 'EBIT_growth%': '영업이익증가율', 'NI_growth%': '당기순이익증가율',}
 
     name_x축 = names[x축]
     name_y축 = names[y축]
