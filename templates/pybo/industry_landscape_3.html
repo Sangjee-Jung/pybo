@@ -18,7 +18,7 @@
         <h5><strong><u>Further Analysis</u></strong></h5>
         <form action = "{% url 'pybo:industry_landscape_4' %}" class="row g-3">
             <div class="col-auto">
-                <label class="col-form-label"> <strong>[축 선택]</strong> X축: </label>
+                <label class="col-form-label"> <strong>[축 설정]</strong> X축: </label>
             </div>
             <div class="col-auto">
                 <select name = "x축" required class="form-select" id="x축">
@@ -96,6 +96,28 @@
                     <option value = ifrs-full_Revenue > 매출액 </option>
                     <option value = dart_OperatingIncomeLoss > 영업이익 </option>
                     <option value = ifrs-full_ProfitLoss > 당기순이익 </option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="start_year" class="col-form-label">시작년도: </label>
+            </div>
+            <div class = "col-auto">
+                <select name = "start_year" required class="form-select" id="start_year">
+                    <option value = 2019 selected> 2019 </option>
+                    <option value = 2020> 2020 </option>
+                    <option value = 2021> 2021 </option>
+                    <option value = 2022> 2022 </option>
+                </select>
+            </div>
+            <div class = "col-auto">
+                <label for="end_year" class="col-form-label">종료년도: </label>
+            </div>
+            <div class = "col-auto">
+                <select name = "end_year" required class="form-select" id="end_year" >
+                    <option value = 2019> 2019 </option>
+                    <option value = 2020> 2020 </option>
+                    <option value = 2021> 2021 </option>
+                    <option value = 2022 selected> 2022 </option>
                 </select>
             </div>
             <div class = "col-auto">
