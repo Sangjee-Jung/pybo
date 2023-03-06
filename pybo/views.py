@@ -192,19 +192,26 @@ def industry_landscape_4(request):
 
     x축 = request.GET.get('x축')
     y축 = request.GET.get('y축')
+    size = request.GET.get('size')
 
     #Session 가져오기
     graph_대상 = request.session['graph_대상']
     fs_type = request.session['fs_type']
 
     #df 생성
-    df_customized = make_df_customized(x축,y축,graph_대상, fs_type)
+    df_customized = make_df_customized(x축,y축,graph_대상, fs_type, size)
 
     #그래프 그려
-    graph_customized, name_x축,name_y축 = make_scatter_customized(df_customized, x축, y축)
+    graph_customized, name_x축,name_y축 = make_scatter_customized(df_customized, x축, y축, size)
 
-    df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22LTM",
-                             name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22LTM"]
+
+    if size == "n/a":
+        df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22LTM",
+                                 name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22LTM"]
+    else:
+        df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22LTM",
+                                 name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22LTM",
+                                 "size_FY19", "size_FY20", "size_FY21", "size_FY22LTM",]
 
     context = {"df_customized": df_customized.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format),
                "graph_customized": graph_customized}

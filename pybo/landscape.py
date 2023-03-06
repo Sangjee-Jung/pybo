@@ -1,6 +1,7 @@
 import json
 import mpld3
 import matplotlib.pyplot as plt
+from matplotlib.patches import Circle
 import pandas as pd
 import numpy as np
 
@@ -137,7 +138,7 @@ def define_companies(search_code, level, fs_type):
 
     return search_name, companies, df
 
-def make_df_customized(x축,y축,graph_대상, fs_type):
+def make_df_customized(x축,y축,graph_대상, fs_type, size):
 
     if fs_type == "별도":
         df = pd.read_excel("static/dart_fs.xlsx", sheet_name='별도', header=0)
@@ -153,7 +154,10 @@ def make_df_customized(x축,y축,graph_대상, fs_type):
     y축_2021 = []
     y축_2020 = []
     y축_2019 = []
-
+    size_2022_LTM = []
+    size_2021 = []
+    size_2020 = []
+    size_2019 = []
 
     이익률 = ['GP%', 'EBIT%', 'NI%']
     성장률 = ['Revenue_growth%', 'EBIT_growth%', 'NI_growth%']
@@ -266,7 +270,7 @@ def make_df_customized(x축,y축,graph_대상, fs_type):
                 y축_2019.append(((int(y축_row['FY19']) / int(y축_row['FY18'])) - 1) * 100)
             except:
                 y축_2019.append(np.nan)
-                
+
 
         else:
             y축_row = df[(df['company'] == 대상) & (df['account'] == y축)]
@@ -287,13 +291,39 @@ def make_df_customized(x축,y축,graph_대상, fs_type):
             except:
                 y축_2019.append(np.nan)
 
+        #size
+        if size == "n/a":
+            pass
+        else:
+            size_row = df[(df['company'] == 대상) & (df['account'] == size)]
+            try:
+                size_2022_LTM.append(int(size_row['FY22_9M_LTM']))
+            except:
+                size_2022_LTM.append(np.nan)
+            try:
+                size_2021.append(int(size_row['FY21']))
+            except:
+                size_2021.append(np.nan)
+            try:
+                size_2020.append(int(size_row['FY20']))
+            except:
+                size_2020.append(np.nan)
+            try:
+                size_2019.append(int(size_row['FY19']))
+            except:
+                size_2019.append(np.nan)
 
-    dict_data = {'x축_2019': x축_2019, 'x축_2020': x축_2020, 'x축_2021': x축_2021, 'x축_2022_LTM': x축_2022_LTM,
-                 'y축_2019': y축_2019, 'y축_2020': y축_2020, 'y축_2021': y축_2021, 'y축_2022_LTM': y축_2022_LTM}
 
-    df_customized = pd.DataFrame(dict_data, index= graph_대상)
+    if size == "n/a":
+        dict_data = {'x축_2019': x축_2019, 'x축_2020': x축_2020, 'x축_2021': x축_2021, 'x축_2022_LTM': x축_2022_LTM,
+                     'y축_2019': y축_2019, 'y축_2020': y축_2020, 'y축_2021': y축_2021, 'y축_2022_LTM': y축_2022_LTM,}
+    else:
+        dict_data = {'x축_2019': x축_2019, 'x축_2020': x축_2020, 'x축_2021': x축_2021, 'x축_2022_LTM': x축_2022_LTM,
+                     'y축_2019': y축_2019, 'y축_2020': y축_2020, 'y축_2021': y축_2021, 'y축_2022_LTM': y축_2022_LTM,
+                     'size_2019': size_2019, 'size_2020': size_2020, 'size_2021': size_2021, 'size_2022_LTM': size_2022_LTM}
+
+    df_customized = pd.DataFrame(dict_data, index=graph_대상)
     df_customized = df_customized.astype('float')
-
 
     return df_customized
 
@@ -382,7 +412,7 @@ def make_scatter(df):
     return graph
 
 
-def make_scatter_customized(df, x축, y축):
+def make_scatter_customized(df, x축, y축, size):
 
     # 색상설정
     kpmg_blue = '#00338D'
@@ -419,11 +449,79 @@ def make_scatter_customized(df, x축, y축):
 
     index = df.index.to_list()
 
+    # size 지정
+    if size == "n/a":
+        pass
+    else:
+        resized_2022_LTM = []
+        resized_2021 = []
+        resized_2020 = []
+        resized_2019 = []
+
+        #Scale 설정
+        size_all = []
+        for i in range(len(index)):
+            size_all.append(int(df['size_2022_LTM'][i]))
+            size_all.append(int(df['size_2021'][i]))
+            size_all.append(int(df['size_2020'][i]))
+            size_all.append(int(df['size_2019'][i]))
+        size_max = max(size_all)
+
+        # size 재지정
+        for i in range(len(index)):
+            try:
+                if df['size_2022_LTM'][i] > 0:
+                    resized_2022_LTM.append((int(df['size_2022_LTM'][i])/size_max * 9964)+36)
+                else:
+                    resized_2022_LTM.append(36)
+            except:
+                resized_2022_LTM.append(np.nan)
+            try:
+                if df['size_2021'][i] > 0:
+                    resized_2021.append((int(df['size_2021'][i])/size_max * 9964)+36)
+                else:
+                    resized_2021.append(36)
+            except:
+                resized_2021.append(np.nan)
+            try:
+                if df['size_2020'][i] > 0:
+                    resized_2020.append((int(df['size_2020'][i])/size_max * 9964)+36)
+                else:
+                    resized_2020.append(36)
+            except:
+                resized_2020.append(np.nan)
+            try:
+                if df['size_2019'][i] >0:
+                    resized_2019.append((int(df['size_2019'][i])/size_max * 9964) + 36)
+                else:
+                    resized_2019.append(36)
+            except:
+                resized_2019.append(np.nan)
+
+
     # 산점도 그래프 그리기
-    plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3])
-    plt.scatter(df_2021['x축_2021'], df_2021['y축_2021'], color=color_kpmg[0])
-    plt.scatter(df_2020['x축_2020'], df_2020['y축_2020'], color=color_kpmg[1])
-    plt.scatter(df_2019['x축_2019'], df_2019['y축_2019'], color=color_kpmg[2])
+    if size == "n/a":
+        plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3])
+        plt.scatter(df_2021['x축_2021'], df_2021['y축_2021'], color=color_kpmg[0])
+        plt.scatter(df_2020['x축_2020'], df_2020['y축_2020'], color=color_kpmg[1])
+        plt.scatter(df_2019['x축_2019'], df_2019['y축_2019'], color=color_kpmg[2])
+    else:
+        try:
+            plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3], s=resized_2022_LTM, alpha=0.9)
+        except:
+            plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3], alpha=0.9)
+        try:
+            plt.scatter(df_2021['x축_2021'], df_2021['y축_2021'], color=color_kpmg[0], s=resized_2021, alpha=0.7)
+        except:
+            plt.scatter(df_2021['x축_2021'], df_2021['y축_2021'], color=color_kpmg[0], alpha=0.7)
+        try:
+            plt.scatter(df_2020['x축_2020'], df_2020['y축_2020'], color=color_kpmg[1], s=resized_2020, alpha=0.6)
+        except:
+            plt.scatter(df_2020['x축_2020'], df_2020['y축_2020'], color=color_kpmg[1], alpha=0.6)
+        try:
+            plt.scatter(df_2019['x축_2019'], df_2019['y축_2019'], color=color_kpmg[2], s=resized_2019, alpha=0.5)
+        except:
+            plt.scatter(df_2019['x축_2019'], df_2019['y축_2019'], color=color_kpmg[2], alpha=0.5)
 
 
     # 연결선 그리기
@@ -474,7 +572,12 @@ def make_scatter_customized(df, x축, y축):
     # 축, 범례 표시
     plt.xlabel(name_x축, fontsize=17, labelpad=30)
     plt.ylabel(name_y축, fontsize=17, labelpad=45)
-    plt.legend(['2022 LTM(9월기준)', '2021', '2020', '2019'], fontsize=15, loc='upper left')
+
+    #legend 표시
+    if size == "n/a":
+        plt.legend(['2022 LTM(9월기준)','2021', '2020', '2019'], fontsize=15, loc='upper left')
+    else:
+        pass
 
     # 수평선(영업이익=0) 표시
     plt.plot([0, xmax], [0, 0], color='indianred', linestyle='--', linewidth=1.2, alpha=0.5)

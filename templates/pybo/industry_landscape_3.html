@@ -87,6 +87,17 @@
                     </optgroup>
                 </select>
             </div>
+            <div class="col-auto">
+                <label class="col-form-label"> Size:</label>
+            </div>
+            <div class="col-auto">
+                <select name = "size" required class="form-select" id="size">
+                    <option value = n/a selected> --선택안함-- </option>
+                    <option value = ifrs-full_Revenue > 매출액 </option>
+                    <option value = dart_OperatingIncomeLoss > 영업이익 </option>
+                    <option value = ifrs-full_ProfitLoss > 당기순이익 </option>
+                </select>
+            </div>
             <div class = "col-auto">
                 <input type="submit" class="btn btn-primary" value="선택">
                 {% csrf_token %}
