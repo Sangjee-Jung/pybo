@@ -412,7 +412,7 @@ def make_scatter(df):
     return graph
 
 
-def make_scatter_customized(df, x축, y축, size):
+def make_scatter_customized(df, x축, y축, size, years):
 
     # 색상설정
     kpmg_blue = '#00338D'
@@ -461,10 +461,26 @@ def make_scatter_customized(df, x축, y축, size):
         #Scale 설정
         size_all = []
         for i in range(len(index)):
-            size_all.append(int(df['size_2022_LTM'][i]))
-            size_all.append(int(df['size_2021'][i]))
-            size_all.append(int(df['size_2020'][i]))
-            size_all.append(int(df['size_2019'][i]))
+            if 2022 in years:
+                size_all.append(int(df['size_2022_LTM'][i]))
+            else:
+                pass
+
+            if 2021 in years:
+                size_all.append(int(df['size_2021'][i]))
+            else:
+                pass
+
+            if 2020 in years:
+                size_all.append(int(df['size_2020'][i]))
+            else:
+                pass
+
+            if 2019 in years:
+                size_all.append(int(df['size_2019'][i]))
+            else:
+                pass
+
         size_max = max(size_all)
 
         # size 재지정
@@ -501,50 +517,86 @@ def make_scatter_customized(df, x축, y축, size):
 
     # 산점도 그래프 그리기
     if size == "n/a":
-        plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3])
-        plt.scatter(df_2021['x축_2021'], df_2021['y축_2021'], color=color_kpmg[0])
-        plt.scatter(df_2020['x축_2020'], df_2020['y축_2020'], color=color_kpmg[1])
-        plt.scatter(df_2019['x축_2019'], df_2019['y축_2019'], color=color_kpmg[2])
+        if 2022 in years:
+            plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3])
+        else:
+            pass
+        if 2021 in years:
+            plt.scatter(df_2021['x축_2021'], df_2021['y축_2021'], color=color_kpmg[0])
+        else:
+            pass
+        if 2020 in years:
+            plt.scatter(df_2020['x축_2020'], df_2020['y축_2020'], color=color_kpmg[1])
+        else:
+            pass
+        if 2019 in years:
+            plt.scatter(df_2019['x축_2019'], df_2019['y축_2019'], color=color_kpmg[2])
+        else:
+            pass
     else:
-        try:
-            plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3], s=resized_2022_LTM, alpha=0.9)
-        except:
-            plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3], alpha=0.9)
-        try:
-            plt.scatter(df_2021['x축_2021'], df_2021['y축_2021'], color=color_kpmg[0], s=resized_2021, alpha=0.7)
-        except:
-            plt.scatter(df_2021['x축_2021'], df_2021['y축_2021'], color=color_kpmg[0], alpha=0.7)
-        try:
-            plt.scatter(df_2020['x축_2020'], df_2020['y축_2020'], color=color_kpmg[1], s=resized_2020, alpha=0.6)
-        except:
-            plt.scatter(df_2020['x축_2020'], df_2020['y축_2020'], color=color_kpmg[1], alpha=0.6)
-        try:
-            plt.scatter(df_2019['x축_2019'], df_2019['y축_2019'], color=color_kpmg[2], s=resized_2019, alpha=0.5)
-        except:
-            plt.scatter(df_2019['x축_2019'], df_2019['y축_2019'], color=color_kpmg[2], alpha=0.5)
+        if 2022 in years:
+            try:
+                plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3], s=resized_2022_LTM, alpha=0.9)
+            except:
+                plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3], alpha=0.9)
+        else:
+            pass
+
+        if 2021 in years:
+            try:
+                plt.scatter(df_2021['x축_2021'], df_2021['y축_2021'], color=color_kpmg[0], s=resized_2021, alpha=0.7)
+            except:
+                plt.scatter(df_2021['x축_2021'], df_2021['y축_2021'], color=color_kpmg[0], alpha=0.7)
+        else:
+            pass
+
+        if 2020 in years:
+            try:
+                plt.scatter(df_2020['x축_2020'], df_2020['y축_2020'], color=color_kpmg[1], s=resized_2020, alpha=0.6)
+            except:
+                plt.scatter(df_2020['x축_2020'], df_2020['y축_2020'], color=color_kpmg[1], alpha=0.6)
+        else:
+            pass
+
+        if 2019 in years:
+            try:
+                plt.scatter(df_2019['x축_2019'], df_2019['y축_2019'], color=color_kpmg[2], s=resized_2019, alpha=0.5)
+            except:
+                plt.scatter(df_2019['x축_2019'], df_2019['y축_2019'], color=color_kpmg[2], alpha=0.5)
+        else:
+            pass
 
 
     # 연결선 그리기
-    df_arrow1 = df[['x축_2021', 'y축_2021', 'x축_2020', 'y축_2020']]
-    df_arrow1.dropna(how="any")
+    if (2021 in years) and (2020 in years):
+        df_arrow1 = df[['x축_2021', 'y축_2021', 'x축_2020', 'y축_2020']]
+        df_arrow1.dropna(how="any")
 
-    for i in range(len(df_arrow1)):
-        plt.plot([df_arrow1['x축_2021'][i], df_arrow1['x축_2020'][i]],
-                 [df_arrow1['y축_2021'][i], df_arrow1['y축_2020'][i]], color='black', alpha=0.2)
+        for i in range(len(df_arrow1)):
+            plt.plot([df_arrow1['x축_2021'][i], df_arrow1['x축_2020'][i]],
+                     [df_arrow1['y축_2021'][i], df_arrow1['y축_2020'][i]], color='black', alpha=0.2)
+    else:
+        pass
 
-    df_arrow2 = df[['x축_2020', 'y축_2020', 'x축_2019', 'y축_2019']]
-    df_arrow2.dropna(how="any")
+    if (2020 in years) and (2019 in years):
+        df_arrow2 = df[['x축_2020', 'y축_2020', 'x축_2019', 'y축_2019']]
+        df_arrow2.dropna(how="any")
 
-    for i in range(len(df_arrow2)):
-        plt.plot([df_arrow2['x축_2020'][i], df_arrow2['x축_2019'][i]],
-                 [df_arrow2['y축_2020'][i], df_arrow2['y축_2019'][i]], color='black', alpha=0.2)
+        for i in range(len(df_arrow2)):
+            plt.plot([df_arrow2['x축_2020'][i], df_arrow2['x축_2019'][i]],
+                     [df_arrow2['y축_2020'][i], df_arrow2['y축_2019'][i]], color='black', alpha=0.2)
+    else:
+        pass
 
-    df_arrow3 = df[['x축_2022_LTM', 'y축_2022_LTM', 'x축_2021', 'y축_2021']]
-    df_arrow3.dropna(how="any")
+    if (2022 in years) and (2021 in years):
+        df_arrow3 = df[['x축_2022_LTM', 'y축_2022_LTM', 'x축_2021', 'y축_2021']]
+        df_arrow3.dropna(how="any")
 
-    for i in range(len(df_arrow3)):
-        plt.plot([df_arrow3['x축_2022_LTM'][i], df_arrow3['x축_2021'][i]],
-                 [df_arrow3['y축_2022_LTM'][i], df_arrow3['y축_2021'][i]], color='black', linestyle='--', alpha=0.2)
+        for i in range(len(df_arrow3)):
+            plt.plot([df_arrow3['x축_2022_LTM'][i], df_arrow3['x축_2021'][i]],
+                     [df_arrow3['y축_2022_LTM'][i], df_arrow3['y축_2021'][i]], color='black', linestyle='--', alpha=0.2)
+    else:
+        pass
 
 
     # x축 설정
