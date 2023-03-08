@@ -125,15 +125,15 @@ def define_companies(search_code, level, fs_type):
     df = pd.DataFrame(dict_data, index=companies)
     df = df.astype('float')
 
-    영업이익률_2021 = []
+    영업이익률_2022 = []
     for i in range(len(companies)):
         try:
-            영업이익률_2021.append(df['영업이익_2021'][i] / df['매출액_2021'][i] * 100)
+            영업이익률_2022.append(df['영업이익_2022_LTM'][i] / df['매출액_2022_LTM'][i] * 100)
         except:
-            영업이익률_2021.append(np.nan)
+            영업이익률_2022.append(np.nan)
 
-    df["영업이익률_2021"] = 영업이익률_2021
-    df["순위"] = df['매출액_2021'].rank(ascending = False, numeric_only = True)
+    df["영업이익률_2022"] = 영업이익률_2022
+    df["순위"] = df['매출액_2022_LTM'].rank(ascending = False, numeric_only = True)
     df = df.sort_values(by=['순위'], axis=0)
 
     return search_name, companies, df
@@ -348,7 +348,7 @@ def make_scatter(df):
     plt.rc('font', size=13)
 
     # 결측치 제거된 DataFrame 생성
-    df_2021 = df[['매출액_2021', '영업이익_2021', '영업이익률_2021', '순위','index']]
+    df_2021 = df[['매출액_2021', '영업이익_2021', '영업이익률_2022', '순위','index']]
     df_2021.dropna(how="any")
 
 
@@ -394,9 +394,9 @@ def make_scatter(df):
     plt.xlim(0, xmax)
 
     #회사명 표시
-    for i in range(len(df_2021)):
-        plt.text(df_2021['매출액_2021'][i] + xmax*0.005, df_2021['영업이익_2021'][i],
-                 df_2021['index'][i] + "(" + str("%0.2f%%" % df_2021['영업이익률_2021'][i]) + ")")
+    for i in range(len(df_2022_LTM)):
+        plt.text(df_2022_LTM['매출액_2022_LTM'][i] + xmax*0.005, df_2022_LTM['영업이익_2022_LTM'][i],
+                 df_2021['index'][i] + "(" + str("%0.2f%%" % df_2021['영업이익률_2022'][i]) + ")")
 
     # 축, 범례 표시
     plt.xlabel('매출액', fontsize=17, labelpad=30)
@@ -604,9 +604,27 @@ def make_scatter_customized(df, x축, y축, size, years):
     plt.xlim(0, xmax)
 
     # 회사명 표시
-    for i in range(len(df_2021)):
-        plt.text(df_2021['x축_2021'][i] + xmax*0.005, df_2021['y축_2021'][i],
-                 index[i])
+
+    if 2022 in years:
+        for i in range(len(df_2022_LTM)):
+            plt.text(df_2022_LTM['x축_2022_LTM'][i] + xmax*0.005, df_2022_LTM['y축_2022_LTM'][i],
+                     index[i])
+    elif 2021 in years:
+        for i in range(len(df_2021)):
+            plt.text(df_2021['x축_2021'][i] + xmax*0.005, df_2021['y축_2021'][i],
+                     index[i])
+    elif 2020 in years:
+        for i in range(len(df_2020)):
+            plt.text(df_2020['x축_2020'][i] + xmax*0.005, df_2020['y축_2020'][i],
+                     index[i])
+    elif 2019 in years:
+        for i in range(len(df_2019)):
+            plt.text(df_2019['x축_2019'][i] + xmax*0.005, df_2019['y축_2019'][i],
+                     index[i])
+    else:
+        pass
+
+
 
     # Dictionary 설정
 
