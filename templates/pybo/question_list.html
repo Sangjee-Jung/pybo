@@ -2,38 +2,7 @@
 {% block content %}
 
 <div class="container my-3">
-    <!--
 
-    <table class="table">
-        <thead>
-        <tr class="table-dark">
-            <th>번호</th>
-            <th>제목</th>
-            <th>작성일시</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% if question_list %}
-        {% for question in question_list %}
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>
-                <a href="{% url 'pybo:detail' question.id %}">{{question.subject}}</a>
-            </td>
-            <td>{{question.create_date}}</td>
-        </tr>
-        {% endfor %}
-        {% else %}
-        <tr>
-            <td colspan = "3">질문이 없습니다.</td>
-        </tr>
-        {% endif %}
-        </tbody>
-    </table>
-    <p>
-        <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">질문 등록하기</a>
-    </p>
-    -->
     <!--Project SJ Start-->
     <div class="container-fluid">
         <div class="row">
@@ -43,7 +12,7 @@
                 <!-- 패널 타이틀1 -->
                 <div class="panel mb-3">
                     <div class="panel-heading">
-                        <h4 class="panel-title">Industry</h4>
+                        <h4 class="panel-title">Industry/Company</h4>
                     </div>
                 <!-- 사이드바 메뉴목록1 -->
                     <ul class="list-group">
@@ -53,7 +22,7 @@
                 <!-- 패널 타이틀2 -->
                 <div class="panel panel-default mb-3">
                     <div class="panel-heading">
-                        <h4 class="panel-title">Company</h4>
+                        <h4 class="panel-title">FDD Tools</h4>
                     </div>
                 <!-- 사이드바 메뉴목록2 -->
                     <ul class="list-group">
@@ -75,24 +44,19 @@
 
 
 
-
             <!-- 9단길이의 첫번째 열 -->
              <div class="col-md-9">
                  <div class = "jumbotron">
                      <div class="container m-3">
                         <h2><strong>Laboratory for Financial Analysis (상디의 실험실)</strong> </h2>
                          <p>
-                         <div><b>Industy Landscape</b><div>
+                         <div><b>Industy Landscape</b></div>
                          <div> >>> 산업 내 비교대상 회사 선택 가능하도록 업데이트(2023.02.24) </div>
                          <div> >>> Further Analysis 업데이트 중(2023.03.02) </div>
-                         </p>
                      </div>
                  </div>
              </div>
         </div>
     </div>
-
 </div>
-
-
 {% endblock %}
