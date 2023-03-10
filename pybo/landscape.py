@@ -5,20 +5,17 @@ from matplotlib.patches import Circle
 import pandas as pd
 import numpy as np
 
-def load_industry():
+def load_industry(분류기준):
 
     #Raw Data Load
-    df_산업코드_기업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='기업코드')
-    df_산업코드_산업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='산업코드(전체)')
+    if 분류기준 == "한국표준":
+        df_산업코드_기업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='기업코드')
+        df_산업코드_산업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='산업코드(전체)')
+    else:
+        df_산업코드_기업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='기업코드_GICS')
+        df_산업코드_산업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='산업코드_GICS')
 
-    company_name_all = df_산업코드_기업['회사명'].tolist()
-    company_code_all_가공전 = df_산업코드_기업['종목코드'].tolist()
-    company_code_all = []
-    for code in company_code_all_가공전:
-        company_code_all.append(code[1:7])
-
-
-    return df_산업코드_산업, df_산업코드_기업, company_name_all, company_code_all
+    return df_산업코드_산업, df_산업코드_기업
 
 def define_industry(target, df_산업코드_산업, df_산업코드_기업):
 
@@ -43,21 +40,30 @@ def define_industry(target, df_산업코드_산업, df_산업코드_기업):
 
     return industry_code_lv2, industry_name_lv2, df_industry_code_lv2, industry_code_lv4, industry_name_lv4, industry_code_lv3, industry_name_lv3
 
-def define_companies(search_code, level, fs_type):
+def define_companies(search_code, level, fs_type, 분류기준):
 
-    df_산업코드_기업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='기업코드')
-    df_산업코드_산업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='산업코드(전체)')
+    if 분류기준 == "한국표준":
+        df_산업코드_기업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='기업코드')
+        df_산업코드_산업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='산업코드(전체)')
+    else:
+        df_산업코드_기업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='기업코드_GICS')
+        df_산업코드_산업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='산업코드_GICS')
+
 
     for i in range(len(df_산업코드_산업["CODE"])):
         if str(int(df_산업코드_산업['CODE'][i])) == search_code:
-            search_name = df_산업코드_산업['표준산업분류(한글)'][i]
+            search_name = df_산업코드_산업['Industry Name'][i]
             break
 
     companies = []
     for i in range(len(df_산업코드_기업)):
         try:
-            if str(int(df_산업코드_기업["한국표준산업분류코드"][i]))[0: level+1 ] == search_code:
-                companies.append(df_산업코드_기업['회사명'][i])
+            if 분류기준 == "한국표준":
+                if str(int(df_산업코드_기업["CODE"][i]))[0: level+1] == search_code:
+                    companies.append(df_산업코드_기업['회사명'][i])
+            else:
+                if str(int(df_산업코드_기업["CODE"][i]))[0: level*2] == search_code:
+                    companies.append(df_산업코드_기업['회사명'][i])
         except:
             pass
 

@@ -63,8 +63,18 @@ def question_create(request):
     return render(request, 'pybo/question_form.html', context)
 
 def industry_landscape(request):
-    df_산업코드_산업, df_산업코드_기업, company_name_all, company_code_all = load_industry()
+    df_회사명_List = pd.read_excel('static/회사명_List.xlsx')
+
+    company_name_all = df_회사명_List['회사명'].tolist()
+    company_code_all_가공전 = df_회사명_List['종목코드'].tolist()
+    company_code_all = []
+    for code in company_code_all_가공전:
+        company_code_all.append(code[1:7])
+
+
     target = request.GET.get('target')
+    분류기준 = request.GET.get('분류기준')
+
     code_2 = None
     name_2 = None
     code_4 = None
@@ -77,12 +87,16 @@ def industry_landscape(request):
     if target == None:
         pass
     else:
+
+        df_산업코드_산업, df_산업코드_기업 = load_industry(분류기준)
         code_2, name_2, df_industry, code_4, name_4, code_3, name_3 = define_industry(target, df_산업코드_산업, df_산업코드_기업)
 
 
         #session 지정
         request.session["code_4"] = code_4
         request.session["target"] = target
+        request.session["분류기준"] = 분류기준
+
 
     try:
 
@@ -111,15 +125,16 @@ def industry_landscape_2(request):
     fs_type = request.GET.get('fs_type')
 
     code_4 = request.session["code_4"]
-    search_code = str(code_4)[0:level+1]
-
     target = request.session["target"]
+    분류기준 = request.session["분류기준"]
 
-    #dart_is = Dart_is_2.objects.all().values()
-    #df_dart_is = pd.DataFrame(dart_is)
+    if 분류기준 == "한국표준":
+        search_code = str(code_4)[0:level+1]
+    else:
+        search_code = str(code_4)[0:level*2]
 
 
-    search_name, companies, df = define_companies(search_code, level, fs_type)
+    search_name, companies, df = define_companies(search_code, level, fs_type, 분류기준)
 
 
     #Session 만들기
