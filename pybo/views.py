@@ -15,6 +15,7 @@ from django.core.files.storage import FileSystemStorage
 import pandas as pd
 from .landscape import load_industry, define_industry, define_companies, make_scatter, make_df_customized, make_scatter_customized
 from .excel_programs import excel_concat
+from .cf import make_df_cf_waterfall
 import mpld3
 
 import logging
@@ -275,6 +276,19 @@ def industry_landscape_4(request):
     return render(request, 'pybo/industry_landscape_4.html', context)
 
 def industry_landscape_5(request):
+
+    start_year_CF = request.GET.get('start_year_CF')
+    end_year_CF = request.GET.get('end_year_CF')
+
+    years = make_years(start_year_CF, end_year_CF)
+
+    # Session 가져오기
+    graph_대상 = request.session['graph_대상']
+    fs_type = request.session['fs_type']
+
+    # df 생성
+    df_cf_waterfall = make_df_cf_waterfall(graph_대상, fs_type, years)
+
 
 
     return render(request, 'pybo/industry_landscape_5.html',)
