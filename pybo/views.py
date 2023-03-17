@@ -274,6 +274,10 @@ def industry_landscape_4(request):
 
     return render(request, 'pybo/industry_landscape_4.html', context)
 
+def industry_landscape_5(request):
+
+
+    return render(request, 'pybo/industry_landscape_5.html',)
 
 def ledger(request):
     start_year = request.GET.get('start_year')

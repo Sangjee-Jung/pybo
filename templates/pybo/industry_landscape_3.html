@@ -148,7 +148,34 @@
                 </h2>
                 <div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                        TBU
+                        <form action = "{% url 'pybo:industry_landscape_5' %}" class="row g-3">
+                            <div class="col-auto">
+                                <label for="start_year_CF" class="col-form-label">시작년도: </label>
+                            </div>
+                            <div class = "col-auto">
+                                <select name = "start_year_CF" required class="form-select" id="start_year_CF">
+                                    <option value = 2019 selected> 2019 </option>
+                                    <option value = 2020> 2020 </option>
+                                    <option value = 2021> 2021 </option>
+                                    <option value = 2022> 2022 </option>
+                                </select>
+                            </div>
+                            <div class = "col-auto">
+                                <label for="end_year_CF" class="col-form-label">종료년도: </label>
+                            </div>
+                            <div class = "col-auto">
+                                <select name = "end_year_CF" required class="form-select" id="end_year_CF" >
+                                    <option value = 2019> 2019 </option>
+                                    <option value = 2020> 2020 </option>
+                                    <option value = 2021> 2021 </option>
+                                    <option value = 2022 selected> 2022 </option>
+                                </select>
+                            </div>
+                            <div class = "col-auto">
+                                <input type="submit" class="btn btn-primary" value="선택">
+                                {% csrf_token %}
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
