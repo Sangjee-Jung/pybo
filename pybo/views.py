@@ -289,9 +289,9 @@ def industry_landscape_5(request):
     # df 생성
     df_cf_waterfall = make_df_cf_waterfall(graph_대상, fs_type, years)
 
+    context= {"df_cf_waterfall": df_cf_waterfall.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format), }
 
-
-    return render(request, 'pybo/industry_landscape_5.html',)
+    return render(request, 'pybo/industry_landscape_5.html', context)
 
 def ledger(request):
     start_year = request.GET.get('start_year')
