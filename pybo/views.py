@@ -15,7 +15,7 @@ from django.core.files.storage import FileSystemStorage
 import pandas as pd
 from .landscape import load_industry, define_industry, define_companies, make_scatter, make_df_customized, make_scatter_customized
 from .excel_programs import excel_concat
-from .cf import make_df_cf_waterfall
+from .cf import make_df_cf_waterfall, make_graph_cf_waterfall
 import mpld3
 
 import logging
@@ -287,9 +287,13 @@ def industry_landscape_5(request):
     fs_type = request.session['fs_type']
 
     # df 생성
-    df_cf_waterfall = make_df_cf_waterfall(graph_대상, fs_type, years)
+    df_cf_waterfall = make_df_cf_waterfall(graph_대상, fs_type)
 
-    context= {"df_cf_waterfall": df_cf_waterfall.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format), }
+    # 그래프 그려
+    graph_cf_waterfall, index = make_graph_cf_waterfall(df_cf_waterfall, graph_대상)
+
+    context = {"df_cf_waterfall": df_cf_waterfall.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format),
+               "graph_cf_waterfall": graph_cf_waterfall, "index": index }
 
     return render(request, 'pybo/industry_landscape_5.html', context)
 
