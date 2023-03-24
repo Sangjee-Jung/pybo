@@ -13,7 +13,7 @@ from .models import Document, Dart_is_2
 import os
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
-from .landscape import load_industry, define_industry, define_companies, make_scatter, make_df_customized, make_scatter_customized
+from .landscape import load_industry, define_industry, define_companies, make_scatter, make_df_customized, make_scatter_customized, make_df_개별
 from .excel_programs import excel_concat
 from .cf import make_df_cf_waterfall, make_graph_cf_waterfall
 import mpld3
@@ -121,6 +121,16 @@ def industry_landscape(request):
 
         return render(request, 'pybo/industry_landscape.html', context)
 
+def industry_landscape_1_1(request):
+
+    #회사명 list 생성
+    df_회사명_List = pd.read_excel('static/회사명_List.xlsx')
+    company_name_all = df_회사명_List['회사명'].tolist()
+
+    context = {"company_name_all": company_name_all}
+
+    return render(request, 'pybo/industry_landscape_1_1.html', context)
+
 def industry_landscape_2(request):
     level = int(request.GET.get('level'))
     fs_type = request.GET.get('fs_type')
@@ -204,6 +214,35 @@ def industry_landscape_3(request):
 
     return render(request, 'pybo/industry_landscape_3.html', context)
 
+
+def industry_landscape_3_2(request):
+    target = request.GET.get('target')
+    fs_type = request.GET.get('fs_type')
+
+    #df 만들어
+    df_개별 = make_df_개별(target, fs_type)
+
+
+
+    df_개별 =df_개별.reset_index(drop=False)
+    df_개별['index'] = [target]
+    df_개별.set_index('index')
+
+
+    #graph 그려
+    graph = make_scatter(df_개별)
+
+    # df Trim
+    df_개별.drop(['순위'], axis=1, inplace=True)
+    df_개별.drop(['index'], axis=1, inplace=True)
+
+
+    context = {"df_개별": df_개별.to_html(justify='center', index = False, classes="table table-sm",  float_format='{0:>,.0f}'.format),
+               "graph": graph, "target": target}
+
+    return render(request, 'pybo/industry_landscape_3_2.html', context)
+
+
 def industry_landscape_4(request):
 
     x축 = request.GET.get('x축')
@@ -274,6 +313,7 @@ def industry_landscape_4(request):
 
 
     return render(request, 'pybo/industry_landscape_4.html', context)
+
 
 def industry_landscape_5(request):
 

@@ -144,6 +144,80 @@ def define_companies(search_code, level, fs_type, 분류기준):
 
     return search_name, companies, df
 
+def make_df_개별(target,fs_type):
+
+    # 데이터프레임 생성
+    if fs_type == "별도":
+        df = pd.read_excel("static/dart_is_4.xlsx", sheet_name='별도', header=0)
+    else:
+        df = pd.read_excel("static/dart_is_4.xlsx", sheet_name='연결', header=0)
+
+    영업이익_2022_LTM = []
+    영업이익_2021 = []
+    영업이익_2020 = []
+    영업이익_2019 = []
+    매출액_2022_LTM = []
+    매출액_2021 = []
+    매출액_2020 = []
+    매출액_2019 = []
+
+    ebit_row = df[(df['company'] == target) & (df['account'] == "dart_OperatingIncomeLoss")]
+    try:
+        영업이익_2022_LTM.append(int(ebit_row['FY22_9M_LTM']))
+    except:
+        영업이익_2022_LTM.append(np.nan)
+    try:
+        영업이익_2021.append(int(ebit_row['FY21']))
+    except:
+        영업이익_2021.append(np.nan)
+    try:
+        영업이익_2020.append(int(ebit_row['FY20']))
+    except:
+        영업이익_2020.append(np.nan)
+    try:
+        영업이익_2019.append(int(ebit_row['FY19']))
+    except:
+        영업이익_2019.append(np.nan)
+
+
+    revenue_row = df[(df['company'] == target) & (df['account'] == "ifrs-full_Revenue")]
+    if len(revenue_row) == 0:
+        revenue_row = df[(df['company'] == target) & (df['account'] == "ifrs-full_GrossProfit")]
+
+    try:
+        매출액_2022_LTM.append(int((revenue_row['FY22_9M_LTM'])))
+    except:
+        매출액_2022_LTM.append(np.nan)
+    try:
+        매출액_2021.append(int((revenue_row['FY21'])))
+    except:
+        매출액_2021.append(np.nan)
+    try:
+        매출액_2020.append(int(revenue_row['FY20']))
+    except:
+        매출액_2020.append(np.nan)
+    try:
+        매출액_2019.append(int(revenue_row['FY19']))
+    except:
+        매출액_2019.append(np.nan)
+
+    dict_data = {'매출액_2019': 매출액_2019, '매출액_2020': 매출액_2020, '매출액_2021': 매출액_2021, '매출액_2022_LTM': 매출액_2022_LTM,
+                 '영업이익_2019': 영업이익_2019, '영업이익_2020': 영업이익_2020, '영업이익_2021': 영업이익_2021, '영업이익_2022_LTM': 영업이익_2022_LTM}
+
+    df = pd.DataFrame(dict_data, index= [target])
+    df = df.astype('float')
+
+    영업이익률_2022 = []
+    try:
+        영업이익률_2022.append(df['영업이익_2022_LTM'][0] / df['매출액_2022_LTM'][0] * 100)
+    except:
+        영업이익률_2022.append(np.nan)
+
+    df["영업이익률_2022"] = 영업이익률_2022
+    df["순위"] = df['매출액_2022_LTM'].rank(ascending = False, numeric_only = True)
+
+    return df
+
 def make_df_customized(x축,y축,graph_대상, fs_type, size):
 
     if fs_type == "별도":
