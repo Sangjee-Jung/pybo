@@ -719,6 +719,11 @@ def make_scatter_customized(df, x축, y축, size, years):
     name_x축 = names[x축]
     name_y축 = names[y축]
 
+    if size == "n/a":
+        name_size = "n/a"
+    else:
+        name_size = names[size]
+
     # 축, 범례 표시
     plt.xlabel(name_x축, fontsize=17, labelpad=30)
     plt.ylabel(name_y축, fontsize=17, labelpad=45)
@@ -735,4 +740,4 @@ def make_scatter_customized(df, x축, y축, size, years):
     # HTML로 내보내기
     graph_customized = mpld3.fig_to_html(f, figid='THIS_IS_FIGID')
 
-    return graph_customized, name_x축, name_y축
+    return graph_customized, name_x축, name_y축, name_size

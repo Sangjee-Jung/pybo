@@ -236,6 +236,10 @@ def industry_landscape_3_2(request):
     df_개별.drop(['순위'], axis=1, inplace=True)
     df_개별.drop(['index'], axis=1, inplace=True)
 
+    # 개별용 Session 만들어!!
+    request.session['target_개별'] = target
+    request.session['fs_type_개별'] = fs_type
+
 
     context = {"df_개별": df_개별.to_html(justify='center', index = False, classes="table table-sm",  float_format='{0:>,.0f}'.format),
                "graph": graph, "target": target}
@@ -262,7 +266,7 @@ def industry_landscape_4(request):
     df_customized = make_df_customized(x축,y축,graph_대상, fs_type, size)
 
     #그래프 그려
-    graph_customized, name_x축,name_y축 = make_scatter_customized(df_customized, x축, y축, size, years)
+    graph_customized, name_x축,name_y축, name_size = make_scatter_customized(df_customized, x축, y축, size, years)
 
 
     if size == "n/a":
@@ -271,7 +275,7 @@ def industry_landscape_4(request):
     else:
         df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22LTM",
                                  name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22LTM",
-                                 "size_FY19", "size_FY20", "size_FY21", "size_FY22LTM",]
+                                 name_size + "_FY19", name_size + "_FY20", name_size + "_FY21", name_size + "_FY22LTM",]
 
     #기간 맞게 column 삭제
     df_customized_dropped = df_customized
@@ -281,7 +285,7 @@ def industry_landscape_4(request):
         if size == "n/a":
             df_customized_dropped.drop([name_x축 + "_FY19",name_y축 + "_FY19" ], axis=1, inplace=True)
         else:
-            df_customized_dropped.drop([name_x축 + "_FY19", name_y축 + "_FY19", "size_FY19" ], axis=1, inplace=True)
+            df_customized_dropped.drop([name_x축 + "_FY19", name_y축 + "_FY19", name_size + "_FY19" ], axis=1, inplace=True)
 
     if 2020 in years:
         pass
@@ -289,7 +293,7 @@ def industry_landscape_4(request):
         if size == "n/a":
             df_customized_dropped.drop([name_x축 + "_FY20",name_y축 + "_FY20"], axis=1, inplace=True)
         else:
-            df_customized_dropped.drop([name_x축 + "_FY20", name_y축 + "_FY20", "size_FY20"], axis=1, inplace=True)
+            df_customized_dropped.drop([name_x축 + "_FY20", name_y축 + "_FY20", name_size + "_FY20"], axis=1, inplace=True)
 
     if 2021 in years:
         pass
@@ -297,7 +301,7 @@ def industry_landscape_4(request):
         if size == "n/a":
             df_customized_dropped.drop([name_x축 + "_FY21",name_y축 + "_FY21"], axis=1, inplace=True)
         else:
-            df_customized_dropped.drop([name_x축 + "_FY21", name_y축 + "_FY21", "size_FY21"], axis=1, inplace=True)
+            df_customized_dropped.drop([name_x축 + "_FY21", name_y축 + "_FY21", name_size + "_FY21"], axis=1, inplace=True)
 
     if 2022 in years:
         pass
@@ -305,10 +309,82 @@ def industry_landscape_4(request):
         if size == "n/a":
             df_customized_dropped.drop([name_x축 + "_FY22LTM",name_y축 + "_FY22LTM"], axis=1, inplace=True)
         else:
-            df_customized_dropped.drop([name_x축 + "_FY22LTM", name_y축 + "_FY22LTM", "size_FY22LTM"], axis=1, inplace=True)
+            df_customized_dropped.drop([name_x축 + "_FY22LTM", name_y축 + "_FY22LTM", name_size + "_FY22LTM"], axis=1, inplace=True)
 
 
-    context = {"df_customized_dropped": df_customized_dropped.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format),
+    context = {"df_customized_dropped": df_customized_dropped.to_html(justify='center',index = True, classes="table table-sm", float_format='{0:>,.0f}'.format),
+               "graph_customized": graph_customized, "years": years}
+
+
+    return render(request, 'pybo/industry_landscape_4.html', context)
+
+def industry_landscape_4_2(request):
+
+    x축 = request.GET.get('x축')
+    y축 = request.GET.get('y축')
+    size = request.GET.get('size')
+    start_year = request.GET.get('start_year')
+    end_year = request.GET.get('end_year')
+
+    years = make_years(start_year, end_year)
+
+
+    #Session 가져오기 <<< 여기가 달라짐!!
+    target_개별 = [request.session['target_개별']]
+    fs_type_개별 = request.session['fs_type_개별']
+
+
+    #df 생성
+    df_customized = make_df_customized(x축,y축,target_개별, fs_type_개별, size)
+
+    #그래프 그려
+    graph_customized, name_x축,name_y축, name_size = make_scatter_customized(df_customized, x축, y축, size, years)
+
+
+    if size == "n/a":
+        df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22LTM",
+                                 name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22LTM"]
+    else:
+        df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22LTM",
+                                 name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22LTM",
+                                 name_size + "_FY19", name_size + "_FY20", name_size + "_FY21", name_size + "_FY22LTM",]
+
+    #기간 맞게 column 삭제
+    df_customized_dropped = df_customized
+    if 2019 in years:
+        pass
+    else:
+        if size == "n/a":
+            df_customized_dropped.drop([name_x축 + "_FY19",name_y축 + "_FY19" ], axis=1, inplace=True)
+        else:
+            df_customized_dropped.drop([name_x축 + "_FY19", name_y축 + "_FY19", name_size + "_FY19" ], axis=1, inplace=True)
+
+    if 2020 in years:
+        pass
+    else:
+        if size == "n/a":
+            df_customized_dropped.drop([name_x축 + "_FY20",name_y축 + "_FY20"], axis=1, inplace=True)
+        else:
+            df_customized_dropped.drop([name_x축 + "_FY20", name_y축 + "_FY20", name_size + "_FY20"], axis=1, inplace=True)
+
+    if 2021 in years:
+        pass
+    else:
+        if size == "n/a":
+            df_customized_dropped.drop([name_x축 + "_FY21",name_y축 + "_FY21"], axis=1, inplace=True)
+        else:
+            df_customized_dropped.drop([name_x축 + "_FY21", name_y축 + "_FY21", name_size + "_FY21"], axis=1, inplace=True)
+
+    if 2022 in years:
+        pass
+    else:
+        if size == "n/a":
+            df_customized_dropped.drop([name_x축 + "_FY22LTM",name_y축 + "_FY22LTM"], axis=1, inplace=True)
+        else:
+            df_customized_dropped.drop([name_x축 + "_FY22LTM", name_y축 + "_FY22LTM", name_size + "_FY22LTM"], axis=1, inplace=True)
+
+
+    context = {"df_customized_dropped": df_customized_dropped.to_html(justify='center', index=True, classes="table table-sm", float_format='{0:>,.0f}'.format),
                "graph_customized": graph_customized, "years": years}
 
 
@@ -316,11 +392,6 @@ def industry_landscape_4(request):
 
 
 def industry_landscape_5(request):
-
-    start_year_CF = request.GET.get('start_year_CF')
-    end_year_CF = request.GET.get('end_year_CF')
-
-    years = make_years(start_year_CF, end_year_CF)
 
     # Session 가져오기
     graph_대상 = request.session['graph_대상']
@@ -336,6 +407,25 @@ def industry_landscape_5(request):
                "graph_cf_waterfall": graph_cf_waterfall, "index": index }
 
     return render(request, 'pybo/industry_landscape_5.html', context)
+
+def industry_landscape_5_2(request):
+
+
+    # Session 가져오기 <<< 여기가 달라짐
+    target_개별 = [request.session['target_개별']]
+    fs_type_개별 = request.session['fs_type_개별']
+
+    # df 생성
+    df_cf_waterfall = make_df_cf_waterfall(target_개별, fs_type_개별)
+
+    # 그래프 그려
+    graph_cf_waterfall, index = make_graph_cf_waterfall(df_cf_waterfall, target_개별)
+
+    context = {"df_cf_waterfall": df_cf_waterfall.to_html(justify='center', index=True, classes="table table-sm", float_format='{0:>,.0f}'.format),
+               "graph_cf_waterfall": graph_cf_waterfall, "index": index}
+
+    return render(request, 'pybo/industry_landscape_5.html', context)
+
 
 def ledger(request):
     start_year = request.GET.get('start_year')
