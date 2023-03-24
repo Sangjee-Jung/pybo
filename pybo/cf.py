@@ -136,7 +136,7 @@ def make_graph_cf_waterfall(df_cf_waterfall, graph_대상):
     colors_using = [kpmg_blue, light_blue, light_purple]
 
     #그래프 설정
-    f = plt.figure(figsize=(17, 10))
+    f = plt.figure(figsize=(17, 6 * len(graph_대상)))
     plt.rc('font', family='Malgun Gothic')
     plt.rcParams['axes.unicode_minus'] = False
     plt.rc('font', size=13)
