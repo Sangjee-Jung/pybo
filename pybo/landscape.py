@@ -469,13 +469,26 @@ def make_scatter(df):
                  [df_arrow3['영업이익_2022_LTM'][i], df_arrow3['영업이익_2021'][i]], color='black', linestyle='--', alpha=0.2)
 
 
-    # x축 설정
+    # x축, y축 설정
+    xmin = plt.axis()[0]
     xmax = plt.axis()[1]
-    plt.xlim(0, xmax)
+    ymin = plt.axis()[2]
+    ymax = plt.axis()[3]
+
+    # y_range 설정
+    if ymin>=0:
+        y_range = ymax
+    else:
+        y_range = ymax - ymin
+
+    if xmin >= 0:
+        plt.xlim(0, xmax*1.1)
+    else:
+        plt.xlim(xmin, xmax*1.1)
 
     #회사명 표시
     for i in range(len(df_2022_LTM)):
-        plt.text(df_2022_LTM['매출액_2022_LTM'][i] + xmax*0.005, df_2022_LTM['영업이익_2022_LTM'][i],
+        plt.text(df_2022_LTM['매출액_2022_LTM'][i] - xmax*0.03, df_2022_LTM['영업이익_2022_LTM'][i] + y_range*0.02,
                  df_2021['index'][i] + "(" + str("%0.2f%%" % df_2021['영업이익률_2022'][i]) + ")")
 
     # 축, 범례 표시
@@ -484,13 +497,16 @@ def make_scatter(df):
     plt.legend(['2022 LTM(9월기준)','2021', '2020', '2019'], fontsize=15, loc='upper left')
 
     # 수평선(영업이익=0) 표시
-    plt.plot([0,xmax],[0,0], color='indianred', linestyle='--', linewidth=1.2, alpha=0.5)
+
+    if xmin >= 0:
+        plt.plot([0,xmax*1.1],[0,0], color='indianred', linestyle='--', linewidth=1.2, alpha=0.5)
+    else:
+        plt.plot([xmin, xmax*1.1], [0, 0], color='indianred', linestyle='--', linewidth=1.2, alpha=0.5)
 
     #HTML로 내보내기
     graph = mpld3.fig_to_html(f, figid='THIS_IS_FIGID')
 
     return graph
-
 
 def make_scatter_customized(df, x축, y축, size, years):
 
@@ -504,7 +520,6 @@ def make_scatter_customized(df, x축, y축, size, years):
     green = '#00A3A1'
 
     color_kpmg = [light_blue, medium_blue, light_purple, green]
-
 
     #######################그래프그리기##########################
     # 그래프 설정
@@ -679,27 +694,40 @@ def make_scatter_customized(df, x축, y축, size, years):
         pass
 
 
-    # x축 설정
+    # x축, y축 설정
+    xmin = plt.axis()[0]
     xmax = plt.axis()[1]
-    plt.xlim(0, xmax)
+    ymin = plt.axis()[2]
+    ymax = plt.axis()[3]
+
+    # y_range 설정
+    if ymin >= 0:
+        y_range = ymax
+    else:
+        y_range = ymax - ymin
+
+    if xmin >= 0:
+        plt.xlim(0, xmax*1.1)
+    else:
+        plt.xlim(xmin, xmax*1.1)
 
     # 회사명 표시
 
     if 2022 in years:
         for i in range(len(df_2022_LTM)):
-            plt.text(df_2022_LTM['x축_2022_LTM'][i] + xmax*0.005, df_2022_LTM['y축_2022_LTM'][i],
+            plt.text(df_2022_LTM['x축_2022_LTM'][i] - xmax*0.03, df_2022_LTM['y축_2022_LTM'][i] + y_range*0.02,
                      index[i])
     elif 2021 in years:
         for i in range(len(df_2021)):
-            plt.text(df_2021['x축_2021'][i] + xmax*0.005, df_2021['y축_2021'][i],
+            plt.text(df_2021['x축_2021'][i] - xmax*0.03, df_2021['y축_2021'][i] + y_range*0.02,
                      index[i])
     elif 2020 in years:
         for i in range(len(df_2020)):
-            plt.text(df_2020['x축_2020'][i] + xmax*0.005, df_2020['y축_2020'][i],
+            plt.text(df_2020['x축_2020'][i] - xmax*0.03, df_2020['y축_2020'][i] + y_range*0.02,
                      index[i])
     elif 2019 in years:
         for i in range(len(df_2019)):
-            plt.text(df_2019['x축_2019'][i] + xmax*0.005, df_2019['y축_2019'][i],
+            plt.text(df_2019['x축_2019'][i] - xmax*0.03, df_2019['y축_2019'][i] + y_range*0.02,
                      index[i])
     else:
         pass
@@ -735,7 +763,10 @@ def make_scatter_customized(df, x축, y축, size, years):
         pass
 
     # 수평선(영업이익=0) 표시
-    plt.plot([0, xmax], [0, 0], color='indianred', linestyle='--', linewidth=1.2, alpha=0.5)
+    if xmin >= 0:
+        plt.plot([0, xmax*1.1], [0, 0], color='indianred', linestyle='--', linewidth=1.2, alpha=0.5)
+    else:
+        plt.plot([xmin, xmax*1.1], [0, 0], color='indianred', linestyle='--', linewidth=1.2, alpha=0.5)
 
     # HTML로 내보내기
     graph_customized = mpld3.fig_to_html(f, figid='THIS_IS_FIGID')
