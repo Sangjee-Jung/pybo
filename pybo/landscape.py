@@ -5,6 +5,9 @@ from matplotlib.patches import Circle
 import pandas as pd
 import numpy as np
 
+def format_percent(x):
+    return "{:,.1f}%".format(x)
+
 def load_industry(분류기준):
 
     #Raw Data Load

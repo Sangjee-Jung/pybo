@@ -13,7 +13,7 @@ from .models import Document, Dart_is_2
 import os
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
-from .landscape import load_industry, define_industry, define_companies, make_scatter, make_df_customized, make_scatter_customized, make_df_개별
+from .landscape import load_industry, define_industry, define_companies, make_scatter, make_df_customized, make_scatter_customized, make_df_개별, format_percent
 from .excel_programs import excel_concat
 from .cf import make_df_cf_waterfall, make_graph_cf_waterfall
 import mpld3
@@ -177,7 +177,7 @@ def industry_landscape_2(request):
                   "영업이익_FY19", "영업이익_FY20", "영업이익_FY21", "영업이익_FY22LTM", "영업이익률_FY22", "순위"]
 
     context = {"level": level, "code": search_code, "name": search_name, "companies": companies,
-               "df": df.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format ),
+               "df": df.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format, formatters={'영업이익률_FY22': format_percent} ),
                "df_lists": df_lists,"fs_type": fs_type, "target": target, "df_index": df_index}
 
     return render(request, 'pybo/industry_landscape_2.html', context)
@@ -241,8 +241,8 @@ def industry_landscape_3_2(request):
     request.session['fs_type_개별'] = fs_type
 
 
-    context = {"df_개별": df_개별.to_html(justify='center', index = False, classes="table table-sm",  float_format='{0:>,.0f}'.format),
-               "graph": graph, "target": target}
+    context = {"df_개별": df_개별.to_html(justify='center', index = False, classes="table table-sm",  float_format='{0:>,.0f}'.format, formatters={'영업이익률_2022':format_percent}),
+               "graph": graph, "target": target, }
 
     return render(request, 'pybo/industry_landscape_3_2.html', context)
 
@@ -311,8 +311,16 @@ def industry_landscape_4(request):
         else:
             df_customized_dropped.drop([name_x축 + "_FY22LTM", name_y축 + "_FY22LTM", name_size + "_FY22LTM"], axis=1, inplace=True)
 
+    #퍼센트 포매팅
+    formatters_percent = {}
+    columns = df_customized_dropped.columns.tolist()
+    for column in columns:
+        if "률" in column:
+            formatters_percent[column] = format_percent
+        if "율" in column:
+            formatters_percent[column] = format_percent
 
-    context = {"df_customized_dropped": df_customized_dropped.to_html(justify='center',index = True, classes="table table-sm", float_format='{0:>,.0f}'.format),
+    context = {"df_customized_dropped": df_customized_dropped.to_html(justify='center',index = True, classes="table table-sm", float_format='{0:>,.0f}'.format, formatters= formatters_percent),
                "graph_customized": graph_customized, "years": years}
 
 
@@ -383,8 +391,16 @@ def industry_landscape_4_2(request):
         else:
             df_customized_dropped.drop([name_x축 + "_FY22LTM", name_y축 + "_FY22LTM", name_size + "_FY22LTM"], axis=1, inplace=True)
 
+    # 퍼센트 포매팅
+    formatters_percent = {}
+    columns = df_customized_dropped.columns.tolist()
+    for column in columns:
+        if "률" in column:
+            formatters_percent[column] = format_percent
+        if "율" in column:
+            formatters_percent[column] = format_percent
 
-    context = {"df_customized_dropped": df_customized_dropped.to_html(justify='center', index=True, classes="table table-sm", float_format='{0:>,.0f}'.format),
+    context = {"df_customized_dropped": df_customized_dropped.to_html(justify='center', index=True, classes="table table-sm", float_format='{0:>,.0f}'.format, formatters= formatters_percent),
                "graph_customized": graph_customized, "years": years}
 
 
