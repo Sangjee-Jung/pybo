@@ -166,7 +166,15 @@ def make_graph_cf_waterfall(df_cf_waterfall, graph_대상):
             sum += CF[j]
             누적.append(sum)
 
-        누적.append(0)
+        누적.append(CF[-1])
+
+        #offset 지정
+        max_cf = 0
+        max_cf = max(누적)
+
+        neg_offset = max_cf / 26
+        pos_offset = max_cf / 50
+        plot_offset = int(max_cf / 5)
 
         # 그외 구하기
         bottom_양 = []
@@ -234,6 +242,19 @@ def make_graph_cf_waterfall(df_cf_waterfall, graph_대상):
         ax.bar(index, cashflow_양, width=0.7, bottom= bottom_양, color= colors)
         ax.bar(index, bottom_음, width=0.7, color="white")
         ax.bar(index, cashflow_음, width=0.7, bottom=bottom_음, color = colors)
+
+        # annotate
+        for m in range(0, 16):
+            if m in [4, 9, 14]:
+                pass
+            else:
+                y = 누적[m]
+                if CF[m] >= 0:
+                    y += pos_offset
+                else:
+                    y -= neg_offset
+                ax.annotate("{:,.0f}".format(CF[m]), (m, y), ha="center")
+
 
 
         ax.set_title(대상 + " Cash Flow", fontsize=17)
