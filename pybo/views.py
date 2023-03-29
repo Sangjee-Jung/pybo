@@ -642,6 +642,29 @@ def excel_settings(request):
 
         return render(request, 'pybo/excel_settings.html', {"df_excel_기준": df_excel_기준})
 
+def data_concat(request):
+    file_lists = []
+    filename_lists = []
+
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            for count, x in enumerate(request.FILES.getlist("files")):
+                file_lists.append(x)
+                filename_lists.append(x.name)
+
+            context = {'form': form, 'file_lists': file_lists, 'filename_lists': filename_lists }
+            return render(request, 'pybo/data_concat.html', context)
+    else:
+        form = UploadFileForm()
+
+    context = {'form': form, }
+
+    return render(request, 'pybo/data_concat.html', context)
+
+
+
+
 def excel_settings_2(request):
     header_index = int(request.GET.get('header_index'))
 

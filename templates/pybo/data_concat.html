@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3" >
+    <h2 class="border-bottom py-2">
+        <b>파일/시트 합치기</b>
+    </h2>
+
+     <div>
+        <form action="" method="POST"  enctype="multipart/form-data">
+            <label class="col-form-label">파일을 모두 선택하세요</label>
+            {{ form }}
+            {% csrf_token %}
+            <br>
+            <button name ="choice" class="btn btn-secondary" value="{{ form.value}}">Upload</button>
+        </form>
+    </div>
+
+    {{file_lists}}
+    {{filename_lists}}
+
+</div>
+{% endblock %}

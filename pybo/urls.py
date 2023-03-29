@@ -22,6 +22,7 @@ urlpatterns = [
     path('ledger/', views.ledger, name='ledger'),
     path('excel/', views.excel, name='excel'),
     path('excel/settings', views.excel_settings, name='excel_settings'),
+    path('data/concat', views.data_concat, name='data_concat'),
     path('excel/settings/2', views.excel_settings_2, name='excel_settings_2'),
     path('excel/download', views.excel_download, name='excel_download'),
     path('account/download', views.account_download, name='account_download'),
