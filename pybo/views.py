@@ -652,30 +652,38 @@ def data_concat(request):
         시트설정 = request.POST.get('시트설정')
 
         if form.is_valid():
-
             try:
                 os.remove("media/result/data_concat.xlsx")
             except:
                 pass
-
-            #writer = pd.ExcelWriter("media/result/data_concat.xlsx", engine='openpyxl',)
 
             # 파일반복
             for count, file in enumerate(request.FILES.getlist("files")):
                 file_lists.append(file)
                 filename_lists.append(file.name)
 
-                #엑셀로 읽기
-                #df = pd.read_excel(file,header=None)
-                #엑셀 저장
-                #df.to_excel(writer, index=False)
+                sheets = pd.ExcelFile(file).sheet_names
 
-            #writer.save()
-            #writer.close()
+                #시트반복
+                for i in range(len(sheets)):
+                    sheet_lists.append(sheets[i])
+
+                    df = pd.read_excel(file, sheet_name= sheets[i])
+
+                    if not os.path.exists("media/result/data_concat.xlsx"):
+                        with pd.ExcelWriter("media/result/data_concat.xlsx", mode='w', engine='openpyxl') as writer:
+                            df.to_excel(writer, index=False, sheet_name=sheets[i])
+                            writer.save()
+                    else:
+                        with pd.ExcelWriter("media/result/data_concat.xlsx", mode='a', engine='openpyxl', if_sheet_exists='new') as writer:
+                            df.to_excel(writer, index=False, sheet_name=sheets[i])
+                            writer.save()
+
 
             df_columns_setting = pd.read_excel(file_lists[0], header=None)
 
             #시트명 가져오고 파일 생성#
+            '''
             df_lists = []
             for file in file_lists:
                 df_lists.append(pd.read_excel(file, sheet_name=None))
@@ -691,12 +699,13 @@ def data_concat(request):
                         with pd.ExcelWriter("media/result/data_concat.xlsx", mode='w', engine='openpyxl') as writer:
                             df_lists[i][sheet].to_excel(writer, index=False, sheet_name= sheet)
                             writer.save()
+
                     else:
                         with pd.ExcelWriter("media/result/data_concat.xlsx", mode='a', engine='openpyxl', if_sheet_exists='new') as writer:
                             df_lists[i][sheet].to_excel(writer, index=False, sheet_name=sheet)
                             writer.save()
+            '''
 
-            #writer.close()
 
             try:
                 sheet_대상 = request.GET.get('sheet_대상')
@@ -705,7 +714,7 @@ def data_concat(request):
 
             context = {'form': form, 'file_lists': file_lists, 'filename_lists': filename_lists,
                        "df_columns_setting": df_columns_setting.to_html(justify='center', max_rows=30, classes="table table-sm table-bordered"),
-                       "sheet_lists": sheet_lists, "시트설정": 시트설정, "sheet_대상": sheet_대상, "file_lists": file_lists}
+                       "sheet_lists": sheet_lists, "시트설정": 시트설정, "sheet_대상": sheet_대상, "file_lists": file_lists, }
 
 
             return render(request, 'pybo/data_concat.html', context)
@@ -716,8 +725,6 @@ def data_concat(request):
     context = {'form': form, }
 
     return render(request, 'pybo/data_concat.html', context)
-
-
 
 def excel_settings_2(request):
     header_index = int(request.GET.get('header_index'))
