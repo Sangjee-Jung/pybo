@@ -714,7 +714,15 @@ def data_concat_2(request):
 
     return render(request, 'pybo/data_concat_2.html', context)
 
+def data_concat_2_2(request):
+
+
+    return render(request, 'pybo/data_concat_2_2.html')
+
+
 def data_concat_3(request):
+
+    selected = request.GET.getlist("selected")
 
     # Session 가져오기
     head_index_start = request.session['head_index_start']
@@ -740,10 +748,12 @@ def data_concat_3(request):
             target_data.columns = columns
 
             # 시트명 추가
-            target_data.insert(0, '시트명', sheet_name)
+            if "시트명" in selected:
+                target_data.insert(0, '시트명', sheet_name)
 
             # 파일명 추가
-            target_data.insert(0, '파일명', file[:-5])
+            if "파일명" in selected:
+                target_data.insert(0, '파일명', file[:-5])
 
             filtered_sheets.append(target_data)
     #합치기

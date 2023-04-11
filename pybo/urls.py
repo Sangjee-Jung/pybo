@@ -24,6 +24,7 @@ urlpatterns = [
     path('excel/settings', views.excel_settings, name='excel_settings'),
     path('data/concat', views.data_concat, name='data_concat'),
     path('data/concat/2', views.data_concat_2, name='data_concat_2'),
+    path('data/concat/2_2', views.data_concat_2_2, name='data_concat_2_2'),
     path('data/concat/3', views.data_concat_3, name='data_concat_3'),
     path('data/concat/download', views.data_concat_download, name='data_concat_download'),
     path('excel/settings/2', views.excel_settings_2, name='excel_settings_2'),

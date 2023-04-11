@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3" >
+    <h2 class="border-bottom py-2">
+        <b>파일/시트 합치기</b>
+    </h2>
+
+    <br>
+
+    <form action = "{% url 'pybo:data_concat_3' %}" class="row g-3">
+        <h5><b><u>Step2: 추가할 파일정보 선택 </u></b></h5>
+        <i> - 선택된 항목을 신규 Column으로 추가</i>
+        <div class="col-auto">
+            <input type="checkbox" class="form-check-input mb-3" name="selected" value="파일명" checked> 파일명
+            <input type="checkbox" class="form-check-input mb-3" name="selected" value="시트명" checked> 시트명
+        </div>
+        <div class = "col-auto">
+            <input type="submit" class="btn btn-primary" value="GO">
+            {% csrf_token %}
+        </div>
+    </form>
+
+</div>
+{% endblock %}
