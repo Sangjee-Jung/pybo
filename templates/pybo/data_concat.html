@@ -10,8 +10,8 @@
      <div>
         <form action="" method="POST" enctype="multipart/form-data" >
             <label class="col-form-label">파일을 모두 선택하세요</label>
+            {% csrf_token %}
             {{ form }}
-
             <br>
             <div class = "col-auto">
                 <div class="form-check form-check-inline">

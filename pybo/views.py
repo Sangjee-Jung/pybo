@@ -671,19 +671,6 @@ def data_concat(request):
                 for i in range(len(sheets)):
                     sheet_lists.append(sheets[i] + " (File: " + filename_lists[count] + ")")
 
-                    '''
-                    df = pd.read_excel(file, sheet_name= sheets[i])
-
-                    if not os.path.exists("media/result/data_concat.xlsx"):
-                        with pd.ExcelWriter("media/result/data_concat.xlsx", mode='w', engine='openpyxl') as writer:
-                            df.to_excel(writer, index=False, sheet_name=sheets[i])
-                            writer.save()
-                    else:
-                        with pd.ExcelWriter("media/result/data_concat.xlsx", mode='a', engine='openpyxl', if_sheet_exists='new') as writer:
-                            df.to_excel(writer, index=False, sheet_name=sheets[i])
-                            writer.save()
-                    '''
-
             df_columns_setting = pd.read_excel(file_lists[0], header=None)
 
             try:
@@ -709,6 +696,11 @@ def data_concat_2(request):
     head_index_start = int(request.GET.get('head_index_start'))
     head_index_end = int(request.GET.get('head_index_end'))
 
+    #세션 지정
+    request.session['head_index_start'] = head_index_start
+    request.session['head_index_end'] = head_index_end
+
+    #첫번쨰 파일 불러오기
     directory = "media/data_concat/"
     files = os.listdir(directory)
     df = pd.read_excel(os.path.join(directory, files[0]), header = None)
@@ -724,8 +716,46 @@ def data_concat_2(request):
 
 def data_concat_3(request):
 
+    # Session 가져오기
+    head_index_start = request.session['head_index_start']
+    head_index_end = request.session['head_index_end']
 
-    return render(request, 'pybo/data_concat_3.html',)
+    #전체 파일 불러오기
+    directory = "media/data_concat/"
+    files = os.listdir(directory)
+
+    filtered_sheets = []
+
+    #파일반복
+    for file in files:
+        all_sheets = pd.read_excel("media/data_concat/" + file, sheet_name=None, header = None)
+
+        #시트 반복
+        for sheet_name, sheet_data in all_sheets.items():
+
+            #Header 지정
+            columns = sheet_data.iloc[head_index_end]
+
+            target_data = sheet_data.iloc[head_index_end+1:,]
+            target_data.columns = columns
+
+            # 시트명 추가
+            target_data.insert(0, '시트명', sheet_name)
+
+            # 파일명 추가
+            target_data.insert(0, '파일명', file[:-5])
+
+            filtered_sheets.append(target_data)
+    #합치기
+    concated_data = pd.concat(filtered_sheets, ignore_index=True)
+    concated_data.reset_index(drop=True)
+
+    #엑셀 저장
+    concated_data.to_excel("media/result/dataset.xlsx", index=False)
+
+    context = {"df" : concated_data.to_html(justify='center', max_rows=30, classes="table table-sm table-bordered",)}
+
+    return render(request, 'pybo/data_concat_3.html',context )
 
 def excel_settings_2(request):
     header_index = int(request.GET.get('header_index'))
@@ -811,6 +841,13 @@ def account_download(request):
 
     return response
 
+def data_concat_download(request):
 
+    with open("media/result/dataset.xlsx", 'rb') as excel_file:
+        excel_data = excel_file.read()
 
+    response = HttpResponse(excel_data, content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="dataset_download.xlsx"'
+
+    return response
 

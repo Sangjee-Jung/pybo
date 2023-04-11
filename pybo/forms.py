@@ -31,4 +31,4 @@ class DocumentForm(forms.ModelForm):
 class UploadFileForm(forms.Form):
     #name = forms.CharField(max_length = 15)
     # file = forms.FileField()
-    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True,}))
+    files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True,}))

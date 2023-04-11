@@ -25,6 +25,7 @@ urlpatterns = [
     path('data/concat', views.data_concat, name='data_concat'),
     path('data/concat/2', views.data_concat_2, name='data_concat_2'),
     path('data/concat/3', views.data_concat_3, name='data_concat_3'),
+    path('data/concat/download', views.data_concat_download, name='data_concat_download'),
     path('excel/settings/2', views.excel_settings_2, name='excel_settings_2'),
     path('excel/download', views.excel_download, name='excel_download'),
     path('account/download', views.account_download, name='account_download'),
