@@ -16,7 +16,7 @@ import pandas as pd
 from .landscape import load_industry, define_industry, define_companies, make_scatter, make_df_customized, make_scatter_customized, make_df_개별, format_percent
 from .excel_programs import excel_concat
 from .cf import make_df_cf_waterfall, make_graph_cf_waterfall
-from .data_concat import handle_uploaded_file, delete_files_in_directory
+from .data_concat import handle_uploaded_file, delete_files_in_directory, select_dataframe_columns
 import mpld3
 
 import logging
@@ -669,7 +669,7 @@ def data_concat(request):
 
                 #시트반복
                 for i in range(len(sheets)):
-                    sheet_lists.append(sheets[i])
+                    sheet_lists.append(sheets[i] + " (File: " + filename_lists[count] + ")")
 
                     '''
                     df = pd.read_excel(file, sheet_name= sheets[i])
@@ -703,6 +703,29 @@ def data_concat(request):
     context = {'form': form, }
 
     return render(request, 'pybo/data_concat.html', context)
+
+def data_concat_2(request):
+    sheet_대상 = request.GET.getlist('sheet_대상')
+    head_index_start = int(request.GET.get('head_index_start'))
+    head_index_end = int(request.GET.get('head_index_end'))
+
+    directory = "media/data_concat/"
+    files = os.listdir(directory)
+    df = pd.read_excel(os.path.join(directory, files[0]), header = None)
+    df = df.iloc[head_index_start:head_index_end + 1]
+
+    sequence = range(head_index_start,head_index_end+1)
+
+    context = {'head_index_start': head_index_start, 'head_index_end': head_index_end,
+               "df": df.to_html(justify='center', max_rows=30, classes="table table-sm table-bordered", header = False),
+               "sequence": sequence}
+
+    return render(request, 'pybo/data_concat_2.html', context)
+
+def data_concat_3(request):
+
+
+    return render(request, 'pybo/data_concat_3.html',)
 
 def excel_settings_2(request):
     header_index = int(request.GET.get('header_index'))

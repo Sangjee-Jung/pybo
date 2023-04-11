@@ -30,38 +30,32 @@
     </div>
     {% endif %}
 
-    {{ filename_lists }}
     <p></p>
 
+    <!--파일 업로드 후-->
+    {% if df_columns_setting %}
+    {{ filename_lists }}
 
-    <!--시트범위 입력받기-->
-    {% if 시트설정 == "일부시트" and sheet_대상 == None %}
-    <div class="'input-group mb-3">
-    <h5><b>Sheet 선택</b></h5>
-        <form action = "" class="row g-3">
+    <p>
+    <div class="input-group mb-3">
+        <form action = "{% url 'pybo:data_concat_2' %}" class="row g-3">
+
+            <!--일부시트: 시트 선택-->
+            {% if 시트설정 == "일부시트" %}
+            <h5><b><u>Step0: Sheet 선택 </u></b></h5>
             <div class="col-auto">
-                <select name="sheet_대상" id="sheet_대상" multiple size="20" required>
+                <select name="sheet_대상" id="sheet_대상" multiple size="10" required>
                     {% for sheet in sheet_lists %}
                     <option> {{sheet}} </option>
                     {% endfor %}
                 </select>
             </div>
-            <div class = "col-auto">
-                <input type="submit" class="btn btn-primary" value="선택">
-                {% csrf_token %}
-            </div>
-        </form>
-    </div>
-    {% endif %}
+            {% endif %}
 
-    <!-- 전체시트일 경우 바로 실행 -->
-    {% if 시트설정 == "전체시트" or sheet_대상 != None %}
-    <p>
-    <div class="'input-group mb-3">
-    <h5><b>Step1: Head(컬럼명) 범위 설정</b></h5>
-        <form action = "" class="row g-3">
+            <!--컬럼 범위 설정-->
+            <h5><b><u>Step1: Header(컬럼명) 범위 설정</u></b></h5>
             <div class="col-auto">
-                <label for="head_index_start" class="col-form-label">Head 시작행: </label>
+                <label for="head_index_start" class="col-form-label">Header 시작행: </label>
             </div>
             <div class = "col-auto">
                 <select name = "head_index_start" required class="form-select" id="head_index_start">
@@ -71,6 +65,7 @@
                     <option value = 3> 3 </option>
                     <option value = 4> 4 </option>
                     <option value = 5> 5 </option>
+                    <option value = 6> 6 </option>
                 </select>
             </div>
             <div class="col-auto">
@@ -84,6 +79,7 @@
                     <option value = 3> 3 </option>
                     <option value = 4> 4 </option>
                     <option value = 5> 5 </option>
+                    <option value = 6> 6 </option>
                 </select>
             </div>
             <div class = "col-auto">
@@ -92,9 +88,8 @@
             </div>
         </form>
     </div>
-    <br>
 
-    {{file_lists}}
+    <br>
     {{df_columns_setting | safe }}
 
     {% endif %}

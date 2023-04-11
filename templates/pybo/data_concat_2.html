@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3" >
+    <h2 class="border-bottom py-2">
+        <b>파일/시트 합치기</b>
+    </h2>
+
+
+    <div class="input-group mb-3">
+        <form action = "{% url 'pybo:data_concat_3' %}" class="row g-3">
+        <h5><b><u>Step1-1: Header(컬럼명) 범위 설정 - 행이 반복되는 범위 지정</u></b></h5>
+            <i> - 일반적인 데이터셋의 경우 데이터행이 1줄씩 반복됨.
+            <br>- 그러나 2줄 이상의 단위로 데이터행이 반복되는 경우를 위하여 (ex.일부 급여대장)
+            <br><b>- 데이터행 반복 범위에 해당하는 Header 지정.</b></i>
+
+            <div class="col-auto">
+                <label for="head_repeat_index_start" class="col-form-label">Header 시작행: </label>
+            </div>
+            <div class = "col-auto">
+                <select name = "head_repeat_index_start" required class="form-select" id="head_repeat_index_start">
+                    {% for i in sequence %}
+                    <option> {{ i }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="head_repeat_index_end" class="col-form-label">종료행: </label>
+            </div>
+            <div class = "col-auto">
+                <select name = "head_repeat_index_end" required class="form-select" id="head_repeat_index_end">
+                    {% for i in sequence %}
+                    <option> {{ i }} </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class = "col-auto">
+                <input type="submit" class="btn btn-primary" value="GO">
+                {% csrf_token %}
+            </div>
+
+
+        </form>
+     </div>
+
+
+    {{df | safe}}
+
+
+</div>
+{% endblock %}
