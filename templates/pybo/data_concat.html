@@ -39,52 +39,53 @@
     <p>
     <div class="input-group mb-3">
         <form action = "{% url 'pybo:data_concat_2' %}" class="row g-3">
+            <div class="row g-3">
+                <!--일부시트: 시트 선택-->
+                {% if 시트설정 == "일부시트" %}
+                <h5><b><u>Step0: Sheet 선택 </u></b></h5>
+                <div class="col-auto">
+                    <select name="sheet_대상" id="sheet_대상" multiple size="10" required>
+                        {% for sheet in sheet_lists %}
+                        <option> {{sheet}} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
 
-            <!--일부시트: 시트 선택-->
-            {% if 시트설정 == "일부시트" %}
-            <h5><b><u>Step0: Sheet 선택 </u></b></h5>
-            <div class="col-auto">
-                <select name="sheet_대상" id="sheet_대상" multiple size="10" required>
-                    {% for sheet in sheet_lists %}
-                    <option> {{sheet}} </option>
-                    {% endfor %}
-                </select>
-            </div>
-            {% endif %}
-
-            <!--컬럼 범위 설정-->
-            <h5><b><u>Step1: Header(컬럼명) 범위 설정</u></b></h5>
-            <div class="col-auto">
-                <label for="head_index_start" class="col-form-label">Header 시작행: </label>
-            </div>
-            <div class = "col-auto">
-                <select name = "head_index_start" required class="form-select" id="head_index_start">
-                    <option value = 0 selected> 0 </option>
-                    <option value = 1> 1 </option>
-                    <option value = 2> 2 </option>
-                    <option value = 3> 3 </option>
-                    <option value = 4> 4 </option>
-                    <option value = 5> 5 </option>
-                    <option value = 6> 6 </option>
-                </select>
-            </div>
-            <div class="col-auto">
-                <label for="head_index_end" class="col-form-label">종료행: </label>
-            </div>
-            <div class = "col-auto">
-                <select name = "head_index_end" required class="form-select" id="head_index_end">
-                    <option value = 0 selected> 0 </option>
-                    <option value = 1> 1 </option>
-                    <option value = 2> 2 </option>
-                    <option value = 3> 3 </option>
-                    <option value = 4> 4 </option>
-                    <option value = 5> 5 </option>
-                    <option value = 6> 6 </option>
-                </select>
-            </div>
-            <div class = "col-auto">
-                <input type="submit" class="btn btn-primary" value="GO">
-                {% csrf_token %}
+                <!--컬럼 범위 설정-->
+                <h5><b><u>Step1: Header(컬럼명) 범위 설정</u></b></h5>
+                <div class="col-auto">
+                    <label for="head_index_start" class="col-form-label">Header 시작행: </label>
+                </div>
+                <div class = "col-auto">
+                    <select name = "head_index_start" required class="form-select" id="head_index_start">
+                        <option value = 0 selected> 0 </option>
+                        <option value = 1> 1 </option>
+                        <option value = 2> 2 </option>
+                        <option value = 3> 3 </option>
+                        <option value = 4> 4 </option>
+                        <option value = 5> 5 </option>
+                        <option value = 6> 6 </option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label for="head_index_end" class="col-form-label">종료행: </label>
+                </div>
+                <div class = "col-auto">
+                    <select name = "head_index_end" required class="form-select" id="head_index_end">
+                        <option value = 0 selected> 0 </option>
+                        <option value = 1> 1 </option>
+                        <option value = 2> 2 </option>
+                        <option value = 3> 3 </option>
+                        <option value = 4> 4 </option>
+                        <option value = 5> 5 </option>
+                        <option value = 6> 6 </option>
+                    </select>
+                </div>
+                <div class = "col-auto">
+                    <input type="submit" class="btn btn-primary" value="GO">
+                    {% csrf_token %}
+                </div>
             </div>
         </form>
     </div>

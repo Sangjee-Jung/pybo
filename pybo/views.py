@@ -16,7 +16,7 @@ import pandas as pd
 from .landscape import load_industry, define_industry, define_companies, make_scatter, make_df_customized, make_scatter_customized, make_df_개별, format_percent
 from .excel_programs import excel_concat
 from .cf import make_df_cf_waterfall, make_graph_cf_waterfall
-from .data_concat import handle_uploaded_file, delete_files_in_directory, select_dataframe_columns
+from .data_concat import handle_uploaded_file, delete_files_in_directory, select_dataframe_columns, make_concated_dataset
 import mpld3
 
 import logging
@@ -692,11 +692,13 @@ def data_concat(request):
     return render(request, 'pybo/data_concat.html', context)
 
 def data_concat_2(request):
+
     sheet_대상 = request.GET.getlist('sheet_대상')
     head_index_start = int(request.GET.get('head_index_start'))
     head_index_end = int(request.GET.get('head_index_end'))
 
     #세션 지정
+    request.session['sheet_대상'] = sheet_대상
     request.session['head_index_start'] = head_index_start
     request.session['head_index_end'] = head_index_end
 
@@ -710,64 +712,28 @@ def data_concat_2(request):
 
     context = {'head_index_start': head_index_start, 'head_index_end': head_index_end,
                "df": df.to_html(justify='center', max_rows=30, classes="table table-sm table-bordered", header = False),
-               "sequence": sequence}
+               "sequence": sequence, "sheet_대상": sheet_대상}
 
     return render(request, 'pybo/data_concat_2.html', context)
 
 def data_concat_2_2(request):
 
-
     return render(request, 'pybo/data_concat_2_2.html')
 
 
 def data_concat_3(request):
-
-    selected = request.GET.getlist("selected")
+    selected_name_option = request.GET.getlist("selected")
 
     # Session 가져오기
     head_index_start = request.session['head_index_start']
     head_index_end = request.session['head_index_end']
+    sheet_대상 = request.session["sheet_대상"]
 
-    header_range = []
-    for i in range(head_index_start,head_index_end+1):
-        header_range.append(i)
 
-    #전체 파일 불러오기
-    directory = "media/data_concat/"
-    files = os.listdir(directory)
+   #함수실행!!
+    concated_data = make_concated_dataset(head_index_start, head_index_end, selected_name_option, sheet_대상)
 
-    filtered_sheets = []
-
-    #파일반복
-    for file in files:
-        all_sheets = pd.read_excel("media/data_concat/" + file, sheet_name=None, header= header_range)
-
-        #시트 반복
-        for sheet_name, sheet_data in all_sheets.items():
-
-            #Header 지정
-            #columns = sheet_data.iloc[head_index_end,]
-
-            target_data = sheet_data.iloc[head_index_end+1:,]
-            #target_data.columns = columns
-
-            # 시트명 추가
-            if "시트명" in selected:
-                target_data.insert(0, '시트명', sheet_name)
-
-            # 파일명 추가
-            if "파일명" in selected:
-                target_data.insert(0, '파일명', file[:-5])
-
-            filtered_sheets.append(target_data)
-    #합치기
-    concated_data = pd.concat(filtered_sheets, ignore_index=True)
-    concated_data.reset_index(drop=True)
-
-    #엑셀 저장
-    concated_data.to_excel("media/result/dataset.xlsx")
-
-    context = {"df" : concated_data.to_html(justify='center', max_rows=30, classes="table table-sm table-bordered",)}
+    context = {"df" : concated_data.to_html(justify='center', max_rows=30, classes="table table-sm table-bordered",), "sheet_대상": sheet_대상,}
 
     return render(request, 'pybo/data_concat_3.html',context )
 
