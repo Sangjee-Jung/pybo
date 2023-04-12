@@ -728,6 +728,10 @@ def data_concat_3(request):
     head_index_start = request.session['head_index_start']
     head_index_end = request.session['head_index_end']
 
+    header_range = []
+    for i in range(head_index_start,head_index_end+1):
+        header_range.append(i)
+
     #전체 파일 불러오기
     directory = "media/data_concat/"
     files = os.listdir(directory)
@@ -736,16 +740,16 @@ def data_concat_3(request):
 
     #파일반복
     for file in files:
-        all_sheets = pd.read_excel("media/data_concat/" + file, sheet_name=None, header = None)
+        all_sheets = pd.read_excel("media/data_concat/" + file, sheet_name=None, header= header_range)
 
         #시트 반복
         for sheet_name, sheet_data in all_sheets.items():
 
             #Header 지정
-            columns = sheet_data.iloc[head_index_end]
+            #columns = sheet_data.iloc[head_index_end,]
 
             target_data = sheet_data.iloc[head_index_end+1:,]
-            target_data.columns = columns
+            #target_data.columns = columns
 
             # 시트명 추가
             if "시트명" in selected:
@@ -761,7 +765,7 @@ def data_concat_3(request):
     concated_data.reset_index(drop=True)
 
     #엑셀 저장
-    concated_data.to_excel("media/result/dataset.xlsx", index=False)
+    concated_data.to_excel("media/result/dataset.xlsx")
 
     context = {"df" : concated_data.to_html(justify='center', max_rows=30, classes="table table-sm table-bordered",)}
 
