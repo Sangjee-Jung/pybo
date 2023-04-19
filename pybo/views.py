@@ -16,7 +16,7 @@ import pandas as pd
 from .landscape import load_industry, define_industry, define_companies, make_scatter, make_df_customized, make_scatter_customized, make_df_개별, format_percent
 from .excel_programs import excel_concat
 from .cf import make_df_cf_waterfall, make_graph_cf_waterfall
-from .data_concat import handle_uploaded_file, delete_files_in_directory, select_dataframe_columns, make_concated_dataset
+from .data_concat import handle_uploaded_file, delete_files_in_directory, select_dataframe_columns, make_concated_dataset, make_concated_dataset_여러행
 import mpld3
 
 import logging
@@ -722,8 +722,11 @@ def data_concat_2_2(request):
 
 
 def data_concat_3(request):
-    selected_name_option = []
     selected_name_option = request.GET.getlist("selected")
+    여러행_option = request.GET.get('여러행')
+    if 여러행_option == "여러행_사용함":
+        여러행_시작행 = int(request.GET.get("head_repeat_index_start"))
+        여러행_종료행 = int(request.GET.get("head_repeat_index_end"))
 
     # Session 가져오기
     head_index_start = request.session['head_index_start']
@@ -732,9 +735,12 @@ def data_concat_3(request):
 
 
    #함수실행!!
-    concated_data = make_concated_dataset(head_index_start, head_index_end, selected_name_option, sheet_대상)
+    if 여러행_option == "여러행_사용안함":
+        concated_data = make_concated_dataset(head_index_start, head_index_end, selected_name_option, sheet_대상)
+    if 여러행_option == "여러행_사용함":
+        concated_data = make_concated_dataset_여러행(head_index_start, head_index_end, selected_name_option, sheet_대상, 여러행_시작행, 여러행_종료행)
 
-    context = {"df" : concated_data.to_html(justify='center', max_rows=30, classes="table table-sm table-bordered",), "sheet_대상": sheet_대상,}
+    context = {"df" : concated_data.to_html(justify='center', max_rows=30, classes="table table-sm table-bordered",), "sheet_대상": sheet_대상,"test": 여러행_option}
 
     return render(request, 'pybo/data_concat_3.html',context )
 

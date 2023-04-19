@@ -35,7 +35,7 @@
                     <li class = "list-group-item">
                         <p></p>
                         <h5 class="card-title"><b>#2. 여러 행을 1줄로 합치기</b></h5>
-                        <h6 class="card-subtitle mb-2 text-muted">2줄 이상씩 데이터행이 반복되는 경우 사용(ex. 일부 급여대장 양식)</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">여러 행의 단위로 반복되는 데이터를 1줄로 합쳐야 할 경우(ex. 일부 급여대장 양식)</h6>
                         <p></p>
                         <div class="col-auto">
                             <div class="form-check form-check-inline">
@@ -77,16 +77,21 @@
                                     </select>
                                 </div>
                             </div>
-
-
-
-
-
-
-
                             {{df | safe}}
                         </details>
                     </li>
+                    <!--시트 내 여러 Data -->
+                    <li class = "list-group-item">
+                        <p></p>
+                        <h5 class="card-title"><b>#3. 한 시트에 2개 이상의 Header 존재</b></h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Header를 기준으로 Dataset 분리해야 할 경우</h6>
+                        <p></p>
+                        <i>TBU</i>
+                        
+
+                    </li>
+
+
                 </ul>
 
             </div>
