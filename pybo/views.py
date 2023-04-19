@@ -722,6 +722,7 @@ def data_concat_2_2(request):
 
 
 def data_concat_3(request):
+    selected_name_option = []
     selected_name_option = request.GET.getlist("selected")
 
     # Session 가져오기

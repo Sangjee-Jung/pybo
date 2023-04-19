@@ -52,10 +52,10 @@ def make_concated_dataset(head_index_start, head_index_end, selected_name_option
                 # 파일명 추가
                 if "파일명" in selected_name_option:
                     target_data.insert(0, '파일명', file[:-5])
-                    filtered_sheets.append(target_data)
+
+                filtered_sheets.append(target_data)
             else:
                 pass
-
 
 
     # 합치기

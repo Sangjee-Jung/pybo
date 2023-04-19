@@ -7,44 +7,98 @@
 
     <br>
 
+
     <div class="input-group mb-3">
-        <form action = "{% url 'pybo:data_concat_2_2' %}" class="row g-3">
-        <h5><b><u>Step1-1: Header(컬럼명) 범위 설정 - 행이 반복되는 범위 지정</u></b></h5>
-            <i> - 일반적인 데이터셋의 경우 데이터행이 1줄씩 반복됨.
-            <br>- 그러나 2줄 이상의 단위로 데이터행이 반복되는 경우를 위하여 (ex.일부 급여대장)
-            <br><b>- 데이터행 반복 범위에 해당하는 Header 지정.</b></i>
 
-            <div class="col-auto">
-                <label for="head_repeat_index_start" class="col-form-label">Header 시작행: </label>
-            </div>
-            <div class = "col-auto">
-                <select name = "head_repeat_index_start" required class="form-select" id="head_repeat_index_start">
-                    {% for i in sequence %}
-                    <option> {{ i }} </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-auto">
-                <label for="head_repeat_index_end" class="col-form-label">종료행: </label>
-            </div>
-            <div class = "col-auto">
-                <select name = "head_repeat_index_end" required class="form-select" id="head_repeat_index_end">
-                    {% for i in sequence %}
-                    <option> {{ i }} </option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class = "col-auto">
-                <input type="submit" class="btn btn-primary" value="GO">
-                {% csrf_token %}
+    <form action = "{% url 'pybo:data_concat_3' %}" >
+        <div class="card">
+            <div class="card-header">
+                <h4>Further Customization</h4>
             </div>
 
+            <div class="card-body">
 
-        </form>
-     </div>
+                <ul class = "list-group list-group-flush">
+                    <!--파일명, 시트명 추가-->
+                    <li class = "list-group-item">
+                        <h5 class="card-title"><b>#1. 시트명/파일명 추가</b></h5>
+                        <h6 class="card-subtitle mb-2 text-muted">신규 Column으로 추가할 항목 선택</h6>
+                        <p></p>
+                        <div class="col-auto">
+                            <input type="checkbox" class="form-check-input mb-3" name="selected" value="파일명" checked> 파일명
+                            <input type="checkbox" class="form-check-input mb-3" name="selected" value="시트명" checked> 시트명
+                        </div>
 
 
-    {{df | safe}}
+                    </li>
+                    <!--여려 행을 1줄로 합치기-->
+                    <li class = "list-group-item">
+                        <p></p>
+                        <h5 class="card-title"><b>#2. 여러 행을 1줄로 합치기</b></h5>
+                        <h6 class="card-subtitle mb-2 text-muted">2줄 이상씩 데이터행이 반복되는 경우 사용(ex. 일부 급여대장 양식)</h6>
+                        <p></p>
+                        <div class="col-auto">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type = "radio" name = "여러행" id = "여러행_사용안함" value = "여러행_사용안함" required checked>
+                                <label class="form-check-label" for="여러행_사용안함">사용안함</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type = "radio" name = "여러행" id = "여러행_사용함" value = "여러행_사용함" required>
+                                <label class="form-check-label" for="여러행_사용함">사용함</label>
+                            </div>
+                        </div>
+                        <p></p>
+                        <details>
+                            <summary><b><u>Detail 설정</u></b> (If. 사용시)</summary>
+                            <ul>
+                            <li><i>Header 중 데이터행이 반복되는 범위를 지정하세요.</i></li>
+                            </ul>
+                            <p></p>
+
+                            <div class="input-group mb-3">
+                                <div class="col-auto">
+                                    <label for="head_repeat_index_start" class="col-form-label">시작행 : </label>
+                                </div>
+                                <div class = "col-auto">
+                                    <select name = "head_repeat_index_start" required class="form-select" id="head_repeat_index_start">
+                                        {% for i in sequence %}
+                                        <option> {{ i }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <label for="head_repeat_index_end" class="col-form-label">종료행 : </label>
+                                </div>
+                                <div class = "col-auto">
+                                    <select name = "head_repeat_index_end" required class="form-select" id="head_repeat_index_end">
+                                        {% for i in sequence %}
+                                        <option> {{ i }} </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+                            {{df | safe}}
+                        </details>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <p></p>
+        <div class = "col-auto">
+            <input type="submit" class="btn btn-primary" value="GO">
+            {% csrf_token %}
+        </div>
+    </form>
+    </div>
+
 
 
 </div>
