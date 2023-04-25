@@ -17,6 +17,7 @@ from .landscape import load_industry, define_industry, define_companies, make_sc
 from .excel_programs import excel_concat
 from .cf import make_df_cf_waterfall, make_graph_cf_waterfall
 from .data_concat import handle_uploaded_file, delete_files_in_directory, select_dataframe_columns, make_concated_dataset, make_concated_dataset_여러행
+from .revenue import make_df_revenue_product, make_graph_revenue_product
 import mpld3
 
 import logging
@@ -443,6 +444,29 @@ def industry_landscape_5_2(request):
 
     return render(request, 'pybo/industry_landscape_5.html', context)
 
+def industry_landscape_6(request):
+
+    start_year_Revenue = int(request.GET.get('start_year_Revenue'))
+    end_year_Revenue = int(request.GET.get('end_year_Revenue'))
+
+    years = []
+    for i in range(start_year_Revenue, end_year_Revenue+1):
+        years.append(i)
+
+    # Session 가져오기
+    graph_대상 = request.session['graph_대상']
+
+    # df 생성
+    df_revenue_product = make_df_revenue_product(graph_대상)
+
+    # 그래프 그려
+    graph_revenue_product = make_graph_revenue_product(df_revenue_product, graph_대상,years)
+
+
+    context = {'years':years, 'graph_대상':graph_대상, 'df':df_revenue_product.to_html(justify='center', index=True, classes="table table-sm", float_format='{0:>,.0f}'.format),
+               "graph_revenue_product": graph_revenue_product}
+
+    return render(request, 'pybo/industry_landscape_6.html', context)
 
 def ledger(request):
     start_year = request.GET.get('start_year')

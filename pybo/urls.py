@@ -19,6 +19,8 @@ urlpatterns = [
     path('industry-landscape/4_2', views.industry_landscape_4_2, name='industry_landscape_4_2'),
     path('industry-landscape/5', views.industry_landscape_5, name='industry_landscape_5'),
     path('industry-landscape/5_2', views.industry_landscape_5_2, name='industry_landscape_5_2'),
+    path('industry-landscape/6', views.industry_landscape_6, name='industry_landscape_6'),
+
     path('ledger/', views.ledger, name='ledger'),
     path('excel/', views.excel, name='excel'),
     path('excel/settings', views.excel_settings, name='excel_settings'),
