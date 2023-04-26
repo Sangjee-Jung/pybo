@@ -42,6 +42,9 @@ def make_graph_revenue_product(df_revenue_product, graph_대상,years):
             sizes = []
             누적 = 0
 
+            종류 = df_revenue_product.loc[대상][str(years[y]) + '_종류']
+            매출액 = int(df_revenue_product.loc[대상][str(years[y]) + '_매출액']) / 1000000
+
             # 3대매출 없는 경우
             if df_revenue_product.loc[대상][str(years[y]) + '_3대_제품명'] is np.nan:
 
@@ -92,17 +95,49 @@ def make_graph_revenue_product(df_revenue_product, graph_대상,years):
             ax = plt.subplot(len(graph_대상), len(years), (i * len(years)) + (y + 1))
             ax.axis('off')
 
+            #annotation 옵션
+            threshold = 5 ## 상한선 비율
+            count = 0
+
             try:
-                ax.pie(sizes, autopct='%1.1f%%',startangle=90, counterclock=False, radius=0.65, labeldistance = 1.1, wedgeprops = wedgeprops, colors = colors_using,)
-                ax.annotate("연결/별도", (0, 0), ha="center")
-                ax.annotate("매출액 XXX", (0, -0.1), ha="center")
+                #ax.pie(sizes, autopct='%1.1f%%',startangle=90, counterclock=False, radius=0.65, labeldistance = 1.1, wedgeprops = wedgeprops, colors = colors_using,)
+                ax.pie(sizes,startangle=90, counterclock=False, radius=0.65, labeldistance = 1.1, wedgeprops = wedgeprops, colors = colors_using,)
+                ax.annotate(종류 + " 매출", (0, 0), ha="center")
+                ax.annotate(f'{매출액:,.0f}', (0, -0.1), ha="center")
+                ax.annotate('(단위: KRW m)', (0.9, 0.7), ha="right")
 
                 plt.legend(labels, loc=(0.01,0.01), fontsize = 12)
 
                 ax.set_title(대상 +"_" + str(years[y]) , fontsize=17)
+                ax.axis('off')
+
+                ## annotation 설정
+
+                for k in range(len(sizes)):
+                    ang1, ang2 = ax.patches[k].theta1, ax.patches[k].theta2
+                    center, r = ax.patches[k].center, ax.patches[k].r
+                    text = f'{sizes[k]:.1f}%'
+
+                    if sizes[k] < 0.1:
+                        pass
+                    else:
+                        if sizes[k] < threshold:
+                            count += 1
+
+                            x축 = (r / 1.5 + count*0.1) * np.cos(np.pi / 180 * ((ang1 + ang2) / 2)) + center[0]
+                            y축 = (r / 1.5 + count*0.1) * np.sin(np.pi / 180 * ((ang1 + ang2) / 2)) + center[1]
+                            ax.text(x축, y축, text, ha='center', va='center', fontsize=13)
+
+                        else:
+                            x축 = (r / 1.5) * np.cos(np.pi / 180 * ((ang1 + ang2) / 2)) + center[0]
+                            y축 = (r / 1.5) * np.sin(np.pi / 180 * ((ang1 + ang2) / 2)) + center[1]
+                            ax.text(x축, y축, text, ha='center', va='center', fontsize=13)
 
             except:
-                pass
+                ax.set_title(대상 + "_" + str(years[y]), fontsize=17)
+                #italic(fontstyle='italic') 적용이 안되는데 이유를 모르겠다.
+                ax.text(0.5, 0.5, "Not Available", fontsize = 20, ha="center")
+                ax.axis("off")
 
 
     graph = mpld3.fig_to_html(f, figid='THIS_IS_FIGID')
