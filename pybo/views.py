@@ -175,8 +175,8 @@ def industry_landscape_2(request):
         df_lists.append(df2.iloc[i,].tolist())
 
     #Column명 변경
-    df.columns = ["매출액_FY19", "매출액_FY20", "매출액_FY21", "매출액_FY22LTM",
-                  "영업이익_FY19", "영업이익_FY20", "영업이익_FY21", "영업이익_FY22LTM", "영업이익률_FY22", "순위"]
+    df.columns = ["매출액_FY19", "매출액_FY20", "매출액_FY21", "매출액_FY22",
+                  "영업이익_FY19", "영업이익_FY20", "영업이익_FY21", "영업이익_FY22", "영업이익률_FY22", "순위"]
 
     context = {"level": level, "code": search_code, "name": search_name, "companies": companies,
                "df": df.to_html(justify='center',index = True, classes="table table-sm",  float_format='{0:>,.0f}'.format, formatters={'영업이익률_FY22': format_percent} ),

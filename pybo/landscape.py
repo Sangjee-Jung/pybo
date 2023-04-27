@@ -79,11 +79,11 @@ def define_companies(search_code, level, fs_type, 분류기준):
 
     df = dart_is_4
 
-    영업이익_2022_LTM = []
+    영업이익_2022 = []
     영업이익_2021 = []
     영업이익_2020 = []
     영업이익_2019 = []
-    매출액_2022_LTM = []
+    매출액_2022 = []
     매출액_2021 = []
     매출액_2020 = []
     매출액_2019 = []
@@ -91,9 +91,9 @@ def define_companies(search_code, level, fs_type, 분류기준):
     for company in companies:
         ebit_row = df[(df['company'] == company) & (df['account'] == "dart_OperatingIncomeLoss")]
         try:
-            영업이익_2022_LTM.append(int(ebit_row['FY22_9M_LTM']))
+            영업이익_2022.append(int(ebit_row['FY22']))
         except:
-            영업이익_2022_LTM.append(np.nan)
+            영업이익_2022.append(np.nan)
         try:
             영업이익_2021.append(int(ebit_row['FY21']))
         except:
@@ -112,9 +112,9 @@ def define_companies(search_code, level, fs_type, 분류기준):
             revenue_row = df[(df['company'] == company) & (df['account'] == "ifrs-full_GrossProfit")]
 
         try:
-            매출액_2022_LTM.append(int((revenue_row['FY22_9M_LTM'])))
+            매출액_2022.append(int((revenue_row['FY22'])))
         except:
-            매출액_2022_LTM.append(np.nan)
+            매출액_2022.append(np.nan)
         try:
             매출액_2021.append(int((revenue_row['FY21'])))
         except:
@@ -128,8 +128,8 @@ def define_companies(search_code, level, fs_type, 분류기준):
         except:
             매출액_2019.append(np.nan)
 
-    dict_data = {'매출액_2019': 매출액_2019, '매출액_2020': 매출액_2020, '매출액_2021': 매출액_2021, '매출액_2022_LTM': 매출액_2022_LTM,
-                 '영업이익_2019': 영업이익_2019, '영업이익_2020': 영업이익_2020, '영업이익_2021': 영업이익_2021, '영업이익_2022_LTM': 영업이익_2022_LTM}
+    dict_data = {'매출액_2019': 매출액_2019, '매출액_2020': 매출액_2020, '매출액_2021': 매출액_2021, '매출액_2022': 매출액_2022,
+                 '영업이익_2019': 영업이익_2019, '영업이익_2020': 영업이익_2020, '영업이익_2021': 영업이익_2021, '영업이익_2022': 영업이익_2022}
 
     df = pd.DataFrame(dict_data, index=companies)
     df = df.astype('float')
@@ -137,12 +137,12 @@ def define_companies(search_code, level, fs_type, 분류기준):
     영업이익률_2022 = []
     for i in range(len(companies)):
         try:
-            영업이익률_2022.append(df['영업이익_2022_LTM'][i] / df['매출액_2022_LTM'][i] * 100)
+            영업이익률_2022.append(df['영업이익_2022'][i] / df['매출액_2022'][i] * 100)
         except:
             영업이익률_2022.append(np.nan)
 
     df["영업이익률_2022"] = 영업이익률_2022
-    df["순위"] = df['매출액_2022_LTM'].rank(ascending = False, numeric_only = True)
+    df["순위"] = df['매출액_2022'].rank(ascending = False, numeric_only = True)
     df = df.sort_values(by=['순위'], axis=0)
 
     return search_name, companies, df
@@ -155,20 +155,20 @@ def make_df_개별(target,fs_type):
     else:
         df = pd.read_excel("static/dart_is_4.xlsx", sheet_name='연결', header=0)
 
-    영업이익_2022_LTM = []
+    영업이익_2022 = []
     영업이익_2021 = []
     영업이익_2020 = []
     영업이익_2019 = []
-    매출액_2022_LTM = []
+    매출액_2022 = []
     매출액_2021 = []
     매출액_2020 = []
     매출액_2019 = []
 
     ebit_row = df[(df['company'] == target) & (df['account'] == "dart_OperatingIncomeLoss")]
     try:
-        영업이익_2022_LTM.append(int(ebit_row['FY22_9M_LTM']))
+        영업이익_2022.append(int(ebit_row['FY22']))
     except:
-        영업이익_2022_LTM.append(np.nan)
+        영업이익_2022.append(np.nan)
     try:
         영업이익_2021.append(int(ebit_row['FY21']))
     except:
@@ -188,9 +188,9 @@ def make_df_개별(target,fs_type):
         revenue_row = df[(df['company'] == target) & (df['account'] == "ifrs-full_GrossProfit")]
 
     try:
-        매출액_2022_LTM.append(int((revenue_row['FY22_9M_LTM'])))
+        매출액_2022.append(int((revenue_row['FY22'])))
     except:
-        매출액_2022_LTM.append(np.nan)
+        매출액_2022.append(np.nan)
     try:
         매출액_2021.append(int((revenue_row['FY21'])))
     except:
@@ -204,20 +204,20 @@ def make_df_개별(target,fs_type):
     except:
         매출액_2019.append(np.nan)
 
-    dict_data = {'매출액_2019': 매출액_2019, '매출액_2020': 매출액_2020, '매출액_2021': 매출액_2021, '매출액_2022_LTM': 매출액_2022_LTM,
-                 '영업이익_2019': 영업이익_2019, '영업이익_2020': 영업이익_2020, '영업이익_2021': 영업이익_2021, '영업이익_2022_LTM': 영업이익_2022_LTM}
+    dict_data = {'매출액_2019': 매출액_2019, '매출액_2020': 매출액_2020, '매출액_2021': 매출액_2021, '매출액_2022': 매출액_2022,
+                 '영업이익_2019': 영업이익_2019, '영업이익_2020': 영업이익_2020, '영업이익_2021': 영업이익_2021, '영업이익_2022': 영업이익_2022}
 
     df = pd.DataFrame(dict_data, index= [target])
     df = df.astype('float')
 
     영업이익률_2022 = []
     try:
-        영업이익률_2022.append(df['영업이익_2022_LTM'][0] / df['매출액_2022_LTM'][0] * 100)
+        영업이익률_2022.append(df['영업이익_2022'][0] / df['매출액_2022'][0] * 100)
     except:
         영업이익률_2022.append(np.nan)
 
     df["영업이익률_2022"] = 영업이익률_2022
-    df["순위"] = df['매출액_2022_LTM'].rank(ascending = False, numeric_only = True)
+    df["순위"] = df['매출액_2022'].rank(ascending = False, numeric_only = True)
 
     return df
 
@@ -441,11 +441,11 @@ def make_scatter(df):
     df_2019 = df[['매출액_2019', '영업이익_2019']]
     df_2019.dropna(how="any")
 
-    df_2022_LTM = df[['매출액_2022_LTM', '영업이익_2022_LTM']]
-    df_2022_LTM.dropna(how="any")
+    df_2022 = df[['매출액_2022', '영업이익_2022']]
+    df_2022.dropna(how="any")
 
     # 산점도 그래프 그리기
-    plt.scatter(df_2022_LTM['매출액_2022_LTM'], df_2022_LTM['영업이익_2022_LTM'], color=color_kpmg[3])
+    plt.scatter(df_2022['매출액_2022'], df_2022['영업이익_2022'], color=color_kpmg[3])
     plt.scatter(df_2021['매출액_2021'], df_2021['영업이익_2021'], color=color_kpmg[0])
     plt.scatter(df_2020['매출액_2020'], df_2020['영업이익_2020'], color=color_kpmg[1])
     plt.scatter(df_2019['매출액_2019'], df_2019['영업이익_2019'], color=color_kpmg[2])
@@ -464,12 +464,12 @@ def make_scatter(df):
     for i in range(len(df_arrow2)):
         plt.plot([df_arrow2['매출액_2020'][i], df_arrow2['매출액_2019'][i]], [df_arrow2['영업이익_2020'][i], df_arrow2['영업이익_2019'][i]], color='black', alpha=0.2)
 
-    df_arrow3 = df[['매출액_2022_LTM', '영업이익_2022_LTM', '매출액_2021', '영업이익_2021']]
+    df_arrow3 = df[['매출액_2022', '영업이익_2022', '매출액_2021', '영업이익_2021']]
     df_arrow3.dropna(how="any")
 
     for i in range(len(df_arrow3)):
-        plt.plot([df_arrow3['매출액_2022_LTM'][i], df_arrow3['매출액_2021'][i]],
-                 [df_arrow3['영업이익_2022_LTM'][i], df_arrow3['영업이익_2021'][i]], color='black', linestyle='--', alpha=0.2)
+        plt.plot([df_arrow3['매출액_2022'][i], df_arrow3['매출액_2021'][i]],
+                 [df_arrow3['영업이익_2022'][i], df_arrow3['영업이익_2021'][i]], color='black', alpha=0.2)
 
 
     # x축, y축 설정
@@ -490,14 +490,14 @@ def make_scatter(df):
         plt.xlim(xmin, xmax*1.1)
 
     #회사명 표시
-    for i in range(len(df_2022_LTM)):
-        plt.text(df_2022_LTM['매출액_2022_LTM'][i] - xmax*0.03, df_2022_LTM['영업이익_2022_LTM'][i] + y_range*0.02,
+    for i in range(len(df_2022)):
+        plt.text(df_2022['매출액_2022'][i] - xmax*0.03, df_2022['영업이익_2022'][i] + y_range*0.02,
                  df_2021['index'][i] + "(" + str("%0.2f%%" % df_2021['영업이익률_2022'][i]) + ")")
 
     # 축, 범례 표시
     plt.xlabel('매출액', fontsize=17, labelpad=30)
     plt.ylabel('영업이익', fontsize=17, labelpad=45)
-    plt.legend(['2022 LTM(9월기준)','2021', '2020', '2019'], fontsize=15, loc='upper left')
+    plt.legend(['2022','2021', '2020', '2019'], fontsize=15, loc='upper left')
 
     # 수평선(영업이익=0) 표시
 
