@@ -43,7 +43,11 @@ def make_graph_revenue_product(df_revenue_product, graph_대상,years):
             누적 = 0
 
             종류 = df_revenue_product.loc[대상][str(years[y]) + '_종류']
-            매출액 = int(df_revenue_product.loc[대상][str(years[y]) + '_매출액']) / 1000000
+
+            try:
+                매출액 = int(df_revenue_product.loc[대상][str(years[y]) + '_매출액']) / 1000000
+            except:
+                매출액 = ""
 
             # 3대매출 없는 경우
             if df_revenue_product.loc[대상][str(years[y]) + '_3대_제품명'] is np.nan:
