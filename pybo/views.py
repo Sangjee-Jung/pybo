@@ -470,7 +470,7 @@ def industry_landscape_6(request):
 
 def industry_external(request):
 
-    df = pd.read_excel('static/KV_별도.xlsx')
+    df = pd.read_excel('static/KV_별도_PL.xlsx')
     df = df.head(10)
 
     context = {"df": df.to_html(justify='center', index=True, classes="table table-sm", float_format='{0:>,.0f}'.format)}
