@@ -468,6 +468,16 @@ def industry_landscape_6(request):
 
     return render(request, 'pybo/industry_landscape_6.html', context)
 
+def industry_external(request):
+
+    df = pd.read_excel('static/KV_별도.xlsx')
+    df = df.head(10)
+
+    context = {"df": df.to_html(justify='center', index=True, classes="table table-sm", float_format='{0:>,.0f}'.format)}
+
+    return render(request, 'pybo/industry_external.html',context)
+
+
 def ledger(request):
     start_year = request.GET.get('start_year')
     end_year = request.GET.get('end_year')
