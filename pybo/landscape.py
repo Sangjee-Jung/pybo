@@ -229,15 +229,15 @@ def make_df_customized(x축,y축,graph_대상, fs_type, size):
         df = pd.read_excel("static/dart_fs.xlsx", sheet_name='연결', header=0)
 
 
-    x축_2022_LTM = []
+    x축_2022 = []
     x축_2021 = []
     x축_2020 = []
     x축_2019 = []
-    y축_2022_LTM = []
+    y축_2022 = []
     y축_2021 = []
     y축_2020 = []
     y축_2019 = []
-    size_2022_LTM = []
+    size_2022 = []
     size_2021 = []
     size_2020 = []
     size_2019 = []
@@ -256,9 +256,9 @@ def make_df_customized(x축,y축,graph_대상, fs_type, size):
             x축_분자_row = df[(df['company'] == 대상) & (df['account'] == names_further[x축])]
 
             try:
-                x축_2022_LTM.append(int(x축_분자_row['FY22_9M_LTM'])/int(x축_분모_row['FY22_9M_LTM']) * 100)
+                x축_2022.append(int(x축_분자_row['FY22'])/int(x축_분모_row['FY22']) * 100)
             except:
-                x축_2022_LTM.append(np.nan)
+                x축_2022.append(np.nan)
             try:
                 x축_2021.append(int(x축_분자_row['FY21'])/int(x축_분모_row['FY21']) * 100)
             except:
@@ -276,9 +276,9 @@ def make_df_customized(x축,y축,graph_대상, fs_type, size):
             x축_row = df[(df['company'] == 대상) & (df['account'] == names_further[x축])]
 
             try:
-                x축_2022_LTM.append(((int(x축_row['FY22_9M_LTM'])/int(x축_row['FY21']))-1) * 100)
+                x축_2022.append(((int(x축_row['FY22'])/int(x축_row['FY21']))-1) * 100)
             except:
-                x축_2022_LTM.append(np.nan)
+                x축_2022.append(np.nan)
             try:
                 x축_2021.append(((int(x축_row['FY21'])/int(x축_row['FY20']))-1) * 100)
             except:
@@ -295,9 +295,9 @@ def make_df_customized(x축,y축,graph_대상, fs_type, size):
         else:
             x축_row = df[(df['company'] == 대상) & (df['account'] == x축)]
             try:
-                x축_2022_LTM.append(int(x축_row['FY22_9M_LTM']))
+                x축_2022.append(int(x축_row['FY22']))
             except:
-                x축_2022_LTM.append(np.nan)
+                x축_2022.append(np.nan)
             try:
                 x축_2021.append(int(x축_row['FY21']))
             except:
@@ -317,9 +317,9 @@ def make_df_customized(x축,y축,graph_대상, fs_type, size):
             y축_분자_row = df[(df['company'] == 대상) & (df['account'] == names_further[y축])]
 
             try:
-                y축_2022_LTM.append(int(y축_분자_row['FY22_9M_LTM']) / int(y축_분모_row['FY22_9M_LTM']) * 100)
+                y축_2022.append(int(y축_분자_row['FY22']) / int(y축_분모_row['FY22']) * 100)
             except:
-                y축_2022_LTM.append(np.nan)
+                y축_2022.append(np.nan)
             try:
                 y축_2021.append(int(y축_분자_row['FY21']) / int(y축_분모_row['FY21']) * 100)
             except:
@@ -338,9 +338,9 @@ def make_df_customized(x축,y축,graph_대상, fs_type, size):
             y축_row = df[(df['company'] == 대상) & (df['account'] == names_further[y축])]
 
             try:
-                y축_2022_LTM.append(((int(y축_row['FY22_9M_LTM']) / int(y축_row['FY21'])) - 1) * 100)
+                y축_2022.append(((int(y축_row['FY22']) / int(y축_row['FY21'])) - 1) * 100)
             except:
-                y축_2022_LTM.append(np.nan)
+                y축_2022.append(np.nan)
             try:
                 y축_2021.append(((int(y축_row['FY21']) / int(y축_row['FY20'])) - 1) * 100)
             except:
@@ -358,9 +358,9 @@ def make_df_customized(x축,y축,graph_대상, fs_type, size):
         else:
             y축_row = df[(df['company'] == 대상) & (df['account'] == y축)]
             try:
-                y축_2022_LTM.append(int(y축_row['FY22_9M_LTM']))
+                y축_2022.append(int(y축_row['FY22']))
             except:
-                y축_2022_LTM.append(np.nan)
+                y축_2022.append(np.nan)
             try:
                 y축_2021.append(int(y축_row['FY21']))
             except:
@@ -380,9 +380,9 @@ def make_df_customized(x축,y축,graph_대상, fs_type, size):
         else:
             size_row = df[(df['company'] == 대상) & (df['account'] == size)]
             try:
-                size_2022_LTM.append(int(size_row['FY22_9M_LTM']))
+                size_2022.append(int(size_row['FY22']))
             except:
-                size_2022_LTM.append(np.nan)
+                size_2022.append(np.nan)
             try:
                 size_2021.append(int(size_row['FY21']))
             except:
@@ -398,12 +398,12 @@ def make_df_customized(x축,y축,graph_대상, fs_type, size):
 
 
     if size == "n/a":
-        dict_data = {'x축_2019': x축_2019, 'x축_2020': x축_2020, 'x축_2021': x축_2021, 'x축_2022_LTM': x축_2022_LTM,
-                     'y축_2019': y축_2019, 'y축_2020': y축_2020, 'y축_2021': y축_2021, 'y축_2022_LTM': y축_2022_LTM,}
+        dict_data = {'x축_2019': x축_2019, 'x축_2020': x축_2020, 'x축_2021': x축_2021, 'x축_2022': x축_2022,
+                     'y축_2019': y축_2019, 'y축_2020': y축_2020, 'y축_2021': y축_2021, 'y축_2022': y축_2022,}
     else:
-        dict_data = {'x축_2019': x축_2019, 'x축_2020': x축_2020, 'x축_2021': x축_2021, 'x축_2022_LTM': x축_2022_LTM,
-                     'y축_2019': y축_2019, 'y축_2020': y축_2020, 'y축_2021': y축_2021, 'y축_2022_LTM': y축_2022_LTM,
-                     'size_2019': size_2019, 'size_2020': size_2020, 'size_2021': size_2021, 'size_2022_LTM': size_2022_LTM}
+        dict_data = {'x축_2019': x축_2019, 'x축_2020': x축_2020, 'x축_2021': x축_2021, 'x축_2022': x축_2022,
+                     'y축_2019': y축_2019, 'y축_2020': y축_2020, 'y축_2021': y축_2021, 'y축_2022': y축_2022,
+                     'size_2019': size_2019, 'size_2020': size_2020, 'size_2021': size_2021, 'size_2022': size_2022}
 
     df_customized = pd.DataFrame(dict_data, index=graph_대상)
     df_customized = df_customized.astype('float')
@@ -542,8 +542,8 @@ def make_scatter_customized(df, x축, y축, size, years):
     df_2019 = df[['x축_2019', 'y축_2019']]
     df_2019.dropna(how="any")
 
-    df_2022_LTM = df[['x축_2022_LTM', 'y축_2022_LTM']]
-    df_2022_LTM.dropna(how="any")
+    df_2022 = df[['x축_2022', 'y축_2022']]
+    df_2022.dropna(how="any")
 
     index = df.index.to_list()
 
@@ -551,7 +551,7 @@ def make_scatter_customized(df, x축, y축, size, years):
     if size == "n/a":
         pass
     else:
-        resized_2022_LTM = []
+        resized_2022 = []
         resized_2021 = []
         resized_2020 = []
         resized_2019 = []
@@ -560,7 +560,7 @@ def make_scatter_customized(df, x축, y축, size, years):
         size_all = []
         for i in range(len(index)):
             if 2022 in years:
-                size_all.append(int(df['size_2022_LTM'][i]))
+                size_all.append(int(df['size_2022'][i]))
             else:
                 pass
 
@@ -584,12 +584,12 @@ def make_scatter_customized(df, x축, y축, size, years):
         # size 재지정
         for i in range(len(index)):
             try:
-                if df['size_2022_LTM'][i] > 0:
-                    resized_2022_LTM.append((int(df['size_2022_LTM'][i])/size_max * 9964)+36)
+                if df['size_2022'][i] > 0:
+                    resized_2022.append((int(df['size_2022'][i])/size_max * 9964)+36)
                 else:
-                    resized_2022_LTM.append(36)
+                    resized_2022.append(36)
             except:
-                resized_2022_LTM.append(np.nan)
+                resized_2022.append(np.nan)
             try:
                 if df['size_2021'][i] > 0:
                     resized_2021.append((int(df['size_2021'][i])/size_max * 9964)+36)
@@ -616,7 +616,7 @@ def make_scatter_customized(df, x축, y축, size, years):
     # 산점도 그래프 그리기
     if size == "n/a":
         if 2022 in years:
-            plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3])
+            plt.scatter(df_2022['x축_2022'], df_2022['y축_2022'], color=color_kpmg[3])
         else:
             pass
         if 2021 in years:
@@ -634,9 +634,9 @@ def make_scatter_customized(df, x축, y축, size, years):
     else:
         if 2022 in years:
             try:
-                plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3], s=resized_2022_LTM, alpha=0.9)
+                plt.scatter(df_2022['x축_2022'], df_2022['y축_2022'], color=color_kpmg[3], s=resized_2022, alpha=0.9)
             except:
-                plt.scatter(df_2022_LTM['x축_2022_LTM'], df_2022_LTM['y축_2022_LTM'], color=color_kpmg[3], alpha=0.9)
+                plt.scatter(df_2022['x축_2022'], df_2022['y축_2022'], color=color_kpmg[3], alpha=0.9)
         else:
             pass
 
@@ -687,12 +687,12 @@ def make_scatter_customized(df, x축, y축, size, years):
         pass
 
     if (2022 in years) and (2021 in years):
-        df_arrow3 = df[['x축_2022_LTM', 'y축_2022_LTM', 'x축_2021', 'y축_2021']]
+        df_arrow3 = df[['x축_2022', 'y축_2022', 'x축_2021', 'y축_2021']]
         df_arrow3.dropna(how="any")
 
         for i in range(len(df_arrow3)):
-            plt.plot([df_arrow3['x축_2022_LTM'][i], df_arrow3['x축_2021'][i]],
-                     [df_arrow3['y축_2022_LTM'][i], df_arrow3['y축_2021'][i]], color='black', linestyle='--', alpha=0.2)
+            plt.plot([df_arrow3['x축_2022'][i], df_arrow3['x축_2021'][i]],
+                     [df_arrow3['y축_2022'][i], df_arrow3['y축_2021'][i]], color='black', linestyle='--', alpha=0.2)
     else:
         pass
 
@@ -717,8 +717,8 @@ def make_scatter_customized(df, x축, y축, size, years):
     # 회사명 표시
 
     if 2022 in years:
-        for i in range(len(df_2022_LTM)):
-            plt.text(df_2022_LTM['x축_2022_LTM'][i] - xmax*0.03, df_2022_LTM['y축_2022_LTM'][i] + y_range*0.02,
+        for i in range(len(df_2022)):
+            plt.text(df_2022['x축_2022'][i] - xmax*0.03, df_2022['y축_2022'][i] + y_range*0.02,
                      index[i])
     elif 2021 in years:
         for i in range(len(df_2021)):
@@ -761,7 +761,7 @@ def make_scatter_customized(df, x축, y축, size, years):
 
     #legend 표시
     if size == "n/a":
-        plt.legend(['2022 LTM(9월기준)','2021', '2020', '2019'], fontsize=15, loc='upper left')
+        plt.legend(['2022','2021', '2020', '2019'], fontsize=15, loc='upper left')
     else:
         pass
 

@@ -272,12 +272,12 @@ def industry_landscape_4(request):
 
 
     if size == "n/a":
-        df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22LTM",
-                                 name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22LTM"]
+        df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22",
+                                 name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22"]
     else:
-        df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22LTM",
-                                 name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22LTM",
-                                 name_size + "_FY19", name_size + "_FY20", name_size + "_FY21", name_size + "_FY22LTM",]
+        df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22",
+                                 name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22",
+                                 name_size + "_FY19", name_size + "_FY20", name_size + "_FY21", name_size + "_FY22",]
 
     #기간 맞게 column 삭제
     df_customized_dropped = df_customized
@@ -309,9 +309,9 @@ def industry_landscape_4(request):
         pass
     else:
         if size == "n/a":
-            df_customized_dropped.drop([name_x축 + "_FY22LTM",name_y축 + "_FY22LTM"], axis=1, inplace=True)
+            df_customized_dropped.drop([name_x축 + "_FY22",name_y축 + "_FY22"], axis=1, inplace=True)
         else:
-            df_customized_dropped.drop([name_x축 + "_FY22LTM", name_y축 + "_FY22LTM", name_size + "_FY22LTM"], axis=1, inplace=True)
+            df_customized_dropped.drop([name_x축 + "_FY22", name_y축 + "_FY22", name_size + "_FY22"], axis=1, inplace=True)
 
     #퍼센트 포매팅
     formatters_percent = {}
@@ -352,12 +352,12 @@ def industry_landscape_4_2(request):
 
 
     if size == "n/a":
-        df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22LTM",
-                                 name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22LTM"]
+        df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22",
+                                 name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22"]
     else:
-        df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22LTM",
-                                 name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22LTM",
-                                 name_size + "_FY19", name_size + "_FY20", name_size + "_FY21", name_size + "_FY22LTM",]
+        df_customized.columns = [name_x축 + "_FY19", name_x축 + "_FY20", name_x축 + "_FY21", name_x축 + "_FY22",
+                                 name_y축 + "_FY19", name_y축 + "_FY20", name_y축 + "_FY21", name_y축 + "_FY22",
+                                 name_size + "_FY19", name_size + "_FY20", name_size + "_FY21", name_size + "_FY22",]
 
     #기간 맞게 column 삭제
     df_customized_dropped = df_customized
@@ -389,9 +389,9 @@ def industry_landscape_4_2(request):
         pass
     else:
         if size == "n/a":
-            df_customized_dropped.drop([name_x축 + "_FY22LTM",name_y축 + "_FY22LTM"], axis=1, inplace=True)
+            df_customized_dropped.drop([name_x축 + "_FY22",name_y축 + "_FY22"], axis=1, inplace=True)
         else:
-            df_customized_dropped.drop([name_x축 + "_FY22LTM", name_y축 + "_FY22LTM", name_size + "_FY22LTM"], axis=1, inplace=True)
+            df_customized_dropped.drop([name_x축 + "_FY22", name_y축 + "_FY22", name_size + "_FY22"], axis=1, inplace=True)
 
     # 퍼센트 포매팅
     formatters_percent = {}
