@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Question
 from django.http import HttpResponseNotAllowed, HttpResponse, FileResponse
-from .forms import QuestionForm, AnswerForm, UploadFileForm
+from .forms import QuestionForm, AnswerForm, UploadFileForm, CompanyNameAll
 import matplotlib.pyplot as plt
 from .ledger_program import make_years, ledger_table
 from .account_programs import account_table, client_analysis
@@ -18,6 +18,7 @@ from .excel_programs import excel_concat
 from .cf import make_df_cf_waterfall, make_graph_cf_waterfall
 from .data_concat import handle_uploaded_file, delete_files_in_directory, select_dataframe_columns, make_concated_dataset, make_concated_dataset_여러행
 from .revenue import make_df_revenue_product, make_graph_revenue_product
+from django.core.exceptions import ValidationError
 import mpld3
 
 import logging
@@ -74,9 +75,10 @@ def industry_landscape(request):
     for code in company_code_all_가공전:
         company_code_all.append(code[1:7])
 
-
-    target = request.GET.get('target')
-    분류기준 = request.GET.get('분류기준')
+    #회사명 입력받기
+    if request.method == 'GET':
+        target = request.GET.get('target')
+        분류기준 = request.GET.get('분류기준')
 
     code_2 = None
     name_2 = None

@@ -1,5 +1,6 @@
 from django import forms
 from pybo.models import Question, Answer, Document
+import pandas as pd
 
 class QuestionForm(forms.ModelForm):
     class Meta:
@@ -32,3 +33,9 @@ class UploadFileForm(forms.Form):
     #name = forms.CharField(max_length = 15)
     # file = forms.FileField()
     files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True,}))
+
+class CompanyNameAll(forms.Form):
+    df_회사명_List = pd.read_excel('static/회사명_List.xlsx')
+    company_name_all = df_회사명_List['회사명'].tolist()
+
+    taraget = forms.ChoiceField(choices=[(name, name) for name in company_name_all])
