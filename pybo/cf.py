@@ -172,9 +172,12 @@ def make_graph_cf_waterfall(df_cf_waterfall, graph_대상):
         max_cf = 0
         max_cf = max(누적)
 
-        neg_offset = max_cf / 26
-        pos_offset = max_cf / 50
-        plot_offset = int(max_cf / 5)
+        try:
+            neg_offset = max_cf / 26
+            pos_offset = max_cf / 50
+            plot_offset = int(max_cf / 5)
+        except:
+            pass
 
         # 그외 구하기
         bottom_양 = []
@@ -235,38 +238,43 @@ def make_graph_cf_waterfall(df_cf_waterfall, graph_대상):
                     cashflow_음.append(CF[k])
                     colors.append(colors_using[2])
 
-        #그래프 그리기
-        ax = plt.subplot(len(graph_대상), 1, i + 1)
+        try:
+            #그래프 그리기
+            ax = plt.subplot(len(graph_대상), 1, i + 1)
 
-        ax.bar(index, bottom_양, width= 0.7, color = "white")
-        ax.bar(index, cashflow_양, width=0.7, bottom= bottom_양, color= colors)
-        ax.bar(index, bottom_음, width=0.7, color="white")
-        ax.bar(index, cashflow_음, width=0.7, bottom=bottom_음, color = colors)
+            ax.bar(index, bottom_양, width= 0.7, color = "white")
+            ax.bar(index, cashflow_양, width=0.7, bottom= bottom_양, color= colors)
+            ax.bar(index, bottom_음, width=0.7, color="white")
+            ax.bar(index, cashflow_음, width=0.7, bottom=bottom_음, color = colors)
 
-        # annotate
-        for m in range(0, 16):
-            if m in [4, 9, 14]:
-                pass
-            else:
-                y = 누적[m]
-                if CF[m] >= 0:
-                    y += pos_offset
+            # annotate
+            for m in range(0, 16):
+                if m in [4, 9, 14]:
+                    pass
                 else:
-                    y -= neg_offset
-                ax.annotate("{:,.0f}".format(CF[m]), (m, y), ha="center")
+                    y = 누적[m]
+                    if CF[m] >= 0:
+                        y += pos_offset
+                    else:
+                        y -= neg_offset
+                    ax.annotate("{:,.0f}".format(CF[m]), (m, y), ha="center")
 
 
+            ax.set_xticklabels(label)
+            plt.xticks(index)
+
+            # x축 설정
+            xmax = plt.axis()[1]
+            plt.xlim(-1, xmax)
+
+            # 수평선(영업이익=0) 표시
+            plt.plot([-1, xmax], [0, 0], color='indianred', linestyle='--', linewidth=1.2, alpha=0.4)
+
+        except:
+            ax.text(0.5, 0.5, "Not Available", fontsize = 20, ha="center")
+            ax.axis("off")
 
         ax.set_title(대상 + " Cash Flow", fontsize=17)
-        ax.set_xticklabels(label)
-        plt.xticks(index)
-
-        # x축 설정
-        xmax = plt.axis()[1]
-        plt.xlim(-1, xmax)
-
-        # 수평선(영업이익=0) 표시
-        plt.plot([-1, xmax], [0, 0], color='indianred', linestyle='--', linewidth=1.2, alpha=0.4)
 
     graph = mpld3.fig_to_html(f, figid='THIS_IS_FIGID')
 
