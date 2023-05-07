@@ -125,6 +125,45 @@ def industry_landscape(request):
 
         return render(request, 'pybo/industry_landscape.html', context)
 
+
+def industry_landscape_0(request):
+    df_회사명_List = pd.read_excel('static/회사명_List.xlsx')
+    company_name_all = df_회사명_List['회사명'].tolist()
+
+    context = {"company_name_all": company_name_all}
+
+    return render(request, 'pybo/industry_landscape_0.html',context)
+
+def industry_landscape_1(request):
+
+    #입력받기
+    target = request.GET.get('target')
+    분류기준 = request.GET.get('분류기준')
+
+    if 분류기준 == "한국표준":
+        분류기준_name = "한국표준산업분류"
+    elif 분류기준 == "GICS":
+        분류기준_name = "GICS"
+
+
+    df_산업코드_산업, df_산업코드_기업 = load_industry(분류기준)
+    code_2, name_2, df_industry, code_4, name_4, code_3, name_3 = define_industry(target, df_산업코드_산업, df_산업코드_기업)
+
+    # session 지정
+    request.session["code_4"] = code_4
+    request.session["target"] = target
+    request.session["분류기준"] = 분류기준
+
+    industry_lists = []
+    for i in range(len(df_industry)):
+        industry_lists.append(df_industry.iloc[i,].tolist())
+
+    context = {"target": target, "code_2": code_2, "name_2": name_2, "code_4": code_4, "name_4": name_4, "code_3": code_3, "name_3": name_3,
+               "df_industry": df_industry.to_html(justify='center',index=False, classes="table table-sm table-hover"),
+               "industry_lists": industry_lists, "분류기준_name":분류기준_name}
+
+    return render(request, 'pybo/industry_landscape_1.html',context)
+
 def industry_landscape_1_1(request):
 
     #회사명 list 생성
