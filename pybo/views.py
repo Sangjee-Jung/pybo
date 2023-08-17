@@ -284,7 +284,8 @@ def industry_landscape_3_2(request):
     request.session['fs_type_개별'] = fs_type
 
 
-    context = {"df_개별": df_개별.to_html(justify='center', index = False, classes="table table-sm",  float_format='{0:>,.0f}'.format, formatters={'영업이익률_2022':format_percent}),
+    context = {"df_개별": df_개별.to_html(justify='center', index = False, classes="table table-sm",
+                                      float_format='{0:>,.0f}'.format, formatters={'영업이익률_2022':format_percent,'영업이익률_2023_6M_LTM':format_percent }),
                "graph": graph, "target": target, }
 
     return render(request, 'pybo/industry_landscape_3_2.html', context)

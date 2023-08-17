@@ -174,16 +174,22 @@ def make_df_개별(target,fs_type):
     else:
         df = pd.read_excel("static/dart_is_4.xlsx", sheet_name='연결', header=0)
 
+    영업이익_2023_6M_LTM = []
     영업이익_2022 = []
     영업이익_2021 = []
     영업이익_2020 = []
     영업이익_2019 = []
+    매출액_2023_6M_LTM = []
     매출액_2022 = []
     매출액_2021 = []
     매출액_2020 = []
     매출액_2019 = []
 
     ebit_row = df[(df['company'] == target) & (df['account'] == "dart_OperatingIncomeLoss")]
+    try:
+        영업이익_2023_6M_LTM.append(int(ebit_row['FY23_6M_LTM']))
+    except:
+        영업이익_2023_6M_LTM.append(np.nan)
     try:
         영업이익_2022.append(int(ebit_row['FY22']))
     except:
@@ -207,6 +213,10 @@ def make_df_개별(target,fs_type):
         revenue_row = df[(df['company'] == target) & (df['account'] == "ifrs-full_GrossProfit")]
 
     try:
+        매출액_2023_6M_LTM.append(int((revenue_row['FY23_6M_LTM'])))
+    except:
+        매출액_2023_6M_LTM.append(np.nan)
+    try:
         매출액_2022.append(int((revenue_row['FY22'])))
     except:
         매출액_2022.append(np.nan)
@@ -223,8 +233,8 @@ def make_df_개별(target,fs_type):
     except:
         매출액_2019.append(np.nan)
 
-    dict_data = {'매출액_2019': 매출액_2019, '매출액_2020': 매출액_2020, '매출액_2021': 매출액_2021, '매출액_2022': 매출액_2022,
-                 '영업이익_2019': 영업이익_2019, '영업이익_2020': 영업이익_2020, '영업이익_2021': 영업이익_2021, '영업이익_2022': 영업이익_2022}
+    dict_data = {'매출액_2019': 매출액_2019, '매출액_2020': 매출액_2020, '매출액_2021': 매출액_2021, '매출액_2022': 매출액_2022,'매출액_2023_6M_LTM': 매출액_2023_6M_LTM,
+                 '영업이익_2019': 영업이익_2019, '영업이익_2020': 영업이익_2020, '영업이익_2021': 영업이익_2021, '영업이익_2022': 영업이익_2022,'영업이익_2023_6M_LTM': 영업이익_2023_6M_LTM,}
 
     df = pd.DataFrame(dict_data, index= [target])
     df = df.astype('float')
@@ -235,7 +245,14 @@ def make_df_개별(target,fs_type):
     except:
         영업이익률_2022.append(np.nan)
 
+    영업이익률_2023_6M_LTM = []
+    try:
+        영업이익률_2023_6M_LTM.append(df['영업이익_2023_6M_LTM'][0] / df['매출액_2023_6M_LTM'][0] * 100)
+    except:
+        영업이익률_2023_6M_LTM.append(np.nan)
+
     df["영업이익률_2022"] = 영업이익률_2022
+    df["영업이익률_2023_6M_LTM"] = 영업이익률_2023_6M_LTM
     df["순위"] = df['매출액_2022'].rank(ascending = False, numeric_only = True)
 
     return df
@@ -439,8 +456,9 @@ def make_scatter(df):
     purple = '#470A68'
     light_purple = '#6D2077'
     green = '#00A3A1'
+    pink = '#E30276'
 
-    color_kpmg = [light_blue, medium_blue, light_purple, green]
+    color_kpmg = [light_blue, medium_blue, light_purple, green, pink]
 
     #######################그래프그리기##########################
     # 그래프 설정
@@ -463,7 +481,13 @@ def make_scatter(df):
     df_2022 = df[['매출액_2022', '영업이익_2022']]
     df_2022.dropna(how="any")
 
+    df_2023_6M_LTM = df[['매출액_2023_6M_LTM', '영업이익_2023_6M_LTM']]
+    df_2023_6M_LTM.dropna(how="any")
+
+
+
     # 산점도 그래프 그리기
+    plt.scatter(df_2023_6M_LTM['매출액_2023_6M_LTM'], df_2023_6M_LTM['영업이익_2023_6M_LTM'], color=color_kpmg[4])
     plt.scatter(df_2022['매출액_2022'], df_2022['영업이익_2022'], color=color_kpmg[3])
     plt.scatter(df_2021['매출액_2021'], df_2021['영업이익_2021'], color=color_kpmg[0])
     plt.scatter(df_2020['매출액_2020'], df_2020['영업이익_2020'], color=color_kpmg[1])
@@ -489,6 +513,13 @@ def make_scatter(df):
     for i in range(len(df_arrow3)):
         plt.plot([df_arrow3['매출액_2022'][i], df_arrow3['매출액_2021'][i]],
                  [df_arrow3['영업이익_2022'][i], df_arrow3['영업이익_2021'][i]], color='black', alpha=0.2)
+
+    df_arrow4 = df[['매출액_2023_6M_LTM', '영업이익_2023_6M_LTM', '매출액_2022', '영업이익_2022']]
+    df_arrow4.dropna(how="any")
+
+    for i in range(len(df_arrow4)):
+        plt.plot([df_arrow4['매출액_2023_6M_LTM'][i], df_arrow4['매출액_2022'][i]],
+                 [df_arrow4['영업이익_2023_6M_LTM'][i], df_arrow4['영업이익_2022'][i]], color='black', alpha=0.2, linestyle = '--')
 
 
     # x축, y축 설정
@@ -516,7 +547,7 @@ def make_scatter(df):
     # 축, 범례 표시
     plt.xlabel('매출액', fontsize=17, labelpad=30)
     plt.ylabel('영업이익', fontsize=17, labelpad=45)
-    plt.legend(['2022','2021', '2020', '2019'], fontsize=15, loc='upper left')
+    plt.legend(['2023_6M_LTM','2022','2021', '2020', '2019'], fontsize=15, loc='upper left')
 
     # 수평선(영업이익=0) 표시
 
