@@ -547,7 +547,7 @@ def make_scatter(df):
     # 축, 범례 표시
     plt.xlabel('매출액', fontsize=17, labelpad=30)
     plt.ylabel('영업이익', fontsize=17, labelpad=45)
-    plt.legend(['2023_6M_LTM','2022','2021', '2020', '2019'], fontsize=15, loc='upper left')
+    plt.legend(['2023_LTM(6M)','2022','2021', '2020', '2019'], fontsize=15, loc='upper left')
 
     # 수평선(영업이익=0) 표시
 

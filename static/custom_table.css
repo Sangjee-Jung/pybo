@@ -1,0 +1,52 @@
+<style>
+
+.custom_table {
+}
+
+.custom_table {
+    border: none;
+    width: 150%;
+    border-top: 1px solid #D5D5D5;
+}
+
+
+.custom_table th:nth-child(13), .custom_table td:nth-child(13) {
+    width: 5px;
+}
+
+.custom_table th:nth-child(6), .custom_table td:nth-child(6), .custom_table th:nth-child(11), .custom_table td:nth-child(11) {
+    border-right: 1px solid #D5D5D5;
+}
+
+.custom_table th, .custom_table td {
+    border-bottom: 1px solid #D5D5D5;
+    padding: 8px;
+}
+
+.custom_table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+
+
+.custom_table td {
+    text-align: right;
+}
+
+
+.custom_table_기준 {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.custom_table_기준 th, .custom_table_기준 td {
+    border: 1px solid gray;
+    padding: 8px;
+}
+
+
+.custom_table_기준 tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+</style>
