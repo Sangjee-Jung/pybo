@@ -20,6 +20,7 @@ from .data_concat import handle_uploaded_file, delete_files_in_directory, select
 from .revenue import make_df_revenue_product, make_graph_revenue_product
 from django.core.exceptions import ValidationError
 import mpld3
+import json
 
 import logging
 logger = logging.getLogger('pybo')
@@ -158,9 +159,16 @@ def industry_landscape_1(request):
     for i in range(len(df_industry)):
         industry_lists.append(df_industry.iloc[i,].tolist())
 
+
+    industries_level2 = df_industry[df_industry["Lv"]== 2]["Industry Name"].tolist()
+    industries_level3 = df_industry[df_industry["Lv"]== 3]["Industry Name"].tolist()
+    industries_level4 = df_industry[df_industry["Lv"]== 4]["Industry Name"].tolist()
+
+
     context = {"target": target, "code_2": code_2, "name_2": name_2, "code_4": code_4, "name_4": name_4, "code_3": code_3, "name_3": name_3,
                "df_industry": df_industry.to_html(justify='center',index=False, classes="table table-sm table-hover"),
-               "industry_lists": industry_lists, "분류기준_name":분류기준_name}
+               "industry_lists": industry_lists, "분류기준_name":분류기준_name,
+               "industries_level2_jason":json.dumps(industries_level2), "industries_level3_jason":json.dumps(industries_level3), "industries_level4_jason":json.dumps(industries_level4), "industries_level4": industries_level4 }
 
     return render(request, 'pybo/industry_landscape_1.html',context)
 
@@ -175,7 +183,7 @@ def industry_landscape_1_1(request):
     return render(request, 'pybo/industry_landscape_1_1.html', context)
 
 def industry_landscape_2(request):
-    level = int(request.GET.get('level'))
+    level = int(request.GET.get('select1_level'))
     fs_type = request.GET.get('fs_type')
 
     code_4 = request.session["code_4"]

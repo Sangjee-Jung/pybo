@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
+
+
 <div class="container my-3">
     <h2 class="border-bottom py-2">
         <b>Financial Analysis (동종산업 Peer 비교)</b>
@@ -84,16 +86,32 @@
         <form action = "{% url 'pybo:industry_landscape_2' %}" class="row g-3">
 
             <div class="col-auto">
-                <label class="col-form-label"> 분석대상 산업레벨 </label>
+                <label class="col-form-label"> 분석대상 레벨/산업 선택 : </label>
             </div>
 
             <div class = "col-auto">
-                <select name = "level" class="form-select">
+                <select name = "select1_level" id = "select1_level" class="form-select">
                     <option value = 2> Lv 2 </option>
                     <option value = 3> Lv 3 </option>
                     <option selected value = 4> Lv 4 </option>
                 </select>
             </div>
+
+            <div class = "col-auto">
+                <select name = "select2_industry" id = "select2_industry" class="form-select">
+                    {% for industry in  industries_level4 %}
+                        {% if industry == name_4%}
+                        <option selected> {{industry}} </option>
+                        {% else %}
+                        <option> {{industry}} </option>
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- JavaScript에서 옵션 변경 -->
+
+                </select>
+            </div>
+
 
             <div class = "col-auto">
                 <div class="form-check form-check-inline">
@@ -115,6 +133,18 @@
             </div>
         </form>
     </div>
+
+    <!-- Python 리스트를 JSON 문자열로 변환하여 JavaScript 변수에 할당 -->
+    <script>
+
+        let industries_level2 = {{ industries_level2_jason|safe }};
+        let industries_level3 = {{ industries_level3_jason|safe }};
+        let industries_level4 = {{ industries_level4_jason|safe }};
+
+    </script>
+
+    {% load static %}
+    <script src="{% static '/script.js' %}"></script>
 
 
 
