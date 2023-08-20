@@ -34,12 +34,23 @@ document.addEventListener("DOMContentLoaded", function() {
                 optionElement.value = option;
                 select2_industry.appendChild(optionElement);
             });
-
         }
+    });
+});
 
+document.getElementById('form_landscape_0').addEventListener('submit', function(event) {
+    var inputVal = document.getElementById('target').value;
+    var options = document.querySelectorAll('#datalistOptions option');
+    var isValid = false;
 
+    options.forEach(function(option) {
+        if (option.value === inputVal) {
+            isValid = true;
+        }
     });
 
-
-
+    if (!isValid) {
+        alert('회사명을 다시 확인하세요');
+        event.preventDefault(); // Prevent form submission
+    }
 });

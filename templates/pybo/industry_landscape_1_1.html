@@ -6,9 +6,9 @@
     </h2>
 
     <div class="'input-group mb-3">
-        <form action = "{% url 'pybo:industry_landscape_3_2' %}" class="row g-3">
+        <form id = "form_landscape_0" action = "{% url 'pybo:industry_landscape_3_2' %}" class="row g-3">
             <div class="col-auto">
-                <input class="form-control" list="datalistOptions" name="target" placeholder="회사명을 입력하세요" required>
+                <input class="form-control" list="datalistOptions" name="target" id ="target" placeholder="회사명을 입력하세요" required>
                 <datalist id="datalistOptions" >
                     {% for name in company_name_all %}
                     <option> {{name}} </option>
@@ -37,7 +37,8 @@
         </form>
     </div>
 
-
+{% load static %}
+<script src="{% static '/script.js' %}"></script>
 
 </div>
 {% endblock %}

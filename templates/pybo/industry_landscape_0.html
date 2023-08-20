@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <div class="container my-3">
     <h2 class="border-bottom py-2">
         <b>Financial Analysis (동종산업 Peer 비교)</b>
@@ -20,9 +21,9 @@
                         <h5 class="card-title"><b>#1. 산업 조회</b></h5>
                         <h6 class="card-subtitle mb-2 text-muted">Target 회사가 속한 산업분류 내 Player 분석</h6>
                         <p></p>
-                        <form action = "{% url 'pybo:industry_landscape_1' %}" class="row g-3">
+                        <form id = "form_landscape_0" action = "{% url 'pybo:industry_landscape_1' %}" class="row g-3">
                             <div class="col-auto">
-                                <input class="form-control" list="datalistOptions" name="target" placeholder="회사명을 입력하세요" required>
+                                <input class="form-control" list="datalistOptions" name="target" id="target" placeholder="회사명을 입력하세요" required>
                                 <datalist id="datalistOptions" >
                                     {% for name in company_name_all %}
                                     <option> {{name}} </option>
@@ -63,7 +64,8 @@
 
     </div>
 
-
+{% load static %}
+<script src="{% static '/script.js' %}"></script>
 
 
 </div>
