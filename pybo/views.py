@@ -215,6 +215,9 @@ def industry_landscape_2(request):
     request.session['level'] = level
     request.session['search_code'] = search_code
     request.session['search_name'] = search_name
+    request.session['selected_industry'] = selected_industry
+    request.session['selected_code'] = selected_code
+
 
     request.session['fs_type'] = fs_type
 
@@ -229,7 +232,7 @@ def industry_landscape_2(request):
     df.columns = ["매출액_FY19", "매출액_FY20", "매출액_FY21", "매출액_FY22","매출액_FY23.LTM(6M)",
                   "영업이익_FY19", "영업이익_FY20", "영업이익_FY21", "영업이익_FY22","영업이익_FY23.LTM(6M)", "영업이익률_FY22", "영업이익률_FY23.LTM(6M)","순위"]
 
-    context = {"level": level, "code": search_code, "name": search_name, "companies": companies,
+    context = {"level": level, "companies": companies,
                "df": df.to_html(justify='center',index = True, classes="custom_table", float_format='{0:>,.0f}'.format, formatters={'영업이익률_FY22': format_percent,"영업이익률_FY23.LTM(6M)": format_percent },),
                "df_lists": df_lists,"fs_type": fs_type, "target": target, "df_index": df_index, "selected_code": selected_code,"selected_industry": selected_industry, }
 
@@ -242,8 +245,9 @@ def industry_landscape_3(request):
     df_index = request.session['df_index']
 
     level = request.session['level']
-    search_code = request.session['search_code']
-    search_name = request.session['search_name']
+    selected_industry = request.session['selected_industry']
+    selected_code = request.session['selected_code']
+
 
     #df 생성
     df = pd.DataFrame()
@@ -263,7 +267,8 @@ def industry_landscape_3(request):
     #그래프 그려
     graph = make_scatter(df_대상)
 
-    context = {"graph": graph, "level": level, "code": search_code, "name": search_name, 'graph_대상':graph_대상}
+    context = {"graph": graph, "level": level, 'graph_대상': graph_대상,
+               "selected_industry": selected_industry, "selected_code": selected_code,}
 
     return render(request, 'pybo/industry_landscape_3.html', context)
 
