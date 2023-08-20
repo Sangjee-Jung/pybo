@@ -1,3 +1,4 @@
+//분석대상 산업 입력받는 Script
 document.addEventListener("DOMContentLoaded", function() {
 
     var select1_level = document.getElementById("select1_level");
@@ -38,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+//회사명 입렵값 오류띄우는 Script
 document.getElementById('form_landscape_0').addEventListener('submit', function(event) {
     var inputVal = document.getElementById('target').value;
     var options = document.querySelectorAll('#datalistOptions option');
@@ -54,3 +56,4 @@ document.getElementById('form_landscape_0').addEventListener('submit', function(
         event.preventDefault(); // Prevent form submission
     }
 });
+
