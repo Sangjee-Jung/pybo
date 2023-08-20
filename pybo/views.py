@@ -184,6 +184,8 @@ def industry_landscape_1_1(request):
 
 def industry_landscape_2(request):
     level = int(request.GET.get('select1_level'))
+    selected_industry = request.GET.get('select2_industry')
+
     fs_type = request.GET.get('fs_type')
 
     code_4 = request.session["code_4"]
@@ -196,7 +198,7 @@ def industry_landscape_2(request):
         search_code = str(code_4)[0:level*2]
 
 
-    search_name, companies, df = define_companies(search_code, level, fs_type, 분류기준)
+    search_name, companies, df, selected_code = define_companies(search_code, level, fs_type, 분류기준, selected_industry)
 
 
     #Session 만들기
@@ -229,7 +231,7 @@ def industry_landscape_2(request):
 
     context = {"level": level, "code": search_code, "name": search_name, "companies": companies,
                "df": df.to_html(justify='center',index = True, classes="custom_table", float_format='{0:>,.0f}'.format, formatters={'영업이익률_FY22': format_percent,"영업이익률_FY23.LTM(6M)": format_percent },),
-               "df_lists": df_lists,"fs_type": fs_type, "target": target, "df_index": df_index}
+               "df_lists": df_lists,"fs_type": fs_type, "target": target, "df_index": df_index, "selected_code": selected_code,"selected_industry": selected_industry, }
 
     return render(request, 'pybo/industry_landscape_2.html', context)
 

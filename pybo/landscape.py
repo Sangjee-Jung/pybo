@@ -43,7 +43,7 @@ def define_industry(target, df_산업코드_산업, df_산업코드_기업):
 
     return industry_code_lv2, industry_name_lv2, df_industry_code_lv2, industry_code_lv4, industry_name_lv4, industry_code_lv3, industry_name_lv3
 
-def define_companies(search_code, level, fs_type, 분류기준):
+def define_companies(search_code, level, fs_type, 분류기준, selected_industry):
 
     if 분류기준 == "한국표준":
         df_산업코드_기업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='기업코드')
@@ -52,20 +52,26 @@ def define_companies(search_code, level, fs_type, 분류기준):
         df_산업코드_기업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='기업코드_GICS')
         df_산업코드_산업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='산업코드_GICS')
 
-
+    #예전버전
     for i in range(len(df_산업코드_산업["CODE"])):
         if str(int(df_산업코드_산업['CODE'][i])) == search_code:
             search_name = df_산업코드_산업['Industry Name'][i]
+            break
+
+    #산업선택가능하도록 변경
+    for i in range(len(df_산업코드_산업["CODE"])):
+        if int(df_산업코드_산업['Lv'][i]) == level and df_산업코드_산업['Industry Name'][i] == selected_industry:
+            selected_code = str(df_산업코드_산업['CODE'][i])
             break
 
     companies = []
     for i in range(len(df_산업코드_기업)):
         try:
             if 분류기준 == "한국표준":
-                if str(int(df_산업코드_기업["CODE"][i]))[0: level+1] == search_code:
+                if str(int(df_산업코드_기업["CODE"][i]))[0: level+1] == selected_code:
                     companies.append(df_산업코드_기업['회사명'][i])
             else:
-                if str(int(df_산업코드_기업["CODE"][i]))[0: level*2] == search_code:
+                if str(int(df_산업코드_기업["CODE"][i]))[0: level*2] == selected_code:
                     companies.append(df_산업코드_기업['회사명'][i])
         except:
             pass
@@ -164,7 +170,7 @@ def define_companies(search_code, level, fs_type, 분류기준):
     df["순위"] = df['매출액_2022'].rank(ascending = False, numeric_only = True)
     df = df.sort_values(by=['순위'], axis=0)
 
-    return search_name, companies, df
+    return search_name, companies, df, selected_code
 
 def make_df_개별(target,fs_type):
 
