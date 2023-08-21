@@ -24,7 +24,7 @@
                         <form id = "form_landscape_0" action = "{% url 'pybo:industry_landscape_1' %}" class="row g-3">
                             <div class="col-auto">
                                 <input class="form-control" list="datalistOptions" name="target" id="target" placeholder="회사명을 입력하세요" required>
-                                <datalist id="datalistOptions" >
+                                <datalist id="datalistOptions">
                                     {% for name in company_name_all %}
                                     <option> {{name}} </option>
                                     {% endfor %}
@@ -43,7 +43,7 @@
                                 </div>
                             </div>
                             <div class="col-auto">
-                                <input type="submit" class="btn btn-secondary mb-3" value="입력">
+                                <input type="submit" class="btn btn-primary mb-3" value="제출">
                                 {% csrf_token %}
                             </div>
                         </form>
@@ -54,7 +54,97 @@
                         <h5 class="card-title"><b>#2. Peer Groups 지정</b></h5>
                         <h6 class="card-subtitle mb-2 text-muted">비교 대상 회사군 직접 선택하여 분석</h6>
                         <p></p>
-                        TBU
+                        <form id = "form_landscape_0_#2" method="POST" class="row g-3">
+                            <div class= "col-auto" id="inputList">
+                                <input class="form-control" list="datalistOptions2" type="text" name="items[]" placeholder="회사명을 입력하세요">
+                                <datalist id="datalistOptions2">
+                                    {% for name in company_name_all %}
+                                    <option> {{name}} </option>
+                                    {% endfor %}
+                                </datalist>
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-secondary mb-3" onclick="addItem()">항목 추가</button>
+                                <input type="submit" class="btn btn-primary mb-3" value="제출">
+                            </div>
+                            {% csrf_token %}
+                        </form>
+                        <p></p>
+
+                        <!-- Container to display the list of inputs -->
+                        <div id="displayList"></div>
+
+                        <script>
+
+                            // Helper function to check if the value exists in datalist
+                            function valueExistsInDataList(inputElement) {
+                                let dataListId = inputElement.getAttribute('list');
+                                let options = document.querySelectorAll('#' + dataListId + ' option');
+                                for(let option of options) {
+                                    if(option.value === inputElement.value) {
+                                        return true;
+                                    }
+                                }
+                                return false;
+                            }
+
+                            function updateDisplayList() {
+                                let displayList = document.getElementById('displayList');
+                                displayList.innerHTML = "";  // Clear the current list
+                                let inputs = document.querySelectorAll('#inputList input.form-control');
+                                inputs.forEach(function(input, index) {
+                                    let listItem = document.createElement('div');
+                                    listItem.textContent = `Target ${index + 1}: ${input.value}`;
+                                    displayList.appendChild(listItem);
+                                });
+                            }
+
+                            function addItem() {
+                                let inputList = document.getElementById('inputList');
+                                let lastInput = inputList.querySelector('input.form-control:last-of-type');
+
+                                // Check if the input value exists in the datalist before adding
+                                if (lastInput && !valueExistsInDataList(lastInput)) {
+                                    alert("회사명을 다시 확인하세요");
+                                    return;
+                                }
+
+                                // Create the new input element
+                                let newInput = document.createElement('input');
+                                newInput.className = "form-control";
+                                newInput.setAttribute('list', 'datalistOptions2');
+                                newInput.type = "text";
+                                newInput.name = "items[]";
+                                newInput.placeholder = "회사명을 입력하세요";
+                                inputList.appendChild(newInput);
+
+                                // Create the associated datalist element
+                                let dataList = document.createElement('datalist');
+                                dataList.id = "datalistOptions2";
+                                let companyNames = {# Assuming this is your list of company names in JS #} ['company1', 'company2']; // Adjust accordingly
+                                companyNames.forEach(function(name) {
+                                    let option = document.createElement('option');
+                                    option.textContent = name;
+                                    dataList.appendChild(option);
+                                });
+                                inputList.appendChild(dataList);
+
+
+                                // Display the input value in the displayList container
+                                newInput.addEventListener('input', updateDisplayList);
+
+                                // Update the displayList initially for the newly created item
+                                updateDisplayList();
+                            }
+
+                            // Adding event listener to the initial input
+                            document.querySelector('#inputList input').addEventListener('input', updateDisplayList);
+
+                            // Attach this validation to your "Add" button's click event
+                            let addButton = document.getElementById('addButton');  // Assuming the id of your "Add" button is 'addButton'
+                            addButton.addEventListener('click', addItem);
+
+                        </script>
 
                     </li>
 
