@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 
+{% load static %}
+<link rel="stylesheet" href="{% static 'hover_style.css' %}">
+
 
 <div class="container my-3">
     <h2 class="border-bottom py-2">
@@ -51,27 +54,69 @@
             {% for list in industry_lists %}
                 {% if list.0 == 2 %}
                 <tr style="background-color: Silver;">
+                    <td>{{ list.0 }}</td>
+                    <td>{{ list.1 }}</td>
+                    <td>{{ list.2 }}</td>
+                    <td>{{ list.3 }}</td>
+                    <!--
                     {% for i in list %}
                     <td>{{ i }}</td>
                     {% endfor %}
+                    -->
                 </tr>
             {% elif list.0 == 3 %}
                 <tr style="background-color: Gainsboro;">
+                    <td>{{ list.0 }}</td>
+                    <td>{{ list.1 }}</td>
+                    <td>{{ list.2 }}</td>
+                    <td>{{ list.3 }}</td>
+                    <!--
                     {% for i in list %}
                     <td>{{ i }}</td>
                     {% endfor %}
+                    -->
                 </tr>
             {% elif code_4 in list %}
                 <tr style="background-color: LemonChiffon; font-weight: bold;">
+                    <td>{{ list.0 }}</td>
+                    <td>{{ list.1 }}</td>
+                    <td>
+                        <div class = "hover-element">
+                            {{ list.2 }}
+                            <div class="popup">
+                                {{list.4}}
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ list.3 }}</td>
+                    <!--
                     {% for i in list %}
                     <td>{{ i }}</td>
                     {% endfor %}
+                    -->
                 </tr>
             {% else %}
                 <tr>
+                    <td>{{ list.0 }}</td>
+                    <td>{{ list.1 }}</td>
+                    <td>
+                        <div class = "hover-element">
+                            {{ list.2 }}
+                            {% if list.4 %}
+                            <div class="popup">
+                                {{list.4}}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </td>
+
+                    <td>{{ list.3 }}</td>
+
+                    <!--
                     {% for i in list %}
                     <td>{{ i }}</td>
                     {% endfor %}
+                    -->
                 </tr>
 
             {% endif %}
@@ -143,8 +188,8 @@
 
     </script>
 
-    {% load static %}
-    <script src="{% static '/script.js' %}"></script>
+{% load static %}
+<script src="{% static '/script.js' %}"></script>
 
 
 

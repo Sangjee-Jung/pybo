@@ -41,6 +41,21 @@ def define_industry(target, df_산업코드_산업, df_산업코드_기업):
                     break
             break
 
+    열_companies = []
+
+    df_산업코드_기업 = pd.read_excel('static/산점도분석_List_개발버전.xlsx', sheet_name='기업코드')
+
+    for i, code in enumerate(df_industry_code_lv2["CODE"]):
+        companies = []
+        if len(str(code)) == 5:
+            companies = df_산업코드_기업[df_산업코드_기업["CODE"]== code]["회사명"].tolist()
+        else:
+            pass
+
+        열_companies.append(companies)
+
+    df_industry_code_lv2["Companies"] = 열_companies
+
     return industry_code_lv2, industry_name_lv2, df_industry_code_lv2, industry_code_lv4, industry_name_lv4, industry_code_lv3, industry_name_lv3
 
 def define_companies(search_code, level, fs_type, 분류기준, selected_industry):
