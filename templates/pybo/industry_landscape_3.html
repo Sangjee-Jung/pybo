@@ -4,10 +4,15 @@
     <h2 class="border-bottom py-2">
         <b>Financial Analysis (동종산업 Peer 비교)</b>
     </h2>
+    {% if level %}
     Lv {{ level }}:
-    [{{ selected_code }}]
-    {{ selected_industry }}
+    {% endif %}
 
+    {% if selected_code %}
+    [{{ selected_code }}]
+    {% endif %}
+
+    {{ selected_industry }}
 
     <div>
         {{ graph | safe }}

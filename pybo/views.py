@@ -13,7 +13,7 @@ from .models import Document, Dart_is_2
 import os
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
-from .landscape import load_industry, define_industry, define_companies, make_scatter, make_df_customized, make_scatter_customized, make_df_개별, format_percent
+from .landscape import load_industry, define_industry, define_companies, make_scatter, make_df_customized, make_scatter_customized, make_df_개별, make_df_targets, format_percent
 from .excel_programs import excel_concat
 from .cf import make_df_cf_waterfall, make_graph_cf_waterfall
 from .data_concat import handle_uploaded_file, delete_files_in_directory, select_dataframe_columns, make_concated_dataset, make_concated_dataset_여러행
@@ -238,6 +238,36 @@ def industry_landscape_2(request):
 
     return render(request, 'pybo/industry_landscape_2.html', context)
 
+def industry_landscape_2_2(request):
+
+    # 입력받기
+
+    targets = request.GET.getlist('items[]')
+    targets = [x for x in targets if x is not ""]  #빈 입력값 제거
+    targets = list(set(targets)) #중복값 제거(순서 유지하지 않음)
+
+    fs_type_targets = request.GET.get('fs_type')
+
+    #세선 생성
+    request.session['targets'] = targets
+    request.session['fs_type_targets'] = fs_type_targets
+
+
+    #df생성
+    df = make_df_targets(targets, fs_type_targets)
+
+    # Column명 변경
+    df.columns = ["매출액_FY19", "매출액_FY20", "매출액_FY21", "매출액_FY22", "매출액_FY23.LTM(6M)",
+                  "영업이익_FY19", "영업이익_FY20", "영업이익_FY21", "영업이익_FY22", "영업이익_FY23.LTM(6M)", "영업이익률_FY22",
+                  "영업이익률_FY23.LTM(6M)", "순위"]
+
+
+    context = {"targets": targets, "fs_type": fs_type_targets,
+               "df": df.to_html(justify='center', index=True, classes="custom_table",float_format='{0:>,.0f}'.format, formatters={'영업이익률_FY22': format_percent,"영업이익률_FY23.LTM(6M)": format_percent},),}
+
+    return render(request, 'pybo/industry_landscape_2_2.html', context)
+
+
 def industry_landscape_3(request):
     #Session 가져오기
     df_columns = request.session['df_columns']
@@ -269,6 +299,22 @@ def industry_landscape_3(request):
 
     context = {"graph": graph, "level": level, 'graph_대상': graph_대상,
                "selected_industry": selected_industry, "selected_code": selected_code,}
+
+    return render(request, 'pybo/industry_landscape_3.html', context)
+
+def industry_landscape_3_3(request):
+
+    # Session 가져오기
+    targets = request.session['targets']
+    fs_type_targets = request.session['fs_type_targets']
+
+    # df생성
+    df = make_df_targets(targets, fs_type_targets)
+    df['index'] = targets
+
+    graph = make_scatter(df)
+
+    context = {'graph': graph}
 
     return render(request, 'pybo/industry_landscape_3.html', context)
 

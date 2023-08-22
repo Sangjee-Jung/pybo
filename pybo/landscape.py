@@ -272,9 +272,107 @@ def make_df_개별(target,fs_type):
     except:
         영업이익률_2023_6M_LTM.append(np.nan)
 
+
+
     df["영업이익률_2022"] = 영업이익률_2022
     df["영업이익률_2023_6M_LTM"] = 영업이익률_2023_6M_LTM
     df["순위"] = df['매출액_2022'].rank(ascending = False, numeric_only = True)
+
+    return df
+
+def make_df_targets(targets, fs_type):
+
+    # 데이터프레임 생성
+    if fs_type == "별도":
+        df = pd.read_excel("static/dart_is_4.xlsx", sheet_name='별도', header=0)
+    else:
+        df = pd.read_excel("static/dart_is_4.xlsx", sheet_name='연결', header=0)
+
+    영업이익_2023_6M_LTM = []
+    영업이익_2022 = []
+    영업이익_2021 = []
+    영업이익_2020 = []
+    영업이익_2019 = []
+    매출액_2023_6M_LTM = []
+    매출액_2022 = []
+    매출액_2021 = []
+    매출액_2020 = []
+    매출액_2019 = []
+
+    for company in targets:
+        ebit_row = df[(df['company'] == company) & (df['account'] == "dart_OperatingIncomeLoss")]
+        try:
+            영업이익_2023_6M_LTM.append(int(ebit_row['FY23_6M_LTM']))
+        except:
+            영업이익_2023_6M_LTM.append(np.nan)
+        try:
+            영업이익_2022.append(int(ebit_row['FY22']))
+        except:
+            영업이익_2022.append(np.nan)
+        try:
+            영업이익_2021.append(int(ebit_row['FY21']))
+        except:
+            영업이익_2021.append(np.nan)
+        try:
+            영업이익_2020.append(int(ebit_row['FY20']))
+        except:
+            영업이익_2020.append(np.nan)
+        try:
+            영업이익_2019.append(int(ebit_row['FY19']))
+        except:
+            영업이익_2019.append(np.nan)
+
+        revenue_row = df[(df['company'] == company) & (df['account'] == "ifrs-full_Revenue")]
+        if len(revenue_row) == 0:
+            revenue_row = df[(df['company'] == company) & (df['account'] == "ifrs-full_GrossProfit")]
+
+        try:
+            매출액_2023_6M_LTM.append(int((revenue_row['FY23_6M_LTM'])))
+        except:
+            매출액_2023_6M_LTM.append(np.nan)
+        try:
+            매출액_2022.append(int((revenue_row['FY22'])))
+        except:
+            매출액_2022.append(np.nan)
+        try:
+            매출액_2021.append(int((revenue_row['FY21'])))
+        except:
+            매출액_2021.append(np.nan)
+        try:
+            매출액_2020.append(int(revenue_row['FY20']))
+        except:
+            매출액_2020.append(np.nan)
+        try:
+            매출액_2019.append(int(revenue_row['FY19']))
+        except:
+            매출액_2019.append(np.nan)
+
+    dict_data = {'매출액_2019': 매출액_2019, '매출액_2020': 매출액_2020, '매출액_2021': 매출액_2021, '매출액_2022': 매출액_2022,
+                 '매출액_2023_6M_LTM': 매출액_2023_6M_LTM,
+                 '영업이익_2019': 영업이익_2019, '영업이익_2020': 영업이익_2020, '영업이익_2021': 영업이익_2021, '영업이익_2022': 영업이익_2022,
+                 '영업이익_2023_6M_LTM': 영업이익_2023_6M_LTM, }
+
+    df = pd.DataFrame(dict_data, index=targets)
+    df = df.astype('float')
+
+    영업이익률_2022 = []
+    for i in range(len(targets)):
+        try:
+            영업이익률_2022.append(df['영업이익_2022'][i] / df['매출액_2022'][i] * 100)
+        except:
+            영업이익률_2022.append(np.nan)
+
+    영업이익률_2023_6M_LTM = []
+    for i in range(len(targets)):
+        try:
+            영업이익률_2023_6M_LTM.append(df['영업이익_2023_6M_LTM'][i] / df['매출액_2023_6M_LTM'][i] * 100)
+        except:
+            영업이익률_2023_6M_LTM.append(np.nan)
+
+    df["영업이익률_2022"] = 영업이익률_2022
+    df["영업이익률_2023_6M_LTM"] = 영업이익률_2023_6M_LTM
+    df["순위"] = df['매출액_2022'].rank(ascending=False, numeric_only=True)
+    df = df.sort_values(by=['순위'], axis=0)
 
     return df
 
