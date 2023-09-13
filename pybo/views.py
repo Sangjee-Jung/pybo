@@ -442,7 +442,7 @@ def industry_landscape_4(request):
             formatters_percent[column] = format_percent
 
     context = {"df_customized_dropped": df_customized_dropped.to_html(justify='center',index = True, classes="table table-sm", float_format='{0:>,.0f}'.format, formatters= formatters_percent),
-               "graph_customized": graph_customized, "years": years}
+               "graph_customized": graph_customized, "years": years, }
 
 
     return render(request, 'pybo/industry_landscape_4.html', context)
