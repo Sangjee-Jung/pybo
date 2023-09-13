@@ -22,6 +22,7 @@ from django.core.exceptions import ValidationError
 import mpld3
 import json
 
+
 import logging
 logger = logging.getLogger('pybo')
 
@@ -248,10 +249,6 @@ def industry_landscape_2_2(request):
 
     fs_type_targets = request.GET.get('fs_type')
 
-    #세선 생성
-    request.session['targets'] = targets
-    request.session['fs_type_targets'] = fs_type_targets
-
 
     #df생성
     df = make_df_targets(targets, fs_type_targets)
@@ -260,6 +257,13 @@ def industry_landscape_2_2(request):
     df.columns = ["매출액_FY19", "매출액_FY20", "매출액_FY21", "매출액_FY22", "매출액_FY23.LTM(6M)",
                   "영업이익_FY19", "영업이익_FY20", "영업이익_FY21", "영업이익_FY22", "영업이익_FY23.LTM(6M)", "영업이익률_FY22",
                   "영업이익률_FY23.LTM(6M)", "순위"]
+
+    # target을 순위대로 바꿀게
+    targets = df.index.tolist()
+
+    # 세선 생성
+    request.session['targets'] = targets
+    request.session['fs_type_targets'] = fs_type_targets
 
 
     context = {"targets": targets, "fs_type": fs_type_targets,
@@ -298,7 +302,7 @@ def industry_landscape_3(request):
     graph = make_scatter(df_대상)
 
     context = {"graph": graph, "level": level, 'graph_대상': graph_대상,
-               "selected_industry": selected_industry, "selected_code": selected_code,}
+               "selected_industry": selected_industry, "selected_code": selected_code,'df_대상': df_대상.to_html()}
 
     return render(request, 'pybo/industry_landscape_3.html', context)
 
@@ -316,15 +320,17 @@ def industry_landscape_3_3(request):
     graph_대상 = request.GET.getlist('graph_대상')
 
     df_대상 = df[df['index'].isin(graph_대상)].reset_index(drop=True)
+
     df_대상.set_index('index')
 
     # Session 만들기
     request.session['graph_대상'] = graph_대상
+    request.session['fs_type'] = fs_type_targets
 
     # 그래프 그려
     graph = make_scatter(df_대상)
 
-    context = {'graph': graph}
+    context = {'graph': graph,}
 
     return render(request, 'pybo/industry_landscape_3.html', context)
 
