@@ -312,7 +312,17 @@ def industry_landscape_3_3(request):
     df = make_df_targets(targets, fs_type_targets)
     df['index'] = targets
 
-    graph = make_scatter(df)
+    # 비교대상 필터링
+    graph_대상 = request.GET.getlist('graph_대상')
+
+    df_대상 = df[df['index'].isin(graph_대상)].reset_index(drop=True)
+    df_대상.set_index('index')
+
+    # Session 만들기
+    request.session['graph_대상'] = graph_대상
+
+    # 그래프 그려
+    graph = make_scatter(df_대상)
 
     context = {'graph': graph}
 
