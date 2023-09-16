@@ -1,12 +1,72 @@
 {% extends 'base.html' %}
 {% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'style.css' %}">
+
 <div class="container my-3">
     <h2 class="border-bottom py-2">
         <b>외감대상 실험</b>
     </h2>
 
-    TBU
+    <div class="accordion col-4" id="lv1Accordion">
 
+        {% for lv1_item in data %}
+        <div class="accordion-item">
+            <h2 class="accordion-header m-2" id="lv1Heading{{ forloop.counter }}">
+                <span style="font-size: 18px;">
+                    {{ lv1_item.lv1_header }}
+                </span>
+                <button class="btn btn-secondary btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv1Collapse{{ forloop.counter }}">+</button>
+            </h2>
+            <div id="lv1Collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv1Heading{{ forloop.counter }}" data-bs-parent="#lv1Accordion">
+                <div class="accordion-body">
+
+                    <div class="accordion" id="lv2Accordion{{ forloop.counter }}">
+                        {% for lv2_item in lv1_item.lv1_contents %}
+                        <div class="accordion-item">
+                            <h2 class="accordion-header m-2" id="lv2Heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                <span style="font-size: 16px;">
+                                    {{ lv2_item.lv2_header }}
+                                </span>
+                                <button class="btn btn-info btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv2Collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
+                            </h2>
+                            <div id="lv2Collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv2Heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#lv2Accordion{{ forloop.parentloop.counter }}">
+                                <div class="accordion-body">
+                                    {% for content in lv2_item.lv2_contents %}
+                                    <li>{{ content }}</li>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+    <script>
+        const accordions = document.querySelectorAll('.accordion-collapse');
+
+        accordions.forEach(accordion => {
+            accordion.addEventListener('show.bs.collapse', function() {
+                const button = document.querySelector(`[data-bs-target="#${accordion.id}"]`);
+                button.textContent = '-';
+            });
+
+            accordion.addEventListener('hide.bs.collapse', function() {
+                const button = document.querySelector(`[data-bs-target="#${accordion.id}"]`);
+                button.textContent = '+';
+            });
+        });
+
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
 

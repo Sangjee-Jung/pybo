@@ -589,12 +589,53 @@ def industry_landscape_6(request):
 
 def industry_external(request):
 
-    #df = pd.read_excel('static/KV_별도_PL.xlsx')
-    #df = df.head(10)
+    data = [
+        {
+            'lv1_header': 'A: 농업,임업 및 어업 (01~03)',
+            'lv1_contents': [
+                {
+                    'lv2_header': '농업 (01)',
+                    'lv2_contents': ['작물 재베업 (011)', '축산업 (012)']
+                },
+                {
+                    'lv2_header': '임업 (02)',
+                    'lv2_contents': ['내용1', '내용2']
+                },
+                {
+                    'lv2_header': '어업 (03)',
+                    'lv2_contents': ['어로 어업 (031)', '양식어업 및 어업관련 서비스업 (032)']
+                },
+            ]
+        },
+        {
+            'lv1_header': 'B: 광업(05~08)',
+            'lv1_contents': [
+                {
+                    'lv2_header': '석탄, 원유 및 천연가스 광업 (05)',
+                    'lv2_contents': ['내용1', '내용2']
+                },
+                {
+                    'lv2_header': '금속광업 (06)',
+                    'lv2_contents': ['내용1', '내용2']
+                },
+                {
+                    'lv2_header': '비금속광물 광업; 연료용 제외 (07)',
+                    'lv2_contents': ['내용1', '내용2']
+                },
+                {
+                    'lv2_header': '광업 지원 서비스업 (08)',
+                    'lv2_contents': ['내용1', '내용2']
+                },
+            ]
+        }
+        # 추가적인 데이터를 이곳에...
+    ]
 
-    #context = {"df": df.to_html(justify='center', index=True, classes="table table-sm", float_format='{0:>,.0f}'.format)}
 
-    return render(request, 'pybo/industry_external.html',)
+    context = {'data': data}
+
+
+    return render(request, 'pybo/industry_external.html',context)
 
 
 def ledger(request):
