@@ -9,33 +9,74 @@
         <b>외감대상 실험</b>
     </h2>
 
-    <div class="accordion col-sm-4" id="lv1Accordion">
-
-        {% for lv1_item in data %}
+    <div class="accordion col-sm-5" id="lv1Accordion">
+        <!-- 1st 아코디언(Lv2)  -->
+        {% for lv1_item in industry_tree %}
         <div class="accordion-item">
             <h2 class="accordion-header m-2" id="lv1Heading{{ forloop.counter }}">
-                <span style="font-size: 18px;">
+                <span style="font-size: 15px;">
                     {{ lv1_item.lv1_header }}
                 </span>
-                <button class="btn btn-secondary btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv1Collapse{{ forloop.counter }}">+</button>
+                <button class="btn btn-dark btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv1Collapse{{ forloop.counter }}">+</button>
             </h2>
             <div id="lv1Collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv1Heading{{ forloop.counter }}" data-bs-parent="#lv1Accordion">
                 <div class="accordion-body">
 
+                    <!-- 2nd 아코디언(Lv2)  -->
                     <div class="accordion" id="lv2Accordion{{ forloop.counter }}">
                         {% for lv2_item in lv1_item.lv1_contents %}
                         <div class="accordion-item">
                             <h2 class="accordion-header m-2" id="lv2Heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
-                                <span style="font-size: 16px;">
+                                <span style="font-size: 15px;">
                                     {{ lv2_item.lv2_header }}
                                 </span>
-                                <button class="btn btn-info btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv2Collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
+                                <button class="btn btn-secondary btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv2Collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
                             </h2>
                             <div id="lv2Collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv2Heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#lv2Accordion{{ forloop.parentloop.counter }}">
                                 <div class="accordion-body">
-                                    {% for content in lv2_item.lv2_contents %}
-                                    <li>{{ content }}</li>
-                                    {% endfor %}
+
+                                    <!-- 3rd 아코디언(Lv3) -->
+                                    <div class="accordion" id="lv3Accordion{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                        {% for lv3_item in lv2_item.lv2_contents %}
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header m-2" id="lv3Heading{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                                <span style="font-size: 15px;">
+                                                    {{ lv3_item.lv3_header }}
+                                                </span>
+                                                <button class="btn btn-info btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv3Collapse{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
+                                            </h2>
+                                            <div id="lv3Collapse{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv3Heading{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#lv3Accordion{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}">
+                                                <div class="accordion-body">
+
+                                                    <!-- 4th 아코디언(Lv4) -->
+                                                    <div class="accordion" id="lv4Accordion{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                                        {% for lv4_item in lv3_item.lv3_contents %}
+                                                        <div class="accordion-item">
+                                                            <h2 class="accordion-header m-2" id="lv4Heading{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                                                <span style="font-size: 15px;">
+                                                                    {{ lv4_item.lv4_header }}
+                                                                </span>
+                                                                <button class="btn btn-primary btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv4Collapse{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
+                                                            </h2>
+                                                            <div id="lv4Collapse{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv4Heading{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#lv4Accordion{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}">
+                                                                <div class="accordion-body">
+                                                                    {% for content in lv4_item.lv4_contents %}
+                                                                    <li>{{ content }}</li>
+                                                                    {% endfor %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                    <!-- 4th 아코디언 끝 -->
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <!-- 3rd 아코디언 끝 -->
+
                                 </div>
                             </div>
                         </div>

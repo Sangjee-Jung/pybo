@@ -589,50 +589,37 @@ def industry_landscape_6(request):
 
 def industry_external(request):
 
-    data = [
-        {
-            'lv1_header': 'A: 농업,임업 및 어업 (01~03)',
-            'lv1_contents': [
-                {
-                    'lv2_header': '농업 (01)',
-                    'lv2_contents': ['작물 재베업 (011)', '축산업 (012)']
-                },
-                {
-                    'lv2_header': '임업 (02)',
-                    'lv2_contents': ['내용1', '내용2']
-                },
-                {
-                    'lv2_header': '어업 (03)',
-                    'lv2_contents': ['어로 어업 (031)', '양식어업 및 어업관련 서비스업 (032)']
-                },
-            ]
-        },
-        {
-            'lv1_header': 'B: 광업(05~08)',
-            'lv1_contents': [
-                {
-                    'lv2_header': '석탄, 원유 및 천연가스 광업 (05)',
-                    'lv2_contents': ['내용1', '내용2']
-                },
-                {
-                    'lv2_header': '금속광업 (06)',
-                    'lv2_contents': ['내용1', '내용2']
-                },
-                {
-                    'lv2_header': '비금속광물 광업; 연료용 제외 (07)',
-                    'lv2_contents': ['내용1', '내용2']
-                },
-                {
-                    'lv2_header': '광업 지원 서비스업 (08)',
-                    'lv2_contents': ['내용1', '내용2']
-                },
-            ]
+    df = pd.read_excel('static/KV_전체_산업Tree.xlsx', sheet_name="Tree")
+
+    industry_tree = []
+
+    for lv1, lv1_group in df.groupby('lv1_header'):
+        lv1_dict = {
+            'lv1_header': lv1,
+            'lv1_contents': []
         }
-        # 추가적인 데이터를 이곳에...
-    ]
+        for lv2, lv2_group in lv1_group.groupby('lv2_header'):
+            lv2_dict = {
+                'lv2_header': lv2,
+                'lv2_contents': []
+            }
+            for lv3, lv3_group in lv2_group.groupby('lv3_header'):
+                lv3_dict = {
+                    'lv3_header': lv3,
+                    'lv3_contents': []
+                }
+                for lv4, lv4_group in lv3_group.groupby('lv4_header'):
+                    lv4_dict = {
+                        'lv4_header': lv4,
+                        'lv4_contents': lv4_group['lv5_header'].tolist()
+                    }
+                    lv3_dict['lv3_contents'].append(lv4_dict)
+                lv2_dict['lv2_contents'].append(lv3_dict)
+            lv1_dict['lv1_contents'].append(lv2_dict)
+        industry_tree.append(lv1_dict)
 
 
-    context = {'data': data}
+    context = {'industry_tree': industry_tree}
 
 
     return render(request, 'pybo/industry_external.html',context)
