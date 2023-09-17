@@ -600,18 +600,18 @@ def industry_external(request):
         }
         for lv2, lv2_group in lv1_group.groupby('lv2_header', sort= False):
             lv2_dict = {
-                'lv2_header': lv2,
+                'lv2_header': [lv2, lv2_group['lv2_number'].iloc[0]],
                 'lv2_contents': []
             }
             for lv3, lv3_group in lv2_group.groupby('lv3_header', sort= False):
                 lv3_dict = {
-                    'lv3_header': lv3,
+                    'lv3_header': [lv3, lv3_group['lv3_number'].iloc[0]],
                     'lv3_contents': []
                 }
                 for lv4, lv4_group in lv3_group.groupby('lv4_header', sort= False):
                     lv4_dict = {
-                        'lv4_header': lv4,
-                        'lv4_contents': lv4_group['lv5_header'].tolist()
+                        'lv4_header': [lv4, lv4_group['lv4_number'].iloc[0]],
+                        'lv4_contents': [lv4_group['lv5_header'].tolist(),lv4_group['lv5_number'].tolist()]
                     }
                     lv3_dict['lv3_contents'].append(lv4_dict)
                 lv2_dict['lv2_contents'].append(lv3_dict)

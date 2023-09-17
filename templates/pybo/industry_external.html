@@ -17,7 +17,7 @@
                 <span style="font-size: 15px;">
                     {{ lv1_item.lv1_header }}
                 </span>
-                <button class="btn btn-dark btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv1Collapse{{ forloop.counter }}">+</button>
+                <button class="btn btn-outline-dark btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv1Collapse{{ forloop.counter }}">+</button>
             </h2>
             <div id="lv1Collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv1Heading{{ forloop.counter }}" data-bs-parent="#lv1Accordion">
                 <div class="accordion-body">
@@ -27,10 +27,11 @@
                         {% for lv2_item in lv1_item.lv1_contents %}
                         <div class="accordion-item">
                             <h2 class="accordion-header m-2" id="lv2Heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
-                                <span style="font-size: 15px;">
-                                    {{ lv2_item.lv2_header }}
+                                <span style="font-size: 15px; cursor: pointer;" onmouseover="this.style.color='blue'; this.style.fontWeight='bold';" onmouseout="this.style.color=''; this.style.fontWeight='normal';" onclick="accordionClicked(event, '{{ lv2_item.lv2_header }}')">
+                                    {{ lv2_item.lv2_header.0 }}
                                 </span>
-                                <button class="btn btn-secondary btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv2Collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
+                                <button class="btn btn-dark btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv2Collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
+                                <span style="font-size: 15px; color: silver;"><i> -- 총 {{ lv2_item.lv2_header.1 }}개사 </i></span>
                             </h2>
                             <div id="lv2Collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv2Heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#lv2Accordion{{ forloop.parentloop.counter }}">
                                 <div class="accordion-body">
@@ -40,10 +41,11 @@
                                         {% for lv3_item in lv2_item.lv2_contents %}
                                         <div class="accordion-item">
                                             <h2 class="accordion-header m-2" id="lv3Heading{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
-                                                <span style="font-size: 15px;">
-                                                    {{ lv3_item.lv3_header }}
+                                                <span style="font-size: 15px; cursor: pointer;" onmouseover="this.style.color='blue'; this.style.fontWeight='bold';" onmouseout="this.style.color=''; this.style.fontWeight='normal';" onclick="accordionClicked(event, '{{ lv3_item.lv3_header }}')" >
+                                                    {{ lv3_item.lv3_header.0 }}
                                                 </span>
-                                                <button class="btn btn-info btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv3Collapse{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
+                                                <button class="btn btn-secondary btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv3Collapse{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
+                                                <span style="font-size: 15px; color: silver;"><i> -- {{ lv3_item.lv3_header.1 }}개사 </i></span>
                                             </h2>
                                             <div id="lv3Collapse{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv3Heading{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#lv3Accordion{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}">
                                                 <div class="accordion-body">
@@ -53,15 +55,18 @@
                                                         {% for lv4_item in lv3_item.lv3_contents %}
                                                         <div class="accordion-item">
                                                             <h2 class="accordion-header m-2" id="lv4Heading{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
-                                                                <span style="font-size: 15px;">
-                                                                    {{ lv4_item.lv4_header }}
+                                                                <span style="font-size: 15px; cursor: pointer;" onmouseover="this.style.color='blue'; this.style.fontWeight='bold';" onmouseout="this.style.color=''; this.style.fontWeight='normal';" onclick="accordionClicked(event, '{{ lv4_item.lv4_header }}')" >
+                                                                    {{ lv4_item.lv4_header.0 }}
                                                                 </span>
-                                                                <button class="btn btn-primary btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv4Collapse{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
+                                                                <button class="btn btn-info btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv4Collapse{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
+                                                                <span style="font-size: 15px; color: silver;"><i> -- {{ lv4_item.lv4_header.1 }}개사 </i></span>
                                                             </h2>
                                                             <div id="lv4Collapse{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv4Heading{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#lv4Accordion{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}">
                                                                 <div class="accordion-body">
-                                                                    {% for content in lv4_item.lv4_contents %}
-                                                                    <li>{{ content }}</li>
+                                                                    {% for content in lv4_item.lv4_contents.0 %}
+                                                                    <li style="cursor: pointer;" onmouseover="this.style.color='blue'; this.style.fontWeight='bold';" onmouseout="this.style.color=''; this.style.fontWeight='normal';" onclick="accordionClicked(event, '{{ content }}')">
+                                                                        {{ content }}
+                                                                    </li>
                                                                     {% endfor %}
                                                                 </div>
                                                             </div>
@@ -90,6 +95,7 @@
 
 
     <script>
+
         const accordions = document.querySelectorAll('.accordion-collapse');
 
         accordions.forEach(accordion => {
@@ -104,6 +110,12 @@
             });
         });
 
+    </script>
+
+    <script>
+        function accordionClicked(event) {
+            console.log("Accordion item clicked!");
+        }
     </script>
 
 
