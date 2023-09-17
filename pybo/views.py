@@ -593,22 +593,22 @@ def industry_external(request):
 
     industry_tree = []
 
-    for lv1, lv1_group in df.groupby('lv1_header'):
+    for lv1, lv1_group in df.groupby('lv1_header', sort= False):
         lv1_dict = {
             'lv1_header': lv1,
             'lv1_contents': []
         }
-        for lv2, lv2_group in lv1_group.groupby('lv2_header'):
+        for lv2, lv2_group in lv1_group.groupby('lv2_header', sort= False):
             lv2_dict = {
                 'lv2_header': lv2,
                 'lv2_contents': []
             }
-            for lv3, lv3_group in lv2_group.groupby('lv3_header'):
+            for lv3, lv3_group in lv2_group.groupby('lv3_header', sort= False):
                 lv3_dict = {
                     'lv3_header': lv3,
                     'lv3_contents': []
                 }
-                for lv4, lv4_group in lv3_group.groupby('lv4_header'):
+                for lv4, lv4_group in lv3_group.groupby('lv4_header', sort= False):
                     lv4_dict = {
                         'lv4_header': lv4,
                         'lv4_contents': lv4_group['lv5_header'].tolist()
