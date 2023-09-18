@@ -4,12 +4,12 @@ from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Question
-from django.http import HttpResponseNotAllowed, HttpResponse, FileResponse
+from django.http import HttpResponseNotAllowed, HttpResponse, FileResponse, JsonResponse
 from .forms import QuestionForm, AnswerForm, UploadFileForm, CompanyNameAll
 import matplotlib.pyplot as plt
 from .ledger_program import make_years, ledger_table
 from .account_programs import account_table, client_analysis
-from .models import Document, Dart_is_2
+from .models import Document, KvTotalCompanyInfo
 import os
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
@@ -25,6 +25,29 @@ import json
 
 import logging
 logger = logging.getLogger('pybo')
+
+
+def ajax(request):
+    code = request.GET.get('code')
+
+    if len(code) == 2:
+        queryset = KvTotalCompanyInfo.objects.filter(industry_code_revised__regex=fr'^{code}\d{{3}}$')
+    elif len(code) == 3:
+        queryset = KvTotalCompanyInfo.objects.filter(industry_code_revised__regex=fr'^{code}\d{{2}}$')
+    elif len(code) == 4:
+        queryset = KvTotalCompanyInfo.objects.filter(industry_code_revised__regex=fr'^{code}\d{{1}}$')
+
+    data = list(
+        queryset.values('name', 'industry_code_revised', 'industry_name', 'industry_name', 'market_category_revised', ))
+    df = pd.DataFrame.from_records(data)
+
+
+    result = {
+        'df': df.to_dict(orient="records")
+    }
+
+    return JsonResponse(result)
+
 
 def index(request):
     logger.info("INFO 레벨로 출력")
@@ -591,6 +614,11 @@ def industry_external(request):
 
     df = pd.read_excel('static/KV_전체_산업Tree.xlsx', sheet_name="Tree")
 
+    #0 제거
+    df = df[df['lv5_number'] != 0]
+
+
+    #아코디언 산업트리 생성
     industry_tree = []
 
     for lv1, lv1_group in df.groupby('lv1_header', sort= False):
@@ -600,17 +628,17 @@ def industry_external(request):
         }
         for lv2, lv2_group in lv1_group.groupby('lv2_header', sort= False):
             lv2_dict = {
-                'lv2_header': [lv2, lv2_group['lv2_number'].iloc[0]],
+                'lv2_header': [lv2, lv2_group['lv2_number'].iloc[0],lv2_group['lv2_code'].iloc[0],],
                 'lv2_contents': []
             }
             for lv3, lv3_group in lv2_group.groupby('lv3_header', sort= False):
                 lv3_dict = {
-                    'lv3_header': [lv3, lv3_group['lv3_number'].iloc[0]],
+                    'lv3_header': [lv3, lv3_group['lv3_number'].iloc[0], lv3_group['lv3_code'].iloc[0], ],
                     'lv3_contents': []
                 }
                 for lv4, lv4_group in lv3_group.groupby('lv4_header', sort= False):
                     lv4_dict = {
-                        'lv4_header': [lv4, lv4_group['lv4_number'].iloc[0]],
+                        'lv4_header': [lv4, lv4_group['lv4_number'].iloc[0], lv4_group['lv4_code'].iloc[0],],
                         'lv4_contents': [lv4_group['lv5_header'].tolist(),lv4_group['lv5_number'].tolist()]
                     }
                     lv3_dict['lv3_contents'].append(lv4_dict)
@@ -618,8 +646,12 @@ def industry_external(request):
             lv1_dict['lv1_contents'].append(lv2_dict)
         industry_tree.append(lv1_dict)
 
+    #모델에서 가져오기
+    queryset = KvTotalCompanyInfo.objects.filter(industry_code_revised__regex =r'^55\d{3}$')
+    data = list(queryset.values('name','industry_code_revised','industry_name','industry_name','market_category_revised',))
+    df = pd.DataFrame.from_records(data)
 
-    context = {'industry_tree': industry_tree}
+    context = {'industry_tree': industry_tree, 'df': df.to_html(justify='center', index=False, classes="table table-sm")}
 
 
     return render(request, 'pybo/industry_external.html',context)

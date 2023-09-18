@@ -42,6 +42,7 @@ urlpatterns = [
     path('account/target', views.account_target, name='account_target'),
     path('account/result', views.account_result, name='account_result'),
     path('excel/settings', views.excel_settings, name='excel_settings'),
+    path('ajax/', views.ajax, name='ajax'),
 
 ]
 

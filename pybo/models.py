@@ -19,7 +19,7 @@ class Document(models.Model):
     uploadedFile = models.FileField(upload_to ="result/")
     dateTimeOfUpload = models.DateTimeField(auto_now=True)
 
-
+'''
 class Dart_is_2(models.Model):
     id = models.IntegerField(primary_key=True)
     재무제표종류 = models.TextField()
@@ -38,3 +38,27 @@ class Dart_is_2(models.Model):
     class Meta:
         managed = False
         db_table = 'dart_is_2'
+'''
+
+class KvTotalCompanyInfo(models.Model):
+    kis = models.TextField(db_column='KIS', blank=True, null=False, primary_key=True)  # Field name made lowercase.
+    stock = models.TextField(db_column='Stock', blank=True, null=True)  # Field name made lowercase.
+    name = models.TextField(db_column='Name', blank=True, null=True)  # Field name made lowercase.
+    market_category = models.TextField(db_column='Market_category', blank=True, null=True)  # Field name made lowercase.
+    market_category_revised = models.TextField(db_column='Market_category_revised', blank=True, null=True)  # Field name made lowercase.
+    industry_code = models.TextField(db_column='Industry_code', blank=True, null=True)  # Field name made lowercase.
+    industry_code_revised = models.IntegerField(db_column='Industry_code_revised', blank=True, null=True)  # Field name made lowercase.
+    industry_name = models.TextField(db_column='Industry_name', blank=True, null=True)  # Field name made lowercase.
+    industry_category = models.TextField(db_column='Industry_category', blank=True, null=True)  # Field name made lowercase.
+    group = models.TextField(db_column='Group', blank=True, null=True)  # Field name made lowercase.
+    ceo = models.TextField(db_column='CEO', blank=True, null=True)  # Field name made lowercase.
+    establishment_date = models.TextField(db_column='Establishment_date', blank=True, null=True)  # Field name made lowercase.
+    listing_date = models.TextField(db_column='Listing_date', blank=True, null=True)  # Field name made lowercase.
+    company_size = models.TextField(db_column='Company_size', blank=True, null=True)  # Field name made lowercase.
+    address = models.TextField(db_column='Address', blank=True, null=True)  # Field name made lowercase.
+    website = models.TextField(db_column='Website', blank=True, null=True)  # Field name made lowercase.
+    main_products = models.TextField(db_column='Main_products', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'KV_total_company_info'
