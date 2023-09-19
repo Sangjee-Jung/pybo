@@ -29,7 +29,7 @@ logger = logging.getLogger('pybo')
 
 def ajax(request):
     code = request.GET.get('code')
-
+    '''
     if len(code) == 2:
         queryset = KvTotalCompanyInfo.objects.filter(industry_code_revised__regex=fr'^{code}\d{{3}}$')
     elif len(code) == 3:
@@ -40,8 +40,9 @@ def ajax(request):
     data = list(
         queryset.values('name', 'industry_code_revised', 'industry_name', 'industry_name', 'market_category_revised', ))
     df = pd.DataFrame.from_records(data)
+    '''
 
-
+    df = pd.DataFrame()
     result = {
         'df': df.to_dict(orient="records")
     }
