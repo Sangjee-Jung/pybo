@@ -54,7 +54,7 @@
                                                                 style="font-size: 15px; cursor: pointer;"
                                                                 onmouseover="this.style.color='blue'; this.style.fontWeight='bold';"
                                                                 onmouseout="this.style.color=''; this.style.fontWeight='normal';"
-                                                                onclick="accordionClicked(event)",
+                                                                onclick="accordionClicked(event)"
                                                                 data-code="{{ lv3_item.lv3_header.2 }}"
                                                         >
                                                             {{ lv3_item.lv3_header.0 }}
@@ -116,21 +116,28 @@
 
             <div class="col-sm-8">
                 <div class="col-auto">
-
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type = "checkbox" name = "category" id = "category_상장" value = "상장" checked>
+                        <input class="form-check-input" type = "checkbox" name = "category" id = "category_상장" value = "상장" checked
+                               onclick="accordionClicked(event)"
+                        >
                         <label class="form-check-label" for="category_상장">상장</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type = "checkbox" name = "category" id = "category_코스닥" value = "코스닥" checked>
+                        <input class="form-check-input" type = "checkbox" name = "category" id = "category_코스닥" value = "코스닥" checked
+                               onclick="accordionClicked(event)"
+                        >
                         <label class="form-check-label" for="category_코스닥">코스닥</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type = "checkbox" name = "category" id = "category_코넥스" value = "코넥스" checked>
+                        <input class="form-check-input" type = "checkbox" name = "category" id = "category_코넥스" value = "코넥스" checked
+                               onclick="accordionClicked(event)"
+                        >
                         <label class="form-check-label" for="category_코넥스">코넥스</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type = "checkbox" name = "category" id = "category_외감" value = "외감" checked>
+                        <input class="form-check-input" type = "checkbox" name = "category" id = "category_외감" value = "외감" checked
+                               onclick="accordionClicked(event)"
+                        >
                         <label class="form-check-label" for="category_외감">외감</label>
                     </div>
                 </div>
@@ -164,21 +171,37 @@
     </script>
 
     <script>
+        let currentCode = null;  // 최근 클릭된 아코디언 항목의 data-code 값을 저장하기 위한 전역 변수
+
         function accordionClicked(event) {
-            var code = event.currentTarget.getAttribute('data-code');
+            const clickedElement = event.target;
+
+            if(clickedElement.tagName !== 'INPUT') {
+                currentCode = clickedElement.getAttribute('data-code');
+            }
+
             var output = "";
 
+            // 체크박스에서 체크된 값을 가져옴
+            var checkedValues = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(input => input.value);
+
             // AJAX 요청 시작
-            fetch(`/ajax/?code=${code}`)
+            fetch(`/ajax/?code=${currentCode}`)
                 .then(response => response.json())
                 .then(data => {
 
+                    var filteredData = data.df.filter(row => checkedValues.includes(row['Category']));  // 원하는_열_이름에 따라 데이터 필터링
+                    output += `<p><i>Filtered Companies: ${filteredData.length}개사</i></p>`;
+
+                    // 테이블의 총 row 수를 추가
+
                     // DataFrame을 HTML 테이블로 변환
                     var tableHTML = '<table border="1" class="table table-sm">';
-                    var headers = Object.keys(data.df[0]);
+                    var headers = Object.keys(filteredData[0]);
 
                     // 헤더 부분 추가
                     tableHTML += '<thead><tr>';
+                    tableHTML += '<th>No.</th>';  // Row number를 위한 header 추가
                     headers.forEach(header => {
                         tableHTML += `<th>${header}</th>`;
                     });
@@ -186,8 +209,9 @@
 
                     // 본문 부분 추가
                     tableHTML += '<tbody>';
-                    data.df.forEach(row => {
+                    filteredData.forEach((row, index) => {
                         tableHTML += '<tr>';
+                        tableHTML += `<td>${index + 1}</td>`;  // Row number 추가
                         headers.forEach(header => {
                             tableHTML += `<td>${row[header]}</td>`;
                         });
@@ -197,11 +221,12 @@
 
                     tableHTML += '</table>';
 
-                    document.getElementById('output').innerHTML = tableHTML;
+                    // output 변수에 tableHTML을 추가
+                    output += tableHTML;
+
+                    document.getElementById('output').innerHTML = output;
 
                 });
-
-
 
         }
     </script>
