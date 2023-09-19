@@ -115,9 +115,32 @@
             </div>
 
             <div class="col-sm-8">
-                <div id="output">
+                <div class="col-auto">
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type = "checkbox" name = "category" id = "category_상장" value = "상장" checked>
+                        <label class="form-check-label" for="category_상장">상장</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type = "checkbox" name = "category" id = "category_코스닥" value = "코스닥" checked>
+                        <label class="form-check-label" for="category_코스닥">코스닥</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type = "checkbox" name = "category" id = "category_코넥스" value = "코넥스" checked>
+                        <label class="form-check-label" for="category_코넥스">코넥스</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type = "checkbox" name = "category" id = "category_외감" value = "외감" checked>
+                        <label class="form-check-label" for="category_외감">외감</label>
+                    </div>
+                </div>
+                <p></p>
+
+
+                <div class="col-auto" id="output">
                     {{df | safe}}
                 </div>
+
             </div>
         </div>
     </div>
