@@ -44,7 +44,7 @@ def ajax(request):
     '''
 
     df = pd.read_excel('static/KV_total_company_info_temp.xlsx')
-    df.drop(['KIS', 'Stock', 'Main_products_원본'], axis=1, inplace=True)
+    df.drop(['KIS', 'Stock'], axis=1, inplace=True)
 
     df['별도매출(FY22)'] = df['별도매출(FY22)'].astype(float, errors='ignore')
     df['별도매출(FY22)'] = df['별도매출(FY22)'].apply(lambda x: '{0:>,.0f}'.format(x))
@@ -671,10 +671,39 @@ def industry_external(request):
 
     df = df.head(20)
 
-    df.drop(['KIS', 'Stock', 'Main_products_원본'], axis=1, inplace=True)
+    df.drop(['KIS', 'Stock',], axis=1, inplace=True)
     df['별도매출(FY22)'] = df['별도매출(FY22)'].astype(float, errors='ignore')
+    df['별도매출(FY22)'] = df['별도매출(FY22)'].apply(lambda x: '{0:>,.0f}'.format(x))
 
-    context = {'industry_tree': industry_tree, 'df': df.to_html(justify='center', index=False, classes="table table-sm",float_format='{0:>,.0f}'.format,),}
+
+    # html 만들기
+    headers = df.columns.tolist()
+    rows = df.values.tolist()
+
+    tableHTML = '<table border="1" class="table table-sm">'
+    tableHTML += '<thead><tr>'
+    for header in headers:
+        if header != 'Main_products_원본':
+            tableHTML += f'<th>{header}</th>'
+    tableHTML += '</tr></thead>'
+
+    ## 본문 부분 추가
+    tableHTML += '<tbody>'
+    for row in rows:
+        tableHTML += '<tr>'
+        for idx, cell in enumerate(row):
+            header = headers[idx]
+            if header == 'Main_products':
+                tableHTML += f'<td class="hover-element">{cell}<span class="popup">{row[headers.index("Main_products_원본")]}</span></td>'
+            elif header != 'Main_products_원본':
+                tableHTML += f'<td>{cell}</td>'
+        tableHTML += '</tr>'
+    tableHTML += '</tbody>'
+
+    tableHTML += '</table>'
+
+
+    context = {'industry_tree': industry_tree, 'df': df.to_html(justify='center', index=False, classes="table table-sm",float_format='{0:>,.0f}'.format,),'html_str': tableHTML}
 
 
     return render(request, 'pybo/industry_external.html',context)

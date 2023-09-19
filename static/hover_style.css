@@ -11,6 +11,9 @@
 .popup {
     display: none;
     position: absolute;
+    bottom: 20px;
+    right: 10px; /* 오른쪽에서 10px 떨어진 위치에 배치 */
+    background-color: rgba(249, 249, 249, 0.9);
     background-color: rgba(249, 249, 249, 0.9);
     max-width: 750px;
     min-width: 100px;
@@ -22,5 +25,33 @@
 .hover-element:hover .popup {
     display: block;
 }
+
+
+.tooltip {
+        position: relative;
+        display: inline-block;
+    }
+
+.tooltip .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -60px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+.tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
 
 </style>

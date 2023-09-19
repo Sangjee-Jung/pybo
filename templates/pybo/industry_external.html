@@ -2,6 +2,7 @@
 {% block content %}
 
 {% load static %}
+<link rel="stylesheet" href="{% static 'hover_style.css' %}">
 <link rel="stylesheet" href="{% static 'style.css' %}">
 
 <div class="container my-3">
@@ -145,7 +146,8 @@
 
 
                 <div class="col-auto" id="output">
-                    {{df | safe}}
+                    {{ html_str | safe}}
+
                 </div>
 
             </div>
@@ -197,7 +199,7 @@
 
                     // DataFrame을 HTML 테이블로 변환
                     var tableHTML = '<table border="1" class="table table-sm">';
-                    var headers = Object.keys(filteredData[0]);
+                    var headers = Object.keys(filteredData[0]).filter(header => header !== 'Main_products_원본');
 
                     // 헤더 부분 추가
                     tableHTML += '<thead><tr>';
@@ -212,8 +214,16 @@
                     filteredData.forEach((row, index) => {
                         tableHTML += '<tr>';
                         tableHTML += `<td>${index + 1}</td>`;  // Row number 추가
+                        //툴팁추가
                         headers.forEach(header => {
-                            tableHTML += `<td>${row[header]}</td>`;
+
+                            // 팝업을 보여줄 열: 'Main_products'
+                            if (header === 'Main_products') {
+                                tableHTML += `<td class="hover-element">${row[header]}<span class="popup">${row['Main_products_원본']}</span></td>`;
+                            } else {
+                                tableHTML += `<td>${row[header]}</td>`;
+                            }
+
                         });
                         tableHTML += '</tr>';
                     });
