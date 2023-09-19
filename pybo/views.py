@@ -29,6 +29,7 @@ logger = logging.getLogger('pybo')
 
 def ajax(request):
     code = request.GET.get('code')
+
     '''
     if len(code) == 2:
         queryset = KvTotalCompanyInfo.objects.filter(industry_code_revised__regex=fr'^{code}\d{{3}}$')
@@ -42,7 +43,7 @@ def ajax(request):
     df = pd.DataFrame.from_records(data)
     '''
 
-    df = pd.DataFrame()
+    df = pd.DataFram()
     result = {
         'df': df.to_dict(orient="records")
     }
@@ -654,9 +655,11 @@ def industry_external(request):
     df = pd.DataFrame.from_records(data)
     '''
 
-    df = pd.DataFrame()
+    df =pd.read_excel('static/KV_total_company_info_temp.xlsx')
+    df.drop(['KIS','Stock','Main_products_원본'], axis=1, inplace=True)
+    df = df.head(20)
 
-    context = {'industry_tree': industry_tree, 'df': df.to_html(justify='center', index=False, classes="table table-sm")}
+    context = {'industry_tree': industry_tree, 'df': df.to_html(justify='center', index=False, classes="table table-sm",float_format='{0:>,.0f}'.format,),}
 
 
     return render(request, 'pybo/industry_external.html',context)
