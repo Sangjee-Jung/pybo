@@ -43,7 +43,19 @@ def ajax(request):
     df = pd.DataFrame.from_records(data)
     '''
 
-    df = pd.DataFram()
+    df = pd.read_excel('static/KV_total_company_info_temp.xlsx')
+    df.drop(['KIS', 'Stock', 'Main_products_원본'], axis=1, inplace=True)
+
+    df['별도매출(FY22)'] = df['별도매출(FY22)'].astype(float, errors='ignore')
+    df['별도매출(FY22)'] = df['별도매출(FY22)'].apply(lambda x: '{0:>,.0f}'.format(x))
+
+    if len(code) == 2:
+        df = df[df['Industry_code'].astype(str).str.match(fr'^{code}\d{{3}}$')]
+    elif len(code) == 3:
+        df = df[df['Industry_code'].astype(str).str.match(fr'^{code}\d{{2}}$')]
+    elif len(code) == 4:
+        df = df[df['Industry_code'].astype(str).str.match(fr'^{code}\d{{1}}$')]
+
     result = {
         'df': df.to_dict(orient="records")
     }
@@ -656,8 +668,11 @@ def industry_external(request):
     '''
 
     df =pd.read_excel('static/KV_total_company_info_temp.xlsx')
-    df.drop(['KIS','Stock','Main_products_원본'], axis=1, inplace=True)
+
     df = df.head(20)
+
+    df.drop(['KIS', 'Stock', 'Main_products_원본'], axis=1, inplace=True)
+    df['별도매출(FY22)'] = df['별도매출(FY22)'].astype(float, errors='ignore')
 
     context = {'industry_tree': industry_tree, 'df': df.to_html(justify='center', index=False, classes="table table-sm",float_format='{0:>,.0f}'.format,),}
 
