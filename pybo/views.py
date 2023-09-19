@@ -647,10 +647,14 @@ def industry_external(request):
             lv1_dict['lv1_contents'].append(lv2_dict)
         industry_tree.append(lv1_dict)
 
+    '''
     #모델에서 가져오기
     queryset = KvTotalCompanyInfo.objects.filter(industry_code_revised__regex =r'^55\d{3}$')
     data = list(queryset.values('name','industry_code_revised','industry_name','industry_name','market_category_revised',))
     df = pd.DataFrame.from_records(data)
+    '''
+
+    df = pd.DataFrame()
 
     context = {'industry_tree': industry_tree, 'df': df.to_html(justify='center', index=False, classes="table table-sm")}
 
