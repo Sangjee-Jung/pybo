@@ -55,6 +55,8 @@ def ajax(request):
         df = df[df['Industry_code'].astype(str).str.match(fr'^{code}\d{{2}}$')]
     elif len(code) == 4:
         df = df[df['Industry_code'].astype(str).str.match(fr'^{code}\d{{1}}$')]
+    elif len(code) == 5:
+        df = df[df['Industry_code'].astype(str).str.match(fr'^{code}$')]
 
     result = {
         'df': df.to_dict(orient="records")
@@ -653,7 +655,7 @@ def industry_external(request):
                 for lv4, lv4_group in lv3_group.groupby('lv4_header', sort= False):
                     lv4_dict = {
                         'lv4_header': [lv4, lv4_group['lv4_number'].iloc[0], lv4_group['lv4_code'].iloc[0],],
-                        'lv4_contents': [lv4_group['lv5_header'].tolist(),lv4_group['lv5_number'].tolist()]
+                        'lv4_contents': [lv4_group['lv5_header'].tolist(),lv4_group['lv5_number'].tolist(),lv4_group['lv5_code'].tolist()]
                     }
                     lv3_dict['lv3_contents'].append(lv4_dict)
                 lv2_dict['lv2_contents'].append(lv3_dict)
@@ -668,6 +670,14 @@ def industry_external(request):
     '''
 
     df =pd.read_excel('static/KV_total_company_info_temp.xlsx')
+
+    #회사명 튜플 만들기
+    name = df['Name'].tolist()
+    industry_code = df['Industry_code'].tolist()
+
+    company_inputs = { 'name' : name,
+              'industry_code': industry_code
+              }
 
     df = df.head(20)
 
@@ -703,7 +713,11 @@ def industry_external(request):
     tableHTML += '</table>'
 
 
-    context = {'industry_tree': industry_tree, 'df': df.to_html(justify='center', index=False, classes="table table-sm",float_format='{0:>,.0f}'.format,),'html_str': tableHTML}
+    context = {'industry_tree': industry_tree,
+               'df': df.to_html(justify='center', index=False, classes="table table-sm",float_format='{0:>,.0f}'.format,),
+               'html_str': tableHTML,
+               'company_inputs': company_inputs
+               }
 
 
     return render(request, 'pybo/industry_external.html',context)

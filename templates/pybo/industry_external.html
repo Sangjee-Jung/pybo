@@ -5,11 +5,30 @@
 <link rel="stylesheet" href="{% static 'hover_style.css' %}">
 <link rel="stylesheet" href="{% static 'style.css' %}">
 
+{% load custom_filters %}
+
 <div class="container my-3">
     <h2 class="border-bottom py-2">
         <b>외감대상 실험</b>
     </h2>
 
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-auto">
+                <input class="form-control" list="datalistOptions" id="searchInput" placeholder="회사명을 입력하세요">
+                <datalist id="datalistOptions">
+                    {% with zipped_contents=company_inputs.name|zip_lists:company_inputs.industry_code %}
+                        {% for company, code in zipped_contents %}
+                        <option data-value="{{code}}">{{company}}</option>
+                        {% endfor %}
+                    {% endwith %}
+                </datalist>
+            </div>
+            <div class="col-auto">
+                <input type="button" class="btn btn-primary mb-3" id="searchBtn" value="검색">
+            </div>
+        </div>
+    </div>
 
     <div class="container-fluid">
         <div class="row">
@@ -85,11 +104,20 @@
                                                                     </h2>
                                                                     <div id="lv4Collapse{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv4Heading{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#lv4Accordion{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}">
                                                                         <div class="accordion-body">
-                                                                            {% for content in lv4_item.lv4_contents.0 %}
-                                                                            <li style="cursor: pointer;" onmouseover="this.style.color='blue'; this.style.fontWeight='bold';" onmouseout="this.style.color=''; this.style.fontWeight='normal';" onclick="accordionClicked(event, '{{ content }}')">
-                                                                                {{ content }}
-                                                                            </li>
-                                                                            {% endfor %}
+
+                                                                            {% with zipped_contents=lv4_item.lv4_contents.0|zip_lists:lv4_item.lv4_contents.2 %}
+                                                                                {% for content, code in zipped_contents %}
+                                                                                <li
+                                                                                        style="cursor: pointer;"
+                                                                                        onmouseover="this.style.color='blue'; this.style.fontWeight='bold';"
+                                                                                        onmouseout="this.style.color=''; this.style.fontWeight='normal';"
+                                                                                        onclick="accordionClicked(event)"
+                                                                                        data-code="{{ code }}"
+                                                                                >
+                                                                                    {{ content }}
+                                                                                </li>
+                                                                                {% endfor %}
+                                                                            {% endwith %}
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -201,6 +229,9 @@
                     var tableHTML = '<table border="1" class="table table-sm">';
                     var headers = Object.keys(filteredData[0]).filter(header => header !== 'Main_products_원본');
 
+                    // 검색 입력 값을 가져옴
+                    const searchValue = document.getElementById('searchInput').value;
+
                     // 헤더 부분 추가
                     tableHTML += '<thead><tr>';
                     tableHTML += '<th>No.</th>';  // Row number를 위한 header 추가
@@ -212,7 +243,11 @@
                     // 본문 부분 추가
                     tableHTML += '<tbody>';
                     filteredData.forEach((row, index) => {
-                        tableHTML += '<tr>';
+
+                        // 검색 입력 값과 Name 열의 값이 일치하는지 확인
+                        let isMatchedRow = row['Name'] === searchValue;
+
+                        tableHTML += isMatchedRow ? '<tr style="background-color: #ECF9FF;">' : '<tr>'; // 변경된 부분
                         tableHTML += `<td>${index + 1}</td>`;  // Row number 추가
                         //툴팁추가
                         headers.forEach(header => {
@@ -240,6 +275,114 @@
 
         }
     </script>
+
+    <!-- 안되는 코드 원인 분석하기
+    <script>
+        document.getElementById('searchBtn').addEventListener('click', function() {
+
+            // 입력 값 가져오기
+            const inputValue = document.getElementById('searchInput').value.toLowerCase();
+
+            // 모든 아코디언 항목 순회
+            const accordions = document.querySelectorAll('.accordion-header span');
+            accordions.forEach(acc => {
+                if (acc.textContent.toLowerCase().includes(inputValue)) {
+                    // 일치하는 항목의 부모 요소를 찾아 펼친다.
+                    let collapseElement = acc.closest('.accordion-item').querySelector('.accordion-collapse');
+                    if (!collapseElement.classList.contains('show')) {
+                        new bootstrap.Collapse(collapseElement, { toggle: true });
+                    }
+
+                    // 상위 아코디언 항목들도 펼친다.
+                    let parentItem = collapseElement.closest('.accordion-item');
+                    while (parentItem) {
+                        let parentAccordion = parentItem.closest('.accordion');
+                        if (parentAccordion) {
+                            let parentCollapse = parentAccordion.previousElementSibling;
+                            if (parentCollapse && parentCollapse.contains(parentItem)) {
+                                new bootstrap.Collapse(parentCollapse, { toggle: true });
+                            }
+                            parentItem = parentAccordion.closest('.accordion-item');
+                        } else {
+                            break;
+                        }
+                    }
+
+
+                }
+            });
+        });
+    </script>
+    -->
+
+
+    <!-- Input값으로 펼쳐지는 코드-->
+    <script>
+        // 코드 가져오기
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const inputValue = this.value;
+            const options = document.querySelectorAll(`#datalistOptions option`);
+            let foundOption = null;
+
+            for (let opt of options) {
+                if (opt.innerText === inputValue) {
+                    foundOption = opt;
+                    break;
+                }
+            }
+
+            if (foundOption) {
+                this.setAttribute('data-value', foundOption.getAttribute('data-value'));
+            } else {
+                this.removeAttribute('data-value');
+            }
+        });
+
+
+
+        // 펼치기
+        document.getElementById('searchBtn').addEventListener('click', function() {
+
+            // 모든 아코디언 항목을 먼저 접습니다.
+            const allCollapsible = document.querySelectorAll('.accordion-collapse.show');
+            allCollapsible.forEach(collapsible => {
+                new bootstrap.Collapse(collapsible, { toggle: true });
+            });
+
+            setTimeout(() => {
+
+                // 입력 값 가져오기
+                const dataValue = document.getElementById('searchInput').getAttribute('data-value');
+
+                // 모든 아코디언 항목 순회
+                const accordionElements = document.querySelectorAll('.accordion-header span, .accordion-body li');
+
+                accordionElements.forEach(element => {
+                    const dataCode = element.getAttribute('data-code'); // data-code 값을 가져온다.
+
+                    // dataCode가 존재하며 inputValue와 일치할 때만 펼친다.
+                    if (dataCode && dataCode.toLowerCase() === dataValue) {
+                        let currentItem = element.closest('.accordion-item');
+                        while (currentItem) {
+                            // 아코디언 항목의 collapse 요소를 펼친다.
+                            let collapseElement = currentItem.querySelector('.accordion-collapse');
+                            if (collapseElement && !collapseElement.classList.contains('show')) {
+                                new bootstrap.Collapse(collapseElement, { toggle: true });
+
+                                // 해당 아코디언 항목이 펼쳐지면 accordionClicked 함수를 호출한다.
+                                accordionClicked({ target: element });
+                            }
+
+                            // 다음 상위 accordion-item 요소로 이동한다.
+                            let parentAccordion = currentItem.closest('.accordion');
+                            currentItem = parentAccordion ? parentAccordion.closest('.accordion-item') : null;
+                        }
+                    }
+                });
+            }, 150); // 300ms의 시간을 줬습니다. 필요에 따라 조정하실 수 있습니다.
+        });
+    </script>
+
 
 
 </div>
