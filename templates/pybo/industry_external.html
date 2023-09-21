@@ -218,7 +218,9 @@
                 item.style.fontWeight = '';
             });
 
-            if(clickedElement.tagName !== 'INPUT') {
+            if (clickedElement.tagName === 'SPAN' || clickedElement.tagName === 'LI') {
+                clickedElement.style.color = 'blue';
+                clickedElement.style.fontWeight = 'bold';
                 currentCode = clickedElement.getAttribute('data-code');
             }
 
@@ -244,7 +246,7 @@
                     // 검색 입력 값을 가져옴
                     const searchValue = document.getElementById('searchInput').value;
 
-                    // 헤더 부분 추가
+                    // 헤더 부분 추가h
                     tableHTML += '<thead><tr>';
                     tableHTML += '<th>No.</th>';  // Row number를 위한 header 추가
                     headers.forEach(header => {
@@ -387,7 +389,7 @@
 
                             // dataCode와 일치하는 li의 글씨 색깔 변경
                             if (element.tagName === 'LI') {
-                                element.style.color = '#00bfff';
+                                element.style.color = '#1e90ff';
                                 element.style.fontWeight = 'bold';
                             }
 
