@@ -217,8 +217,8 @@
         function accordionClicked(event) {
             const clickedElement = event.target;
 
-            // 클릭된 요소가 button이면 함수를 빠져나감 (버튼 클릭 시 아코디언의 동작에만 집중)
-            if (clickedElement.tagName === 'INPUT') return;
+            // 체크박스에서 체크된 값을 가져옴
+            var checkedValues = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(input => input.value);
 
 
             // 모든 아코디언 항목의 스타일을 초기 상태로 되돌림
@@ -235,9 +235,6 @@
             }
 
             var output = "";
-
-            // 체크박스에서 체크된 값을 가져옴
-            var checkedValues = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(input => input.value);
 
             // AJAX 요청 시작
             fetch(`/ajax/?code=${currentCode}`)
@@ -300,45 +297,6 @@
 
         }
     </script>
-
-    <!-- 안되는 코드 원인 분석하기
-    <script>
-        document.getElementById('searchBtn').addEventListener('click', function() {
-
-            // 입력 값 가져오기
-            const inputValue = document.getElementById('searchInput').value.toLowerCase();
-
-            // 모든 아코디언 항목 순회
-            const accordions = document.querySelectorAll('.accordion-header span');
-            accordions.forEach(acc => {
-                if (acc.textContent.toLowerCase().includes(inputValue)) {
-                    // 일치하는 항목의 부모 요소를 찾아 펼친다.
-                    let collapseElement = acc.closest('.accordion-item').querySelector('.accordion-collapse');
-                    if (!collapseElement.classList.contains('show')) {
-                        new bootstrap.Collapse(collapseElement, { toggle: true });
-                    }
-
-                    // 상위 아코디언 항목들도 펼친다.
-                    let parentItem = collapseElement.closest('.accordion-item');
-                    while (parentItem) {
-                        let parentAccordion = parentItem.closest('.accordion');
-                        if (parentAccordion) {
-                            let parentCollapse = parentAccordion.previousElementSibling;
-                            if (parentCollapse && parentCollapse.contains(parentItem)) {
-                                new bootstrap.Collapse(parentCollapse, { toggle: true });
-                            }
-                            parentItem = parentAccordion.closest('.accordion-item');
-                        } else {
-                            break;
-                        }
-                    }
-
-
-                }
-            });
-        });
-    </script>
-    -->
 
 
     <!-- Input값으로 펼쳐지는 코드-->
@@ -413,26 +371,6 @@
             }, 150); // 300ms의 시간을 줬습니다. 필요에 따라 조정하실 수 있습니다.
         });
     </script>
-
-    <script>
-        document.getElementById('searchBtn').addEventListener('click', function() {
-            const searchValue = document.getElementById('searchInput').value;
-
-            fetch(`/company_info_table_ajax/?company=${searchValue}`)
-                .then(response => response.json())
-                .then(data => {
-
-                    let output_info = `<p><i>${searchValue}</i></p>`;
-                    document.getElementById('output_info').innerHTML = output_info;
-
-
-
-
-                });
-        });
-
-    </script>
-
 
 
 </div>
