@@ -13,7 +13,8 @@
     </h2>
 
     <div class="container-fluid">
-        <div class="row">
+        <!--입력버튼-->
+        <div class="row g-3">
             <div class="col-auto">
                 <input class="form-control" list="datalistOptions" id="searchInput" placeholder="회사명을 입력하세요">
                 <datalist id="datalistOptions">
@@ -28,7 +29,16 @@
                 <input type="button" class="btn btn-primary mb-3" id="searchBtn" value="검색">
             </div>
         </div>
+
+        <!-- 테이블-->
+        <div class="row g-3">
+            <div class="col-auto" id="output_info">
+
+            </div>
+        </div>
+
     </div>
+
 
     <div class="container-fluid">
         <div class="row">
@@ -239,6 +249,7 @@
 
                     // 테이블의 총 row 수를 추가
 
+
                     // DataFrame을 HTML 테이블로 변환
                     var tableHTML = '<table border="1" class="table table-sm">';
                     var headers = Object.keys(filteredData[0]).filter(header => header !== 'Main_products_원본');
@@ -401,6 +412,25 @@
                 });
             }, 150); // 300ms의 시간을 줬습니다. 필요에 따라 조정하실 수 있습니다.
         });
+    </script>
+
+    <script>
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const searchValue = document.getElementById('searchInput').value;
+
+            fetch(`/company_info_table_ajax/?company=${searchValue}`)
+                .then(response => response.json())
+                .then(data => {
+
+                    let output_info = `<p><i>${searchValue}</i></p>`;
+                    document.getElementById('output_info').innerHTML = output_info;
+
+
+
+
+                });
+        });
+
     </script>
 
 

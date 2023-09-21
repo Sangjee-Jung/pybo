@@ -64,6 +64,17 @@ def ajax(request):
 
     return JsonResponse(result)
 
+def company_info_table_ajax(request):
+
+    df = pd.read_excel('static/KV_total_company_info_temp_table.xlsx')
+    df = df.head(10)
+
+    result = {
+        'df': df.to_dict(orient="records")
+    }
+
+    return JsonResponse(result)
+
 
 def index(request):
     logger.info("INFO 레벨로 출력")
