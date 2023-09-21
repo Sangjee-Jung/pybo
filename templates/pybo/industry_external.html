@@ -109,8 +109,8 @@
                                                                                 {% for content, code in zipped_contents %}
                                                                                 <li
                                                                                         style="cursor: pointer;"
-                                                                                        onmouseover="this.style.color='blue'; this.style.fontWeight='bold';"
-                                                                                        onmouseout="this.style.color=''; this.style.fontWeight='normal';"
+                                                                                        onmouseover="originalColor = this.style.color; originalWeight = this.style.fontWeight; this.style.color='blue'; this.style.fontWeight='bold';"
+                                                                                        onmouseout="this.style.color=originalColor; this.style.fontWeight=originalWeight;"
                                                                                         onclick="accordionClicked(event)"
                                                                                         data-code="{{ code }}"
                                                                                 >
@@ -200,11 +200,23 @@
 
     </script>
 
+
     <script>
         let currentCode = null;  // 최근 클릭된 아코디언 항목의 data-code 값을 저장하기 위한 전역 변수
 
         function accordionClicked(event) {
             const clickedElement = event.target;
+
+            // 클릭된 요소가 button이면 함수를 빠져나감 (버튼 클릭 시 아코디언의 동작에만 집중)
+            if (clickedElement.tagName === 'INPUT') return;
+
+
+            // 모든 아코디언 항목의 스타일을 초기 상태로 되돌림
+            let allAccordionItems = document.querySelectorAll('.accordion-item span, .accordion-item li');
+            allAccordionItems.forEach(item => {
+                item.style.color = '';  // 초기 글씨 색상으로 되돌림
+                item.style.fontWeight = '';
+            });
 
             if(clickedElement.tagName !== 'INPUT') {
                 currentCode = clickedElement.getAttribute('data-code');
@@ -371,6 +383,12 @@
 
                                 // 해당 아코디언 항목이 펼쳐지면 accordionClicked 함수를 호출한다.
                                 accordionClicked({ target: element });
+                            }
+
+                            // dataCode와 일치하는 li의 글씨 색깔 변경
+                            if (element.tagName === 'LI') {
+                                element.style.color = '#00bfff';
+                                element.style.fontWeight = 'bold';
                             }
 
                             // 다음 상위 accordion-item 요소로 이동한다.

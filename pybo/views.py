@@ -675,7 +675,7 @@ def industry_external(request):
     name = df['Name'].tolist()
     industry_code = df['Industry_code'].tolist()
 
-    company_inputs = { 'name' : name,
+    company_inputs = { 'name': name,
               'industry_code': industry_code
               }
 
