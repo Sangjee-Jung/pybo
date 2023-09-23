@@ -47,7 +47,7 @@ def ajax(request):
     df.drop(['KIS', 'Stock'], axis=1, inplace=True)
 
     df['별도매출(FY22)'] = df['별도매출(FY22)'].astype(float, errors='ignore')
-    df['별도매출(FY22)'] = df['별도매출(FY22)'].apply(lambda x: '{0:>,.0f}'.format(x))
+    df['별도매출(FY22)'] = df['별도매출(FY22)'].apply(lambda x: '{0:>,.0f}'.format(x/1_000_000))
 
     if len(code) == 2:
         df = df[df['Industry_code'].astype(str).str.match(fr'^{code}\d{{3}}$')]

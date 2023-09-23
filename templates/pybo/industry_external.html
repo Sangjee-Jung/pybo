@@ -42,12 +42,12 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="accordion col-sm-4" id="lv1Accordion" >
+            <div class="accordion col-sm-3" id="lv1Accordion" >
                 <!-- 1st 아코디언(Lv1)  -->
                 {% for lv1_item in industry_tree %}
                 <div class="accordion-item">
                     <h2 class="accordion-header m-2" id="lv1Heading{{ forloop.counter }}">
-                        <span style="font-size: 15px;">
+                        <span style="font-size: 14px;">
                             {{ lv1_item.lv1_header }}
                         </span>
                         <button class="btn btn-outline-dark btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv1Collapse{{ forloop.counter }}">+</button>
@@ -61,7 +61,7 @@
                                 <div class="accordion-item">
                                     <h2 class="accordion-header m-2" id="lv2Heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
                                         <span
-                                                style="font-size: 15px; cursor: pointer;"
+                                                style="font-size: 14px; cursor: pointer;"
                                                 onmouseover="this.style.color='blue'; this.style.fontWeight='bold';"
                                                 onmouseout="this.style.color=''; this.style.fontWeight='normal';"
                                                 onclick="accordionClicked(event)"
@@ -70,7 +70,7 @@
                                             {{ lv2_item.lv2_header.0 }}
                                         </span>
                                         <button class="btn btn-dark btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv2Collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
-                                        <span style="font-size: 15px; color: silver;"><i> -- 총 {{ lv2_item.lv2_header.1 }}개사 </i></span>
+                                        <span style="font-size: 12px; color: silver;"><i> -- 총 {{ lv2_item.lv2_header.1 }}개사 </i></span>
                                     </h2>
                                     <div id="lv2Collapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv2Heading{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#lv2Accordion{{ forloop.parentloop.counter }}">
                                         <div class="accordion-body">
@@ -81,7 +81,7 @@
                                                 <div class="accordion-item">
                                                     <h2 class="accordion-header m-2" id="lv3Heading{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
                                                         <span
-                                                                style="font-size: 15px; cursor: pointer;"
+                                                                style="font-size: 14px; cursor: pointer;"
                                                                 onmouseover="this.style.color='blue'; this.style.fontWeight='bold';"
                                                                 onmouseout="this.style.color=''; this.style.fontWeight='normal';"
                                                                 onclick="accordionClicked(event)"
@@ -90,7 +90,7 @@
                                                             {{ lv3_item.lv3_header.0 }}
                                                         </span>
                                                         <button class="btn btn-secondary btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv3Collapse{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
-                                                        <span style="font-size: 15px; color: silver;"><i> -- {{ lv3_item.lv3_header.1 }}개사 </i></span>
+                                                        <span style="font-size: 12px; color: silver;"><i> -- {{ lv3_item.lv3_header.1 }}개사 </i></span>
                                                     </h2>
                                                     <div id="lv3Collapse{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv3Heading{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#lv3Accordion{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}">
                                                         <div class="accordion-body">
@@ -101,7 +101,7 @@
                                                                 <div class="accordion-item">
                                                                     <h2 class="accordion-header m-2" id="lv4Heading{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
                                                                         <span
-                                                                                style="font-size: 15px; cursor: pointer;"
+                                                                                style="font-size: 14px; cursor: pointer;"
                                                                                 onmouseover="this.style.color='blue'; this.style.fontWeight='bold';"
                                                                                 onmouseout="this.style.color=''; this.style.fontWeight='normal';"
                                                                                 onclick="accordionClicked(event)"
@@ -110,7 +110,7 @@
                                                                             {{ lv4_item.lv4_header.0 }}
                                                                         </span>
                                                                         <button class="btn btn-info btn-sm toggle-btn" type="button" data-bs-toggle="collapse" data-bs-target="#lv4Collapse{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">+</button>
-                                                                        <span style="font-size: 15px; color: silver;"><i> -- {{ lv4_item.lv4_header.1 }}개사 </i></span>
+                                                                        <span style="font-size: 12px; color: silver;"><i> -- {{ lv4_item.lv4_header.1 }}개사 </i></span>
                                                                     </h2>
                                                                     <div id="lv4Collapse{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="lv4Heading{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" data-bs-parent="#lv4Accordion{{ forloop.parentloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.parentloop.counter }}-{{ forloop.parentloop.counter }}">
                                                                         <div class="accordion-body">
@@ -118,7 +118,7 @@
                                                                             {% with zipped_contents=lv4_item.lv4_contents.0|zip_lists:lv4_item.lv4_contents.2 %}
                                                                                 {% for content, code in zipped_contents %}
                                                                                 <li
-                                                                                        style="cursor: pointer;"
+                                                                                        style="font-size: 14px; cursor: pointer;"
                                                                                         onmouseover="originalColor = this.style.color; originalWeight = this.style.fontWeight; this.style.color='blue'; this.style.fontWeight='bold';"
                                                                                         onmouseout="this.style.color=originalColor; this.style.fontWeight=originalWeight;"
                                                                                         onclick="accordionClicked(event)"
@@ -153,7 +153,7 @@
                 {% endfor %}
             </div>
 
-            <div class="col-sm-8">
+            <div class="col-sm-7">
                 <div class="col-auto">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type = "checkbox" name = "category" id = "category_상장" value = "상장" checked
@@ -185,10 +185,19 @@
 
                 <div class="col-auto" id="output">
                     {{ html_str | safe}}
-
                 </div>
-
             </div>
+
+            <div class="col-sm-2">
+                <div class="card">
+                    <div class="card-body" id="cardList">
+
+                    </div>
+                </div>
+            </div>
+
+
+
         </div>
     </div>
 
@@ -217,8 +226,11 @@
         function accordionClicked(event) {
             const clickedElement = event.target;
 
-            // 체크박스에서 체크된 값을 가져옴
+            // 상장 체크박스에서 체크된 값을 가져옴
             var checkedValues = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(input => input.value);
+
+            // Name 체크박스에서 체크된 값을 가져옴
+            let previouslyChecked = Array.from(document.querySelectorAll('.selected-checkbox:checked')).map(input => input.getAttribute('data-value'));
 
 
             // 모든 아코디언 항목의 스타일을 초기 상태로 되돌림
@@ -235,6 +247,7 @@
             }
 
             var output = "";
+
 
             // AJAX 요청 시작
             fetch(`/ajax/?code=${currentCode}`)
@@ -260,6 +273,7 @@
                     headers.forEach(header => {
                         tableHTML += `<th>${header}</th>`;
                     });
+                    tableHTML += '<th>선택</th>';  // 담기 checkbox위한 header 추가
                     tableHTML += '</tr></thead>';
 
                     // 본문 부분 추가
@@ -282,6 +296,13 @@
                             }
 
                         });
+                        // 체크박스 생성 부분
+                        if (previouslyChecked.includes(row['Name'])) {
+                            tableHTML += `<td><div class="form-check form-switch"><input class="form-check-input selected-checkbox" type="checkbox" data-value="${row['Name']}" checked></div></td>`;
+                        } else {
+                            tableHTML += `<td><div class="form-check form-switch"><input class="form-check-input selected-checkbox" type="checkbox" data-value="${row['Name']}"></div></td>`;
+                        }
+
                         tableHTML += '</tr>';
                     });
                     tableHTML += '</tbody>';
@@ -292,6 +313,19 @@
                     output += tableHTML;
 
                     document.getElementById('output').innerHTML = output;
+
+                    // 이 부분에서 cardList 업데이트 호출
+                    updateCardList();
+
+                    // 이제 DOM에 체크박스가 추가되었으므로, 이벤트 리스너를 설정합니다.
+                    const checkboxes = document.querySelectorAll(".selected-checkbox");
+
+                    checkboxes.forEach(checkbox => {
+                        checkbox.addEventListener('change', updateCardList);
+                    });
+
+                    // 체크박스의 상태를 설정한 후에 previouslyChecked 배열을 초기화합니다.
+                    previouslyChecked = [];
 
                 });
 
@@ -372,6 +406,63 @@
         });
     </script>
 
+    <!-- 선택해서 담는 코드 -->
+    <script>
+        function updateCardList() {
+            const cardList = document.getElementById("cardList");
+            const checkedValues = Array.from(document.querySelectorAll(".selected-checkbox:checked")).map(box => box.getAttribute('data-value'));
+
+            // 체크된 체크박스의 값을 순회하면서, cardList에 없는 항목을 추가합니다.
+            checkedValues.forEach(value => {
+
+                const existingItem = Array.from(cardList.children).find(item => item.getAttribute('data-value') === value); // === 비교로 변경
+                if (!existingItem) {
+                    const listItem = document.createElement("li");
+                    listItem.setAttribute('data-value', value);  // data-value 속성 추가
+                    const textNode = document.createTextNode(value);  // 별도의 텍스트 노드를 추가
+                    listItem.appendChild(textNode);
+
+                    // 제거 버튼 추가
+                    const removeButton = document.createElement("button");
+                    removeButton.textContent = "X";
+                    removeButton.classList.add("btn", "btn-danger", "m-1");
+
+                    // 버튼 스타일 직접 추가
+                    removeButton.style.padding = "2px 4px";
+                    removeButton.style.fontSize = "0.7rem";
+                    removeButton.style.lineHeight = "1";
+                    removeButton.style.borderRadius = "0.2rem";
+
+                    removeButton.addEventListener('click', (event) => {
+                        const itemToRemove = event.target.parentNode;
+                        const checkboxToRemove = document.querySelector(`.selected-checkbox[data-value="${itemToRemove.getAttribute('data-value')}"]`);
+                        if (checkboxToRemove) {
+                            checkboxToRemove.checked = false; // 체크박스의 체크 해제
+                        }
+                        cardList.removeChild(itemToRemove);
+                    });
+
+                    listItem.appendChild(removeButton);
+                    cardList.appendChild(listItem);
+                }
+            });
+
+            // 체크박스의 체크를 해제한 경우 해당 항목을 cardList에서 제거합니다.
+            document.querySelectorAll(".selected-checkbox").forEach(checkbox => {
+                checkbox.addEventListener('change', (event) => {
+                    if (!event.target.checked) {
+                        const uncheckedValue = event.target.getAttribute('data-value');
+                        const itemToRemove = Array.from(cardList.children).find(item => item.getAttribute('data-value') === uncheckedValue); // === 비교로 변경
+                        if (itemToRemove) {
+                            cardList.removeChild(itemToRemove);
+                        }
+                    }
+                });
+            });
+
+        }
+
+    </script>
 
 </div>
 {% endblock %}
