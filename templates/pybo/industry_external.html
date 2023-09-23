@@ -188,11 +188,24 @@
                 </div>
             </div>
 
-            <div class="col-sm-2">
-                <div class="card">
-                    <div class="card-body" id="cardList">
+            <style>
+                .sticky-card {
+                    position: sticky;
+                    top: 10px;  /* 스크롤이 시작되는 위치에서 10px 아래에 카드가 고정됩니다. */
+                }
+            </style>
 
-                    </div>
+            <div class="col-sm-2">
+                <div class="card sticky-card">
+                    <form action="{% url 'pybo:industry_external_2' %}" method="post">
+                        <div class="card-body" id="cardList">
+                            <h6 class="card-title border-bottom py-2"><b>Selected Companies</b></h6>
+                        </div>
+                        <div class="card-footer text-center">
+                            <button type="submit" class="btn btn-primary">Analysis</button>
+                            {% csrf_token %}
+                        </div>
+                    </form>
                 </div>
             </div>
 

@@ -730,8 +730,11 @@ def industry_external(request):
                'company_inputs': company_inputs
                }
 
-
     return render(request, 'pybo/industry_external.html',context)
+
+def industry_external_2(request):
+
+    return render(request, 'pybo/industry_external_2.html',)
 
 
 def ledger(request):
