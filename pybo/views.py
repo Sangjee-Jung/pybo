@@ -14,6 +14,7 @@ import os
 from django.core.files.storage import FileSystemStorage
 import pandas as pd
 from .landscape import load_industry, define_industry, define_companies, make_scatter, make_df_customized, make_scatter_customized, make_df_개별, make_df_targets, format_percent
+from .landscape_external import make_scatter_external
 from .excel_programs import excel_concat
 from .cf import make_df_cf_waterfall, make_graph_cf_waterfall
 from .data_concat import handle_uploaded_file, delete_files_in_directory, select_dataframe_columns, make_concated_dataset, make_concated_dataset_여러행
@@ -63,6 +64,23 @@ def ajax(request):
     }
 
     return JsonResponse(result)
+
+def ajax_scatter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        selected_companies = data.get('selected_companies', [])
+
+        df = pd.read_excel('static/KS_IS_temp.xlsx')
+        df = df[df['Name'].isin(selected_companies)]
+
+        graph = make_scatter_external(df)
+
+
+        result = { 'graph': graph,
+
+        }
+
+        return JsonResponse(result)
 
 def company_info_table_ajax(request):
 
@@ -734,7 +752,16 @@ def industry_external(request):
 
 def industry_external_2(request):
 
-    return render(request, 'pybo/industry_external_2.html',)
+    selected_companies = request.POST.getlist('selectedCompanies[]')
+
+    df = pd.read_excel('static/KS_IS_temp.xlsx')
+    df = df[df['Name'].isin(selected_companies)]
+
+    graph = make_scatter_external(df)
+
+    context = {'selected_companies': selected_companies, "graph": graph, }
+
+    return render(request, 'pybo/industry_external_2.html', context)
 
 
 def ledger(request):

@@ -1,15 +1,70 @@
 {% extends 'base.html' %}
 {% block content %}
 
+
 <div class="container my-3">
     <h2 class="border-bottom py-2">
         <b>외감대상 실험</b>
     </h2>
 
+    <div class="row">
+        <div class="col-sm-2">
+            <div class="card sticky-card">
+
+                <div class="card-body" id="cardList">
+                    <h6 class="card-title border-bottom py-2"><b>Selected Companies</b></h6>
+                        <div class="form-check form-check-inline">
+                            {% for company in selected_companies %}
+
+                            <label class="form-check-label"> {{company}} </label>
+                            <input class="form-check-input" type = "checkbox" checked>
+
+                            {% endfor %}
+                        </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-sm-10" id="graphContainer">
+            {{ graph | safe }}
+        </div>
+
+    </div>
+
+    <script>
+        document.querySelectorAll(".form-check-input").forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                sendCheckedCompanies();
+            });
+        });
+
+        function sendCheckedCompanies() {
+            const checkedCompanies = Array.from(document.querySelectorAll(".form-check-input:checked"))
+                .map(box => box.previousElementSibling.textContent.trim());
 
 
+            // Use fetch or any other AJAX method to send the data to server
+            fetch('/ajax_scatter/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'  // Assuming you are using Django
+                },
+                body: JSON.stringify({selected_companies: checkedCompanies})
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the graph container with the new graph
 
 
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+    </script>
 
 </div>
 {% endblock %}

@@ -44,6 +44,7 @@ urlpatterns = [
     path('account/result', views.account_result, name='account_result'),
     path('excel/settings', views.excel_settings, name='excel_settings'),
     path('ajax/', views.ajax, name='ajax'),
+    path('ajax_scatter/', views.ajax_scatter, name='ajax_scatter'),
     path('company_info_table_ajax/', views.company_info_table_ajax, name='company_info_table_ajax'),
 
 ]

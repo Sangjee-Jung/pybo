@@ -197,7 +197,7 @@
 
             <div class="col-sm-2">
                 <div class="card sticky-card">
-                    <form action="{% url 'pybo:industry_external_2' %}" method="post">
+                    <form action="{% url 'pybo:industry_external_2' %}" method="post" id="cardForm">
                         <div class="card-body" id="cardList">
                             <h6 class="card-title border-bottom py-2"><b>Selected Companies</b></h6>
                         </div>
@@ -423,6 +423,7 @@
     <script>
         function updateCardList() {
             const cardList = document.getElementById("cardList");
+            const cardForm = document.getElementById("cardForm");
             const checkedValues = Array.from(document.querySelectorAll(".selected-checkbox:checked")).map(box => box.getAttribute('data-value'));
 
             // 체크된 체크박스의 값을 순회하면서, cardList에 없는 항목을 추가합니다.
@@ -434,6 +435,14 @@
                     listItem.setAttribute('data-value', value);  // data-value 속성 추가
                     const textNode = document.createTextNode(value);  // 별도의 텍스트 노드를 추가
                     listItem.appendChild(textNode);
+
+                    // Add hidden input for this value to the form
+                    const hiddenInput = document.createElement("input");
+                    hiddenInput.type = "hidden";
+                    hiddenInput.name = "selectedCompanies[]";  // You can access these on the server with 'selectedCompanies' key
+                    hiddenInput.value = value;
+                    cardForm.appendChild(hiddenInput);
+
 
                     // 제거 버튼 추가
                     const removeButton = document.createElement("button");
@@ -453,6 +462,12 @@
                             checkboxToRemove.checked = false; // 체크박스의 체크 해제
                         }
                         cardList.removeChild(itemToRemove);
+
+                        // Remove the hidden input for this value from the form
+                        const hiddenInputToRemove = Array.from(cardForm.children).find(input => input.value === value && input.type === "hidden");
+                        if (hiddenInputToRemove) {
+                            cardForm.removeChild(hiddenInputToRemove);
+                        }
                     });
 
                     listItem.appendChild(removeButton);
@@ -469,12 +484,28 @@
                         if (itemToRemove) {
                             cardList.removeChild(itemToRemove);
                         }
+
+                        // Remove the hidden input for this value from the form
+                        const hiddenInputToRemove = Array.from(cardForm.children).find(input => input.value === uncheckedValue && input.type === "hidden");
+                        if (hiddenInputToRemove) {
+                            cardForm.removeChild(hiddenInputToRemove);
+                        }
                     }
                 });
             });
-
         }
+    </script>
 
+    // 회사선택하세요
+    <script>
+        document.getElementById("cardForm").addEventListener("submit", function(event) {
+
+            const selectedCompanies = document.querySelectorAll("input[name='selectedCompanies[]']");
+            if (selectedCompanies.length === 0) {
+                alert("분석대상 회사를 선택하세요");
+                event.preventDefault();  // This will prevent the form from being submitted
+            }
+        });
     </script>
 
 </div>
