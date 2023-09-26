@@ -22,7 +22,7 @@ from .revenue import make_df_revenue_product, make_graph_revenue_product
 from django.core.exceptions import ValidationError
 import mpld3
 import json
-
+import FinanceDataReader as fdr
 
 import logging
 logger = logging.getLogger('pybo')
@@ -705,14 +705,34 @@ def industry_external(request):
     industry_code = df['Industry_code'].tolist()
 
     company_inputs = { 'name': name,
-              'industry_code': industry_code
+              'industry_code': industry_code,
               }
 
     df = df.head(20)
 
-    df.drop(['KIS', 'Stock',], axis=1, inplace=True)
+    df.drop(['KIS'], axis=1, inplace=True)
     df['별도매출(FY22)'] = df['별도매출(FY22)'].astype(float, errors='ignore')
     df['별도매출(FY22)'] = df['별도매출(FY22)'].apply(lambda x: '{0:>,.0f}'.format(x))
+
+
+    # 시가총액 불러오기
+    df_krx = fdr.StockListing('KRX-MARCAP')
+    stock_list = df['Stock'].tolist()
+    marketcap_list = []
+
+    for stock in stock_list:
+        if stock == None:
+            marketcap_list.append(None)
+        else:
+            try:
+                marketcap_list.append(df_krx[df_krx['Code'] == stock]['Marcap'].iloc[0])
+            except:
+                marketcap_list.append(None)
+
+    df['시가총액'] = marketcap_list
+    df['시가총액'] = df['시가총액'].apply(lambda x: '{0:>,.0f}'.format(x))
+
+    df.drop(['Stock'], axis=1, inplace=True)
 
 
     # html 만들기
@@ -745,7 +765,8 @@ def industry_external(request):
     context = {'industry_tree': industry_tree,
                'df': df.to_html(justify='center', index=False, classes="table table-sm",float_format='{0:>,.0f}'.format,),
                'html_str': tableHTML,
-               'company_inputs': company_inputs
+               'company_inputs': company_inputs,
+               'df_krx': df_krx,
                }
 
     return render(request, 'pybo/industry_external.html',context)

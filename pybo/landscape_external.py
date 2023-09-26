@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 import pandas as pd
 import numpy as np
+from matplotlib.patches import FancyArrowPatch
 
 def make_scatter_external(df):
 
@@ -21,12 +22,17 @@ def make_scatter_external(df):
 
     #######################그래프그리기##########################
     # 그래프 설정
-    f = plt.figure(figsize=(17, 10))
+    #f = plt.figure(figsize=(17, 10))
+    fig, ax = plt.subplots(figsize=(17, 10))
     plt.rc('font', family='Malgun Gothic')
     plt.rcParams['axes.unicode_minus'] = False
     plt.rc('font', size=13)
 
     # 결측치 제거된 DataFrame 생성
+
+    df_2023 = df[['별도매출_23', '별도영업이익_23']]
+    df_2023.dropna(how="any")
+
     df_2022 = df[['별도매출_22', '별도영업이익_22', 'Name']]
     df_2022.dropna(how="any")
 
@@ -37,6 +43,7 @@ def make_scatter_external(df):
     df_2020.dropna(how="any")
 
     # 산점도 그래프 그리기
+    plt.scatter(df_2023['별도매출_23'], df_2023['별도영업이익_23'], color=color_kpmg[4])
     plt.scatter(df_2022['별도매출_22'], df_2022['별도영업이익_22'], color=color_kpmg[3])
     plt.scatter(df_2021['별도매출_21'], df_2021['별도영업이익_21'], color=color_kpmg[0])
     plt.scatter(df_2020['별도매출_20'], df_2020['별도영업이익_20'], color=color_kpmg[1])
@@ -53,8 +60,22 @@ def make_scatter_external(df):
     df_arrow2.dropna(how="any")
 
     for i in range(len(df_arrow2)):
+
+
         plt.plot([df_arrow2['별도매출_22'].iloc[i], df_arrow2['별도매출_21'].iloc[i]],
                  [df_arrow2['별도영업이익_22'].iloc[i], df_arrow2['별도영업이익_21'].iloc[i]], color='black', alpha=0.2)
+
+
+    df_arrow3 = df[['별도매출_22', '별도영업이익_22', '별도매출_23', '별도영업이익_23']]
+    df_arrow3.dropna(how="any")
+
+    for i in range(len(df_arrow3)):
+        arrow = FancyArrowPatch((df_arrow3['별도매출_22'].iloc[i], df_arrow3['별도영업이익_22'].iloc[i]),
+                                (df_arrow3['별도매출_23'].iloc[i], df_arrow3['별도영업이익_23'].iloc[i]),
+                                arrowstyle='-|>', mutation_scale=15, color='black', alpha=0.5, lw=1, linestyle='--', )
+        ax.add_patch(arrow)
+
+
 
     # x축, y축 설정
     xmin = plt.axis()[0]
@@ -81,7 +102,8 @@ def make_scatter_external(df):
     # 축, 범례 표시
     plt.xlabel('매출액', fontsize=17, labelpad=30)
     plt.ylabel('영업이익', fontsize=17, labelpad=45)
-    plt.legend(['2022', '2021', '2020'], fontsize=15, loc='upper left')
+    plt.legend(['2023.반기 LTM','2022', '2021', '2020'], fontsize=15, loc='upper left')
+
 
     # 수평선(영업이익=0) 표시
     if xmin >= 0:
@@ -90,6 +112,7 @@ def make_scatter_external(df):
         plt.plot([xmin, xmax*1.1], [0, 0], color='indianred', linestyle='--', linewidth=1.2, alpha=0.5)
 
     # HTML로 내보내기
-    graph = mpld3.fig_to_html(f, figid='THIS_IS_FIGID')
+    #graph = mpld3.fig_to_html(f, figid='THIS_IS_FIGID')
+    graph = mpld3.fig_to_html(fig, figid='THIS_IS_FIGID')
 
     return graph

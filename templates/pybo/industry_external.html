@@ -209,9 +209,8 @@
                 </div>
             </div>
 
-
-
         </div>
+
     </div>
 
     <script>
@@ -280,13 +279,13 @@
                     // 검색 입력 값을 가져옴
                     const searchValue = document.getElementById('searchInput').value;
 
-                    // 헤더 부분 추가h
+                    // 헤더 부분 추가
                     tableHTML += '<thead><tr>';
                     tableHTML += '<th>No.</th>';  // Row number를 위한 header 추가
                     headers.forEach(header => {
                         tableHTML += `<th>${header}</th>`;
                     });
-                    tableHTML += '<th>선택</th>';  // 담기 checkbox위한 header 추가
+                    tableHTML += '<th>Select</th>';  // 담기 checkbox위한 header 추가
                     tableHTML += '</tr></thead>';
 
                     // 본문 부분 추가
@@ -496,7 +495,7 @@
         }
     </script>
 
-    // 회사선택하세요
+    <!--회사선택하세요-->
     <script>
         document.getElementById("cardForm").addEventListener("submit", function(event) {
 
